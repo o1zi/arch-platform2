@@ -18,7 +18,7 @@ export default function ServicesClient({ initialServices, initialFeatures }: Pro
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">الخدمات والمميزات</h1>
         <p className="text-gray-500 mt-1 text-sm">
-          خصّص أقسام "ما نقدمه لك" و"ما يميزنا" التي تظهر في صفحة موقعك الرئيسية.
+          خصّص أقسام &quot;ما نقدمه لك&quot; و&quot;ما يميزنا&quot; التي تظهر في صفحة موقعك الرئيسية.
           إذا تركت القسم فارغاً سيظهر المحتوى الافتراضي.
         </p>
       </div>
@@ -48,7 +48,7 @@ export default function ServicesClient({ initialServices, initialFeatures }: Pro
       {tab === 'services' && (
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <h2 className="font-semibold text-gray-900 mb-1">الخدمات</h2>
-          <p className="text-gray-400 text-xs mb-5">تظهر في قسم "ما نقدمه لك" — حد أقصى 6 خدمات</p>
+          <p className="text-gray-400 text-xs mb-5">تظهر في قسم &quot;ما نقدمه لك&quot; — حد أقصى 6 خدمات</p>
           <ContentBlocksManager type="service" initialBlocks={initialServices} />
         </div>
       )}
@@ -56,7 +56,7 @@ export default function ServicesClient({ initialServices, initialFeatures }: Pro
       {tab === 'features' && (
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <h2 className="font-semibold text-gray-900 mb-1">المميزات</h2>
-          <p className="text-gray-400 text-xs mb-5">تظهر في قسم "ما يميزنا" — حد أقصى 6 مميزات</p>
+          <p className="text-gray-400 text-xs mb-5">تظهر في قسم &quot;ما يميزنا&quot; — حد أقصى 6 مميزات</p>
           <ContentBlocksManager type="feature" initialBlocks={initialFeatures} />
         </div>
       )}

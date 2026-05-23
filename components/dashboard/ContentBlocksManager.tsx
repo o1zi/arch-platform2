@@ -121,8 +121,6 @@ export default function ContentBlocksManager({ type, initialBlocks }: Props) {
     }
   }
 
-  const BlockIcon = getIcon(draft.icon)
-
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
