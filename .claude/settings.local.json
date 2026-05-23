@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($file = Get-Item \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro\\\\CLAUDE.md\"; Write-Output \"Size: $\\($file.Length\\) bytes\"; [System.IO.File]::ReadAllBytes\\($file.FullName\\) | ForEach-Object { Write-Output $_ })",
+      "PowerShell([System.IO.File]::ReadAllText\\(\"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro\\\\CLAUDE.md\", [System.Text.Encoding]::UTF8\\))",
+      "PowerShell($base = \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro\"; $dirs = @\\( \"app\\\\\\(marketing\\)\", \"app\\\\\\(auth\\)\\\\login\", \"app\\\\dashboard\\\\profile\", \"app\\\\dashboard\\\\projects\", \"app\\\\dashboard\\\\theme\", \"app\\\\dashboard\\\\domain\", \"app\\\\dashboard\\\\subscription\", \"app\\\\admin\\\\tenants\\\\new\", \"app\\\\admin\\\\tenants\\\\[id]\", \"app\\\\admin\\\\subscriptions\", \"app\\\\[domain]\\\\projects\\\\[id]\", \"app\\\\[domain]\\\\contact\", \"components\\\\dashboard\", \"components\\\\admin\", \"components\\\\themes\\\\modern\", \"components\\\\themes\\\\classic\", \"components\\\\themes\\\\bold\", \"components\\\\themes\\\\minimal\", \"components\\\\themes\\\\luxury\", \"lib\\\\supabase\", \"types\", \"supabase\\\\migrations\" \\); foreach \\($d in $dirs\\) { New-Item -ItemType Directory -Path \"$base\\\\$d\" -Force | Out-Null }; Write-Output \"All directories created\")",
+      "Bash(Remove-Item \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro\\\\components\\\\themes\\\\modern\\\\Hero.tsx\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro\\\\components\\\\themes\\\\modern\\\\Projects.tsx\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro\\\\components\\\\themes\\\\modern\\\\Contact.tsx\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro\\\\components\\\\themes\\\\modern\\\\Nav.tsx\" -ErrorAction SilentlyContinue)",
+      "Bash(git --version)",
+      "Bash(gh --version)",
+      "Bash(git config *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}
