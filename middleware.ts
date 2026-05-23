@@ -1,48 +1,68 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
-const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? 'localhost:3000'
+function getRootDomain(): string {
+  const configured = process.env.NEXT_PUBLIC_ROOT_DOMAIN
+  if (configured) return configured.replace(/:.*/, '')
+  return ''
+}
+
+function rewriteTenant(
+  request: NextRequest,
+  slug: string | null,
+  domain: string | null,
+  pathname: string
+) {
+  const url = request.nextUrl.clone()
+  const identifier = slug ?? domain!
+  url.pathname = `/${identifier}${pathname}`
+
+  const requestHeaders = new Headers(request.headers)
+  if (slug) requestHeaders.set('x-tenant-slug', slug)
+  if (domain) requestHeaders.set('x-tenant-domain', domain)
+
+  return NextResponse.rewrite(url, { request: { headers: requestHeaders } })
+}
 
 export async function middleware(request: NextRequest) {
-  // Use Host header — more reliable than request.url in dev/proxy environments
   const hostname = request.headers.get('host') ?? new URL(request.url).hostname
   const { pathname } = new URL(request.url)
 
   const host = hostname.replace(/:.*/, '')
-  const rootHost = ROOT_DOMAIN.replace(/:.*/, '')
+  const rootHost = getRootDomain()
 
-  let tenantSlug: string | null = null
-  let tenantDomain: string | null = null
+  const isLocalhost = host === 'localhost' || host === '127.0.0.1'
 
-  if (host === rootHost || host === `www.${rootHost}`) {
-    // Main domain — marketing, dashboard, admin, login
-  } else if (host.endsWith(`.${rootHost}`)) {
-    tenantSlug = host.replace(`.${rootHost}`, '')
+  if (isLocalhost) {
+    // Local development — always main site
+  } else if (rootHost) {
+    // Production — root domain is configured
+    const isRootSite = host === rootHost || host === `www.${rootHost}`
+    const isSubdomain = host.endsWith(`.${rootHost}`)
+
+    if (isSubdomain) {
+      const slug = host.replace(`.${rootHost}`, '')
+      return rewriteTenant(request, slug, null, pathname)
+    }
+
+    if (!isRootSite) {
+      // Custom domain
+      return rewriteTenant(request, null, host, pathname)
+    }
+
+    // isRootSite === true → fall through to main site logic
   } else {
-    tenantDomain = host
+    // No root domain configured — cannot detect subdomains or custom domains
+    // Treat ALL requests as main site (safe default, no 404s)
   }
 
-  // Rewrite tenant requests to [domain] route segment
-  if (tenantSlug || tenantDomain) {
-    const url = request.nextUrl.clone()
-    const identifier = tenantSlug ?? tenantDomain!
-    url.pathname = `/${identifier}${pathname}`
+  // -- Main site logic (marketing, auth, dashboard, admin) --
 
-    // Pass headers on the REQUEST side so server components can read them via headers()
-    const requestHeaders = new Headers(request.headers)
-    if (tenantSlug) requestHeaders.set('x-tenant-slug', tenantSlug)
-    if (tenantDomain) requestHeaders.set('x-tenant-domain', tenantDomain)
-
-    return NextResponse.rewrite(url, { request: { headers: requestHeaders } })
-  }
-
-  // Only call Supabase for protected routes
   const needsAuth = pathname.startsWith('/dashboard') || pathname.startsWith('/admin')
   if (!needsAuth) {
     return NextResponse.next()
   }
 
-  // Supabase not configured — redirect to login with message
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
   if (!supabaseUrl.startsWith('http')) {
     return NextResponse.redirect(new URL('/login', request.url))
@@ -52,7 +72,8 @@ export async function middleware(request: NextRequest) {
 
   if (pathname.startsWith('/dashboard')) {
     if (!user) {
-      const loginUrl = new URL('/login', request.url)
+      const loginUrl = request.nextUrl.clone()
+      loginUrl.pathname = '/login'
       loginUrl.searchParams.set('redirectTo', pathname)
       return NextResponse.redirect(loginUrl)
     }
@@ -78,6 +99,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|_next/data|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 }
