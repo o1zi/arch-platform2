@@ -62,6 +62,7 @@ export default function ContentBlocksManager({ type, initialBlocks }: Props) {
   const [draft, setDraft] = useState<Draft>(EMPTY_DRAFT)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const sectionLabel = type === 'service' ? 'الخدمات' : 'المميزات'
@@ -113,9 +114,17 @@ export default function ContentBlocksManager({ type, initialBlocks }: Props) {
 
   async function handleDelete(id: string) {
     setDeleting(id)
+    setDeleteError(null)
     try {
-      await fetch(`/api/dashboard/content-blocks/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/dashboard/content-blocks/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        setDeleteError(d.error ?? 'فشل الحذف، حاول مرة أخرى')
+        return
+      }
       setBlocks(bs => bs.filter(b => b.id !== id))
+    } catch {
+      setDeleteError('فشل الحذف، تحقق من الاتصال')
     } finally {
       setDeleting(null)
     }
@@ -132,6 +141,10 @@ export default function ContentBlocksManager({ type, initialBlocks }: Props) {
           إضافة {itemLabel}
         </Button>
       </div>
+
+      {deleteError && (
+        <p className="text-red-500 text-sm mb-3 p-3 bg-red-50 rounded-lg">{deleteError}</p>
+      )}
 
       {blocks.length === 0 ? (
         <div className="border-2 border-dashed border-gray-200 rounded-lg p-10 text-center">
