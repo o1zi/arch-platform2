@@ -14,16 +14,16 @@ export default function ClassicProjectsPage({ tenant, projects }: { tenant: Tena
     <div className="min-h-screen bg-[#f5f0e8]" dir="rtl">
       <div className="border-b-2 border-[#2c1a0e] px-8 py-2 flex items-center justify-between text-[10px] tracking-[0.2em] text-[#2c1a0e]/50 uppercase">
         <span>معرض المشاريع</span>
-        <Link href="./" className="hover:text-[#8b6914] transition-colors">{tenant.name_ar}</Link>
+        <Link href={`/${tenant.slug}`} className="hover:text-[#8b6914] transition-colors">{tenant.name_ar}</Link>
       </div>
 
       <header className="border-b-2 border-[#2c1a0e]/20 px-8 py-6 text-center">
         <h1 className="text-4xl font-black text-[#2c1a0e]">المشاريع</h1>
         <p className="text-[#2c1a0e]/40 text-sm mt-1">{projects.length} مشروع</p>
         <nav className="flex justify-center gap-8 mt-4 text-xs text-[#2c1a0e]/60 tracking-widest uppercase">
-          <Link href="./" className="hover:text-[#8b6914]">الرئيسية</Link>
+          <Link href={`/${tenant.slug}`} className="hover:text-[#8b6914]">الرئيسية</Link>
           <span className="text-[#8b6914]">المشاريع</span>
-          <Link href="./contact" className="hover:text-[#8b6914]">التواصل</Link>
+          <Link href={`/${tenant.slug}/contact`} className="hover:text-[#8b6914]">التواصل</Link>
         </nav>
       </header>
 

@@ -33,8 +33,8 @@ export default function ClassicLayout({ tenant, featuredProjects }: ThemeProps) 
 
         {/* NAV */}
         <nav className="flex justify-center gap-10 mt-5 text-sm text-[#2c1a0e]/70 tracking-widest uppercase">
-          {[['./', 'الرئيسية'], ['./projects', 'المشاريع'], ['./contact', 'التواصل']].map(([href, label]) => (
-            <Link key={href} href={href} className="hover:text-[#8b6914] border-b border-transparent hover:border-[#8b6914] pb-0.5 transition-colors">{label}</Link>
+          {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'التواصل']].map(([href, label]) => (
+              <Link key={href} href={`/${tenant.slug}${href}`} className="hover:text-[#8b6914] border-b border-transparent hover:border-[#8b6914] pb-0.5 transition-colors">{label}</Link>
           ))}
         </nav>
       </header>
@@ -96,7 +96,7 @@ export default function ClassicLayout({ tenant, featuredProjects }: ThemeProps) 
           </div>
 
           <div className="text-center mt-10 border-t border-[#2c1a0e]/10 pt-8">
-            <Link href="./projects" className="inline-block border-2 border-[#2c1a0e] text-[#2c1a0e] px-10 py-2.5 text-sm tracking-widest uppercase hover:bg-[#2c1a0e] hover:text-[#f5f0e8] transition-colors">
+            <Link href={`/${tenant.slug}/projects`} className="inline-block border-2 border-[#2c1a0e] text-[#2c1a0e] px-10 py-2.5 text-sm tracking-widest uppercase hover:bg-[#2c1a0e] hover:text-[#f5f0e8] transition-colors">
               جميع المشاريع
             </Link>
           </div>

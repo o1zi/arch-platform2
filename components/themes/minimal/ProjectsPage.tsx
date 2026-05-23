@@ -13,11 +13,11 @@ export default function MinimalProjectsPage({ tenant, projects }: { tenant: Tena
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <header className="px-10 py-6 flex items-center justify-between border-b border-gray-100">
-        <Link href="./" className="text-[11px] text-gray-400 tracking-[0.25em] uppercase hover:text-gray-700 transition-colors">{tenant.name_ar}</Link>
+        <Link href={`/${tenant.slug}`} className="text-[11px] text-gray-400 tracking-[0.25em] uppercase hover:text-gray-700 transition-colors">{tenant.name_ar}</Link>
         <nav className="flex gap-8 text-[11px] text-gray-300 tracking-[0.2em] uppercase">
-          <Link href="./" className="hover:text-gray-700 transition-colors">رئيسية</Link>
+          <Link href={`/${tenant.slug}`} className="hover:text-gray-700 transition-colors">رئيسية</Link>
           <span className="text-gray-500">مشاريع</span>
-          <Link href="./contact" className="hover:text-gray-700 transition-colors">تواصل</Link>
+          <Link href={`/${tenant.slug}/contact`} className="hover:text-gray-700 transition-colors">تواصل</Link>
         </nav>
       </header>
 

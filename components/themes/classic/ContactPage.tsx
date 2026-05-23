@@ -6,7 +6,7 @@ export default function ClassicContactPage({ tenant }: { tenant: Tenant }) {
     <div className="min-h-screen bg-[#f5f0e8]" dir="rtl">
       <div className="border-b-2 border-[#2c1a0e] px-8 py-2 flex items-center justify-between text-[10px] tracking-[0.2em] text-[#2c1a0e]/50 uppercase">
         <span>التواصل</span>
-        <Link href="./" className="hover:text-[#8b6914]">{tenant.name_ar}</Link>
+        <Link href={`/${tenant.slug}`} className="hover:text-[#8b6914]">{tenant.name_ar}</Link>
       </div>
 
       <div className="max-w-2xl mx-auto px-8 py-16">

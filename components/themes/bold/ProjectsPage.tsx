@@ -13,11 +13,11 @@ export default function BoldProjectsPage({ tenant, projects }: { tenant: Tenant;
   return (
     <div className="min-h-screen bg-black text-white" dir="rtl">
       <nav className="border-b-4 border-red-600 px-6 py-4 flex items-center justify-between">
-        <Link href="./" className="text-white font-black text-xl uppercase tracking-tighter">{tenant.name_ar}</Link>
+        <Link href={`/${tenant.slug}`} className="text-white font-black text-xl uppercase tracking-tighter">{tenant.name_ar}</Link>
         <div className="flex gap-0">
-          <Link href="./" className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:text-white hover:bg-red-600 transition-all">الرئيسية</Link>
+          <Link href={`/${tenant.slug}`} className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:text-white hover:bg-red-600 transition-all">الرئيسية</Link>
           <span className="px-5 py-2 text-sm font-black uppercase bg-red-600 text-white">المشاريع</span>
-          <Link href="./contact" className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:text-white hover:bg-red-600 transition-all">تواصل</Link>
+          <Link href={`/${tenant.slug}/contact`} className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:text-white hover:bg-red-600 transition-all">تواصل</Link>
         </div>
       </nav>
 

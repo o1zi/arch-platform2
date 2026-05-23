@@ -10,8 +10,8 @@ export default function MinimalLayout({ tenant, featuredProjects }: ThemeProps) 
       <header className="px-10 py-6 flex items-center justify-between">
         <span className="text-[11px] text-gray-400 tracking-[0.25em] uppercase">{tenant.name_ar}</span>
         <nav className="flex gap-8 text-[11px] text-gray-300 tracking-[0.2em] uppercase">
-          <Link href="./projects" className="hover:text-gray-700 transition-colors">مشاريع</Link>
-          <Link href="./contact" className="hover:text-gray-700 transition-colors">تواصل</Link>
+          <Link href={`/${tenant.slug}/projects`} className="hover:text-gray-700 transition-colors">مشاريع</Link>
+          <Link href={`/${tenant.slug}/contact`} className="hover:text-gray-700 transition-colors">تواصل</Link>
         </nav>
       </header>
 
@@ -51,7 +51,7 @@ export default function MinimalLayout({ tenant, featuredProjects }: ThemeProps) 
               </Link>
             ))}
           </div>
-          <Link href="./projects" className="inline-block mt-10 text-[11px] text-gray-300 tracking-[0.2em] uppercase hover:text-gray-700 transition-colors border-b border-transparent hover:border-gray-300 pb-0.5">
+          <Link href={`/${tenant.slug}/projects`} className="inline-block mt-10 text-[11px] text-gray-300 tracking-[0.2em] uppercase hover:text-gray-700 transition-colors border-b border-transparent hover:border-gray-300 pb-0.5">
             جميع المشاريع
           </Link>
         </section>
@@ -63,7 +63,7 @@ export default function MinimalLayout({ tenant, featuredProjects }: ThemeProps) 
         {tenant.phone && (
           <a href={`tel:${tenant.phone}`} className="text-[11px] text-gray-300 hover:text-gray-700 transition-colors tracking-widest" dir="ltr">{tenant.phone}</a>
         )}
-        <Link href="./contact" className="text-[11px] text-gray-300 hover:text-gray-700 transition-colors tracking-widest uppercase">تواصل معنا</Link>
+        <Link href={`/${tenant.slug}/contact`} className="text-[11px] text-gray-300 hover:text-gray-700 transition-colors tracking-widest uppercase">تواصل معنا</Link>
       </footer>
     </div>
   )

@@ -6,10 +6,10 @@ export default function LuxuryContactPage({ tenant }: { tenant: Tenant }) {
     <div className="min-h-screen bg-[#080808]" dir="rtl">
       <div className="h-px bg-gradient-to-l from-transparent via-[#c9a84c] to-transparent" />
       <nav className="px-8 py-5 flex items-center justify-between max-w-7xl mx-auto">
-        <Link href="./" className="text-[#c9a84c] text-xs tracking-[0.3em] uppercase">{tenant.name_ar}</Link>
+        <Link href={`/${tenant.slug}`} className="text-[#c9a84c] text-xs tracking-[0.3em] uppercase">{tenant.name_ar}</Link>
         <div className="flex gap-8 text-[11px] text-white/30 tracking-[0.25em] uppercase">
-          <Link href="./" className="hover:text-[#c9a84c] transition-colors">رئيسية</Link>
-          <Link href="./projects" className="hover:text-[#c9a84c] transition-colors">مشاريع</Link>
+          <Link href={`/${tenant.slug}`} className="hover:text-[#c9a84c] transition-colors">رئيسية</Link>
+          <Link href={`/${tenant.slug}/projects`} className="hover:text-[#c9a84c] transition-colors">مشاريع</Link>
           <span className="text-[#c9a84c]">تواصل</span>
         </div>
       </nav>

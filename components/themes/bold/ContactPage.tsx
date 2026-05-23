@@ -5,10 +5,10 @@ export default function BoldContactPage({ tenant }: { tenant: Tenant }) {
   return (
     <div className="min-h-screen bg-black text-white" dir="rtl">
       <nav className="border-b-4 border-red-600 px-6 py-4 flex items-center justify-between">
-        <Link href="./" className="font-black text-xl uppercase tracking-tighter">{tenant.name_ar}</Link>
+        <Link href={`/${tenant.slug}`} className="font-black text-xl uppercase tracking-tighter">{tenant.name_ar}</Link>
         <div className="flex gap-0">
-          <Link href="./" className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:bg-red-600 hover:text-white transition-all">الرئيسية</Link>
-          <Link href="./projects" className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:bg-red-600 hover:text-white transition-all">المشاريع</Link>
+          <Link href={`/${tenant.slug}`} className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:bg-red-600 hover:text-white transition-all">الرئيسية</Link>
+          <Link href={`/${tenant.slug}/projects`} className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:bg-red-600 hover:text-white transition-all">المشاريع</Link>
           <span className="px-5 py-2 text-sm font-black uppercase bg-red-600">تواصل</span>
         </div>
       </nav>
