@@ -129,7 +129,9 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
           <h1 className="text-6xl md:text-8xl font-light text-white leading-tight mb-6">{tenant.name_ar}</h1>
           {tenant.name_en && <p className="text-[#c9a84c]/50 text-sm tracking-[0.2em] uppercase mb-4" dir="ltr">{tenant.name_en}</p>}
 
-          <p className="text-white/40 font-light text-base max-w-md leading-loose">{bio}</p>
+          {!tenant.cover_url && (
+            <p className="text-white/40 font-light text-base max-w-md leading-loose">{bio}</p>
+          )}
 
           <div className="mt-12 flex gap-4">
             <Link href={`/${tenant.slug}/projects`}

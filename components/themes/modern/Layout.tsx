@@ -123,13 +123,13 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-[#0f0f0f] to-black" />
         )}
         <div className="relative z-10 max-w-7xl mx-auto w-full">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-            <div>
-              <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-4">مكتب هندسي</p>
-              <h1 className="text-6xl md:text-8xl font-black text-white leading-none mb-6">{tenant.name_ar}</h1>
-              {tenant.name_en && <p className="text-white/30 text-lg font-light" dir="ltr">{tenant.name_en}</p>}
-            </div>
-            <p className="text-white/50 max-w-xs leading-relaxed text-sm md:text-right">{bio}</p>
+          <div>
+            <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-4">مكتب هندسي</p>
+            <h1 className="text-6xl md:text-8xl font-black text-white leading-none mb-6">{tenant.name_ar}</h1>
+            {tenant.name_en && <p className="text-white/30 text-lg font-light" dir="ltr">{tenant.name_en}</p>}
+            {!tenant.cover_url && (
+              <p className="text-white/50 max-w-sm leading-relaxed text-sm mt-6">{bio}</p>
+            )}
           </div>
           <div className="mt-12 flex gap-4">
             <Link href={`/${tenant.slug}/projects`} className="bg-white text-black px-8 py-3 font-bold hover:bg-white/90 transition-colors">

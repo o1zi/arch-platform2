@@ -109,7 +109,9 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
             {tenant.name_ar}
           </h1>
           <div className="w-full h-1 bg-red-600 mb-6" />
-          <p className="text-white/50 text-lg max-w-lg leading-relaxed">{bio}</p>
+          {!tenant.cover_url && (
+            <p className="text-white/50 text-lg max-w-lg leading-relaxed">{bio}</p>
+          )}
           <div className="mt-10 flex gap-4 flex-wrap">
             <Link href={`/${tenant.slug}/projects`} className="bg-red-600 hover:bg-red-700 text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
               المشاريع

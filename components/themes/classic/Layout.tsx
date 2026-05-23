@@ -107,9 +107,6 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
         <div className="relative h-72 md:h-[480px] overflow-hidden">
           <Image src={tenant.cover_url} alt="" fill className="object-cover" />
           <div className="absolute inset-0 bg-[#2c1a0e]/30" />
-          <div className="absolute inset-0 flex items-end justify-center pb-12">
-            <p className="text-[#f5f0e8] text-lg max-w-lg text-center leading-relaxed opacity-90">{bio}</p>
-          </div>
         </div>
       ) : (
         <div className="bg-[#2c1a0e] py-20 px-8 text-center">
