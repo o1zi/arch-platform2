@@ -21,11 +21,11 @@ export default async function AdminSubscriptionsPage() {
         <p className="text-gray-500 mt-1">المكاتب التي اشتراكها منتهٍ أو سينتهي خلال 30 يوم</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden overflow-x-auto">
         {!tenants?.length ? (
           <div className="p-12 text-center text-gray-400">لا توجد اشتراكات تحتاج متابعة</div>
         ) : (
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[480px]">
             <thead className="bg-gray-50 border-b">
               <tr>
                 <th className="text-right p-3 font-medium text-gray-600">المكتب</th>

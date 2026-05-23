@@ -167,8 +167,8 @@ export default function TenantDetail({
       {logs.length > 0 && (
         <div className="space-y-3">
           <h2 className="text-lg font-semibold">سجل الإجراءات</h2>
-          <div className="bg-white rounded-xl border overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="bg-white rounded-xl border overflow-hidden overflow-x-auto">
+            <table className="w-full text-sm min-w-[480px]">
               <thead className="bg-gray-50 border-b">
                 <tr>
                   <th className="text-right p-3 font-medium text-gray-600">الإجراء</th>

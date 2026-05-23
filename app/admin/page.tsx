@@ -51,8 +51,8 @@ export default async function AdminPage() {
           <h2 className="text-lg font-semibold">آخر المكاتب المضافة</h2>
           <Link href="/admin/tenants" className="text-sm text-blue-600 hover:underline">عرض الكل</Link>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden overflow-x-auto">
+          <table className="w-full text-sm min-w-[420px]">
             <thead className="bg-gray-50 border-b">
               <tr>
                 <th className="text-right p-3 font-medium text-gray-600">المكتب</th>

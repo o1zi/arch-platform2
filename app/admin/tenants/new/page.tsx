@@ -85,7 +85,7 @@ export default function NewTenantPage() {
         <Card>
           <CardHeader><CardTitle>معلومات المكتب</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>اسم المكتب (عربي) *</Label>
                 <Input value={form.name_ar} onChange={e => set('name_ar', e.target.value)} required />
@@ -95,7 +95,7 @@ export default function NewTenantPage() {
                 <Input value={form.slug} onChange={e => set('slug', slugify(e.target.value))} dir="ltr" required />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>البريد الإلكتروني *</Label>
                 <Input type="email" value={form.email} onChange={e => set('email', e.target.value)} dir="ltr" required />
@@ -111,7 +111,7 @@ export default function NewTenantPage() {
         <Card className="mt-4">
           <CardHeader><CardTitle>الاشتراك</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>الباقة</Label>
                 <Select value={form.plan} onValueChange={(v) => v && set('plan', v)}>
