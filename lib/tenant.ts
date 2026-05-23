@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import { Tenant } from '@/types'
 
@@ -8,7 +9,7 @@ function handleError(e: unknown): null {
   return null
 }
 
-export async function getTenantBySlug(slug: string): Promise<Tenant | null> {
+async function _getTenantBySlug(slug: string): Promise<Tenant | null> {
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
@@ -23,7 +24,7 @@ export async function getTenantBySlug(slug: string): Promise<Tenant | null> {
   }
 }
 
-export async function getTenantByDomain(domain: string): Promise<Tenant | null> {
+async function _getTenantByDomain(domain: string): Promise<Tenant | null> {
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
@@ -38,12 +39,16 @@ export async function getTenantByDomain(domain: string): Promise<Tenant | null> 
   }
 }
 
-// Used by [domain] pages — identifier is either a slug or custom domain
-export async function getTenantByIdentifier(identifier: string): Promise<Tenant | null> {
-  const bySlug = await getTenantBySlug(identifier)
+export const getTenantBySlug = cache(_getTenantBySlug)
+export const getTenantByDomain = cache(_getTenantByDomain)
+
+async function _getTenantByIdentifier(identifier: string): Promise<Tenant | null> {
+  const bySlug = await _getTenantBySlug(identifier)
   if (bySlug) return bySlug
-  return getTenantByDomain(identifier)
+  return _getTenantByDomain(identifier)
 }
+
+export const getTenantByIdentifier = cache(_getTenantByIdentifier)
 
 export async function getTenantFromRequest(headers: Headers): Promise<Tenant | null> {
   const slug = headers.get('x-tenant-slug')
