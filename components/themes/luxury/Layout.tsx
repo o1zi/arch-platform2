@@ -9,6 +9,7 @@ import {
   Award, Users, Clock, Shield, Star, CheckCircle2,
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
+import { resolveIcon } from '@/components/themes/iconMap'
 
 const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
 
@@ -42,7 +43,7 @@ function GoldLine() {
   return <div className="h-px bg-gradient-to-l from-transparent via-[#c9a84c]/40 to-transparent my-8" />
 }
 
-export default function LuxuryLayout({ tenant, projects, featuredProjects }: ThemeProps) {
+export default function LuxuryLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -199,7 +200,10 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects }: The
             <h2 className="text-3xl font-light text-white">ما نقدمه لك</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-[#c9a84c]/5">
-            {SERVICES.map(({ Icon, title, desc }) => (
+            {(customServices && customServices.length > 0
+              ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
+              : SERVICES
+            ).map(({ Icon, title, desc }) => (
               <div key={title} className="bg-[#0a0a0a] p-8 group hover:bg-[#111] transition-colors text-center">
                 <div className="w-12 h-12 border border-[#c9a84c]/20 flex items-center justify-center mx-auto mb-5 group-hover:border-[#c9a84c]/50 transition-colors">
                   <Icon className="w-5 h-5 text-[#c9a84c]/40 group-hover:text-[#c9a84c] transition-colors" />
@@ -285,7 +289,10 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects }: The
             <h2 className="text-3xl font-light text-white">ما يميزنا</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {WHY_US.map(({ Icon, title, desc }) => (
+            {(customFeatures && customFeatures.length > 0
+              ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
+              : WHY_US
+            ).map(({ Icon, title, desc }) => (
               <div key={title} className="flex gap-4 p-6 border border-[#c9a84c]/10 hover:border-[#c9a84c]/30 transition-colors">
                 <div className="w-8 h-8 border border-[#c9a84c]/20 flex items-center justify-center flex-shrink-0">
                   <Icon className="w-3.5 h-3.5 text-[#c9a84c]/60" />

@@ -14,6 +14,7 @@ import {
   CreditCard,
   LogOut,
   ExternalLink,
+  LayoutList,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -22,6 +23,7 @@ const navItems = [
   { href: '/dashboard', label: 'الرئيسية', icon: LayoutDashboard },
   { href: '/dashboard/profile', label: 'معلومات المكتب', icon: User },
   { href: '/dashboard/projects', label: 'المشاريع', icon: FolderOpen },
+  { href: '/dashboard/services', label: 'الخدمات والمميزات', icon: LayoutList },
   { href: '/dashboard/theme', label: 'القالب', icon: Palette },
   { href: '/dashboard/domain', label: 'الدومين', icon: Globe },
   { href: '/dashboard/subscription', label: 'الاشتراك', icon: CreditCard },

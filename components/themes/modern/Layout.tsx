@@ -9,6 +9,7 @@ import {
   Award, Users, Clock, Shield, Star, CheckCircle2,
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
+import { resolveIcon } from '@/components/themes/iconMap'
 
 const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
 
@@ -38,7 +39,7 @@ function WhatsAppIcon() {
   )
 }
 
-export default function ModernLayout({ tenant, projects, featuredProjects }: ThemeProps) {
+export default function ModernLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -190,7 +191,10 @@ export default function ModernLayout({ tenant, projects, featuredProjects }: The
             <h2 className="text-5xl font-black text-white">ما نقدمه لك</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
-            {SERVICES.map(({ Icon, title, desc }) => (
+            {(customServices && customServices.length > 0
+              ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
+              : SERVICES
+            ).map(({ Icon, title, desc }) => (
               <div key={title} className="bg-[#0f0f0f] p-8 hover:bg-white/5 transition-colors group">
                 <Icon className="w-8 h-8 text-white/20 mb-6 group-hover:text-white transition-colors" />
                 <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
@@ -269,7 +273,10 @@ export default function ModernLayout({ tenant, projects, featuredProjects }: The
             <h2 className="text-5xl font-black text-white">ما يميزنا</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {WHY_US.map(({ Icon, title, desc }) => (
+            {(customFeatures && customFeatures.length > 0
+              ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
+              : WHY_US
+            ).map(({ Icon, title, desc }) => (
               <div key={title} className="flex gap-4">
                 <div className="w-10 h-10 border border-white/10 flex items-center justify-center flex-shrink-0">
                   <Icon className="w-4 h-4 text-white/40" />

@@ -9,6 +9,7 @@ import {
   Award, Users, Clock, Shield, Star, CheckCircle2,
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
+import { resolveIcon } from '@/components/themes/iconMap'
 
 const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
 
@@ -38,7 +39,7 @@ function WhatsAppIcon() {
   )
 }
 
-export default function BoldLayout({ tenant, projects, featuredProjects }: ThemeProps) {
+export default function BoldLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -168,7 +169,10 @@ export default function BoldLayout({ tenant, projects, featuredProjects }: Theme
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/5">
-            {SERVICES.map(({ Icon, title, desc }) => (
+            {(customServices && customServices.length > 0
+              ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
+              : SERVICES
+            ).map(({ Icon, title, desc }) => (
               <div key={title} className="bg-black p-8 group hover:bg-red-600 transition-colors">
                 <Icon className="w-8 h-8 text-red-600 group-hover:text-white mb-4" />
                 <h3 className="font-black text-white text-lg uppercase mb-1">{title}</h3>
@@ -237,7 +241,10 @@ export default function BoldLayout({ tenant, projects, featuredProjects }: Theme
             <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">لماذا نحن</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {WHY_US.map(({ Icon, title }, i) => (
+            {(customFeatures && customFeatures.length > 0
+              ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
+              : WHY_US.map(w => ({ ...w, desc: '' }))
+            ).map(({ Icon, title }, i) => (
               <div key={title} className="border border-white/10 p-6 flex items-center gap-4 hover:border-red-600 transition-colors group">
                 <span className="text-white/10 font-black text-3xl group-hover:text-red-600 transition-colors">
                   {String(i + 1).padStart(2, '0')}

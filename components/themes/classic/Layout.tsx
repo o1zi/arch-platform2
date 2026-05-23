@@ -9,6 +9,7 @@ import {
   Award, Users, Clock, Shield, Star, CheckCircle2,
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
+import { resolveIcon } from '@/components/themes/iconMap'
 
 const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
 
@@ -48,7 +49,7 @@ function WhatsAppIcon() {
   )
 }
 
-export default function ClassicLayout({ tenant, projects, featuredProjects }: ThemeProps) {
+export default function ClassicLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -151,7 +152,10 @@ export default function ClassicLayout({ tenant, projects, featuredProjects }: Th
             <Ornament />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {SERVICES.map(({ Icon, title, desc }) => (
+            {(customServices && customServices.length > 0
+              ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
+              : SERVICES
+            ).map(({ Icon, title, desc }) => (
               <div key={title} className="border border-[#8b6914]/20 p-6 text-center hover:border-[#8b6914] transition-colors">
                 <div className="w-10 h-10 border border-[#8b6914]/30 flex items-center justify-center mx-auto mb-4">
                   <Icon className="w-4 h-4 text-[#8b6914]" />
@@ -240,7 +244,10 @@ export default function ClassicLayout({ tenant, projects, featuredProjects }: Th
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {WHY_US.map(({ Icon, title, desc }) => (
+            {(customFeatures && customFeatures.length > 0
+              ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
+              : WHY_US
+            ).map(({ Icon, title, desc }) => (
               <div key={title} className="flex gap-4 p-4 border border-[#8b6914]/20 hover:border-[#8b6914]/50 transition-colors">
                 <Icon className="w-5 h-5 text-[#8b6914] flex-shrink-0 mt-0.5" />
                 <div>

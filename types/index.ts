@@ -83,10 +83,24 @@ export interface SubscriptionLog {
   created_at: string
 }
 
+export interface ContentBlock {
+  id: string
+  tenant_id: string
+  type: 'service' | 'feature'
+  title: string
+  description: string | null
+  icon: string | null
+  sort_order: number
+  is_active: boolean
+  created_at: string
+}
+
 export interface ThemeProps {
   tenant: Tenant
   projects: Project[]
   featuredProjects: Project[]
+  services: ContentBlock[]
+  features: ContentBlock[]
 }
 
 export const PLAN_LIMITS = {

@@ -9,6 +9,7 @@ import {
   Award, Users, Clock, Shield, Star, CheckCircle2,
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
+import { resolveIcon } from '@/components/themes/iconMap'
 
 const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
 
@@ -38,7 +39,7 @@ function WhatsAppIcon() {
   )
 }
 
-export default function MinimalLayout({ tenant, projects, featuredProjects }: ThemeProps) {
+export default function MinimalLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -124,7 +125,10 @@ export default function MinimalLayout({ tenant, projects, featuredProjects }: Th
       <section className="px-10 py-20 border-t border-gray-100 bg-gray-50">
         <p className="text-[11px] text-gray-300 tracking-[0.3em] uppercase mb-12">خدماتنا</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-          {SERVICES.map(({ Icon, title, desc }, i) => (
+          {(customServices && customServices.length > 0
+            ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
+            : SERVICES
+          ).map(({ Icon, title, desc }, i) => (
             <div key={title} className={`py-6 flex gap-6 items-start ${i % 2 === 0 ? 'md:border-l border-gray-200' : ''} border-b border-gray-200`}>
               <Icon className="w-4 h-4 text-gray-300 mt-1 flex-shrink-0" />
               <div>
@@ -180,7 +184,10 @@ export default function MinimalLayout({ tenant, projects, featuredProjects }: Th
       <section className="px-10 py-20 border-t border-gray-100">
         <p className="text-[11px] text-gray-300 tracking-[0.3em] uppercase mb-12">لماذا نحن</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {WHY_US.map(({ Icon, title, desc }) => (
+          {(customFeatures && customFeatures.length > 0
+            ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
+            : WHY_US
+          ).map(({ Icon, title, desc }) => (
             <div key={title} className="flex gap-4">
               <Icon className="w-4 h-4 text-gray-300 mt-0.5 flex-shrink-0" />
               <div>

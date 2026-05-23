@@ -13,7 +13,7 @@ const themes = {
   luxury: LuxuryLayout,
 }
 
-export function ThemeRenderer({ tenant, projects, featuredProjects }: ThemeProps) {
+export function ThemeRenderer({ tenant, projects, featuredProjects, services, features }: ThemeProps) {
   const Layout = themes[tenant.theme] ?? themes.modern
-  return <Layout tenant={tenant} projects={projects} featuredProjects={featuredProjects} />
+  return <Layout tenant={tenant} projects={projects} featuredProjects={featuredProjects} services={services} features={features} />
 }
