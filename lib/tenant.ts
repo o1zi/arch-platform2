@@ -1,24 +1,41 @@
 import { createClient } from '@/lib/supabase/server'
 import { Tenant } from '@/types'
 
+function handleError(e: unknown): null {
+  if (e instanceof Error) {
+    console.error('Tenant lookup failed:', e.message)
+  }
+  return null
+}
+
 export async function getTenantBySlug(slug: string): Promise<Tenant | null> {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('tenants')
-    .select('*')
-    .eq('slug', slug)
-    .single()
-  return data
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('tenants')
+      .select('*')
+      .eq('slug', slug)
+      .single()
+    if (error) return handleError(error)
+    return data
+  } catch (e) {
+    return handleError(e)
+  }
 }
 
 export async function getTenantByDomain(domain: string): Promise<Tenant | null> {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('tenants')
-    .select('*')
-    .eq('custom_domain', domain)
-    .single()
-  return data
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('tenants')
+      .select('*')
+      .eq('custom_domain', domain)
+      .single()
+    if (error) return handleError(error)
+    return data
+  } catch (e) {
+    return handleError(e)
+  }
 }
 
 // Used by [domain] pages — identifier is either a slug or custom domain

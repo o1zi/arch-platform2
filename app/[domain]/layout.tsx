@@ -8,7 +8,12 @@ export default async function TenantLayout({
   children: React.ReactNode
   params: { domain: string }
 }) {
-  const tenant = await getTenantByIdentifier(params.domain)
+  let tenant
+  try {
+    tenant = await getTenantByIdentifier(params.domain)
+  } catch {
+    return notFound()
+  }
 
   if (!tenant) notFound()
 
