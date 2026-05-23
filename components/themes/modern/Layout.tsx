@@ -141,10 +141,10 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
           </div>
           {projects.length > 0 && (
             <div className="mt-16 pt-8 border-t border-white/10">
-              <div>
-                <span className="text-4xl font-black text-white">{projects.length}+</span>
-                <p className="text-white/30 text-xs mt-1 tracking-widest uppercase">مشروع منجز</p>
-              </div>
+              <Link href={`/${tenant.slug}/projects`} className="group inline-block">
+                <span className="text-4xl font-black text-white group-hover:text-white/70 transition-colors">{projects.length}+</span>
+                <p className="text-white/30 text-xs mt-1 tracking-widest uppercase group-hover:text-white/50 transition-colors">مشروع منجز ←</p>
+              </Link>
             </div>
           )}
         </div>
@@ -201,6 +201,11 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
                 <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
+          </div>
+          <div className="mt-12 flex justify-center">
+            <Link href={`/${tenant.slug}/contact`} className="border border-white/20 text-white px-10 py-3 text-sm font-medium hover:bg-white hover:text-black transition-colors">
+              ابدأ مشروعك معنا ←
+            </Link>
           </div>
         </div>
       </section>
@@ -287,6 +292,21 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
                 </div>
               </div>
             ))}
+          </div>
+          <div className="mt-14 pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+            <p className="text-white/30 text-sm">هل أنت مقتنع؟ دعنا نبدأ معاً</p>
+            <div className="flex gap-4">
+              {waUrl && (
+                <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                  className="bg-[#25D366] text-white px-6 py-2.5 text-sm font-medium hover:bg-[#20BA5A] transition-colors flex items-center gap-2">
+                  <WhatsAppIcon />
+                  واتساب
+                </a>
+              )}
+              <Link href={`/${tenant.slug}/contact`} className="bg-white text-black px-8 py-2.5 text-sm font-bold hover:bg-white/90 transition-colors">
+                تواصل معنا
+              </Link>
+            </div>
           </div>
         </div>
       </section>
