@@ -10,7 +10,7 @@ export default function BoldLayout({ tenant, featuredProjects }: ThemeProps) {
       <nav className="border-b-4 border-red-600 px-6 py-4 flex items-center justify-between">
         <span className="text-white font-black text-xl uppercase tracking-tighter">{tenant.name_ar}</span>
         <div className="flex gap-0">
-          {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل']].map(([href, label]) => (
+          {[['./', 'الرئيسية'], ['./projects', 'المشاريع'], ['./contact', 'تواصل']].map(([href, label]) => (
             <Link key={href} href={href} className="px-5 py-2 text-sm font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-red-600 transition-all">{label}</Link>
           ))}
         </div>
@@ -40,10 +40,10 @@ export default function BoldLayout({ tenant, featuredProjects }: ThemeProps) {
             <p className="text-white/50 text-lg max-w-lg leading-relaxed">{tenant.bio_ar}</p>
           )}
           <div className="mt-10 flex gap-4">
-            <Link href="/projects" className="bg-red-600 hover:bg-red-700 text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
+            <Link href="./projects" className="bg-red-600 hover:bg-red-700 text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
               المشاريع
             </Link>
-            <Link href="/contact" className="border-2 border-white/20 hover:border-white text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
+            <Link href="./contact" className="border-2 border-white/20 hover:border-white text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
               تواصل
             </Link>
           </div>
@@ -55,7 +55,7 @@ export default function BoldLayout({ tenant, featuredProjects }: ThemeProps) {
         <section className="border-t-4 border-red-600">
           <div className="px-6 py-8 flex items-center justify-between bg-red-600">
             <h2 className="text-3xl font-black uppercase tracking-tighter">أعمالنا</h2>
-            <Link href="/projects" className="text-white/70 hover:text-white font-black text-sm uppercase tracking-widest transition-colors">
+            <Link href="./projects" className="text-white/70 hover:text-white font-black text-sm uppercase tracking-widest transition-colors">
               الكل ←
             </Link>
           </div>
@@ -91,7 +91,7 @@ export default function BoldLayout({ tenant, featuredProjects }: ThemeProps) {
       {/* CTA */}
       <section className="px-6 py-20 text-center border-t-4 border-white/5">
         <h3 className="text-5xl md:text-7xl font-black mb-8">ابدأ مشروعك</h3>
-        <Link href="/contact" className="inline-block bg-red-600 hover:bg-red-700 text-white font-black text-xl px-16 py-5 uppercase tracking-widest transition-colors">
+        <Link href="./contact" className="inline-block bg-red-600 hover:bg-red-700 text-white font-black text-xl px-16 py-5 uppercase tracking-widest transition-colors">
           تواصل الآن
         </Link>
       </section>

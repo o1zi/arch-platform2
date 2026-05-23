@@ -26,9 +26,9 @@ export default function ModernLayout({ tenant, featuredProjects }: ThemeProps) {
             <span className="text-white font-bold tracking-tight">{tenant.name_ar}</span>
           </div>
           <div className="flex items-center gap-8 text-sm text-white/50">
-            <Link href="/" className="hover:text-white transition-colors">الرئيسية</Link>
-            <Link href="/projects" className="hover:text-white transition-colors">المشاريع</Link>
-            <Link href="/contact" className="bg-white text-black px-4 py-1.5 rounded-full font-medium hover:bg-white/90 transition-colors">تواصل</Link>
+            <Link href="./" className="hover:text-white transition-colors">الرئيسية</Link>
+            <Link href="./projects" className="hover:text-white transition-colors">المشاريع</Link>
+            <Link href="./contact" className="bg-white text-black px-4 py-1.5 rounded-full font-medium hover:bg-white/90 transition-colors">تواصل</Link>
           </div>
         </div>
       </nav>
@@ -53,10 +53,10 @@ export default function ModernLayout({ tenant, featuredProjects }: ThemeProps) {
             )}
           </div>
           <div className="mt-12 flex gap-4">
-            <Link href="/projects" className="bg-white text-black px-8 py-3 font-bold hover:bg-white/90 transition-colors">
+            <Link href="./projects" className="bg-white text-black px-8 py-3 font-bold hover:bg-white/90 transition-colors">
               استعرض المشاريع
             </Link>
-            <Link href="/contact" className="border border-white/20 text-white px-8 py-3 font-medium hover:border-white/50 transition-colors">
+            <Link href="./contact" className="border border-white/20 text-white px-8 py-3 font-medium hover:border-white/50 transition-colors">
               تواصل معنا
             </Link>
           </div>
@@ -74,7 +74,7 @@ export default function ModernLayout({ tenant, featuredProjects }: ThemeProps) {
           <div className="max-w-7xl mx-auto">
             <div className="flex items-end justify-between mb-16">
               <h2 className="text-5xl font-black text-black">مشاريع<br />مختارة</h2>
-              <Link href="/projects" className="text-black/40 hover:text-black text-sm transition-colors flex items-center gap-2">
+              <Link href="./projects" className="text-black/40 hover:text-black text-sm transition-colors flex items-center gap-2">
                 جميع المشاريع <span>←</span>
               </Link>
             </div>
@@ -114,7 +114,7 @@ export default function ModernLayout({ tenant, featuredProjects }: ThemeProps) {
             {tenant.phone && (
               <a href={`tel:${tenant.phone}`} className="text-white/50 hover:text-white transition-colors" dir="ltr">{tenant.phone}</a>
             )}
-            <Link href="/contact" className="bg-white text-black px-8 py-3 font-bold hover:bg-white/90 transition-colors">
+            <Link href="./contact" className="bg-white text-black px-8 py-3 font-bold hover:bg-white/90 transition-colors">
               ابدأ الآن
             </Link>
           </div>

@@ -18,7 +18,7 @@ export default function LuxuryLayout({ tenant, featuredProjects }: ThemeProps) {
           <span className="text-[#c9a84c] text-xs tracking-[0.3em] uppercase">{tenant.name_ar}</span>
         </div>
         <nav className="hidden md:flex gap-8 text-[11px] text-white/30 tracking-[0.25em] uppercase">
-          {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل']].map(([href, label]) => (
+          {[['./', 'الرئيسية'], ['./projects', 'المشاريع'], ['./contact', 'تواصل']].map(([href, label]) => (
             <Link key={href} href={href} className="hover:text-[#c9a84c] transition-colors relative group">
               {label}
               <span className="absolute -bottom-1 right-0 w-0 h-px bg-[#c9a84c] group-hover:w-full transition-all duration-300" />
@@ -52,11 +52,11 @@ export default function LuxuryLayout({ tenant, featuredProjects }: ThemeProps) {
           )}
 
           <div className="mt-12 flex gap-4">
-            <Link href="/projects"
+            <Link href="./projects"
               className="border border-[#c9a84c] text-[#c9a84c] px-10 py-3 text-xs tracking-[0.25em] uppercase hover:bg-[#c9a84c] hover:text-black transition-all duration-300">
               استعرض الأعمال
             </Link>
-            <Link href="/contact"
+            <Link href="./contact"
               className="border border-white/15 text-white/50 px-10 py-3 text-xs tracking-[0.25em] uppercase hover:border-white/40 hover:text-white transition-all">
               تواصل معنا
             </Link>
@@ -106,7 +106,7 @@ export default function LuxuryLayout({ tenant, featuredProjects }: ThemeProps) {
           </div>
 
           <div className="text-center mt-12">
-            <Link href="/projects" className="inline-block border border-[#c9a84c]/30 text-[#c9a84c]/60 hover:text-[#c9a84c] hover:border-[#c9a84c] px-12 py-3 text-[11px] tracking-[0.3em] uppercase transition-all">
+            <Link href="./projects" className="inline-block border border-[#c9a84c]/30 text-[#c9a84c]/60 hover:text-[#c9a84c] hover:border-[#c9a84c] px-12 py-3 text-[11px] tracking-[0.3em] uppercase transition-all">
               جميع المشاريع
             </Link>
           </div>

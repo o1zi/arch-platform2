@@ -14,11 +14,11 @@ export default function ModernProjectsPage({ tenant, projects }: { tenant: Tenan
     <div className="min-h-screen bg-[#0f0f0f]" dir="rtl">
       {/* top nav */}
       <nav className="border-b border-white/5 px-6 h-16 flex items-center justify-between max-w-7xl mx-auto">
-        <Link href="/" className="text-white font-bold">{tenant.name_ar}</Link>
+        <Link href="./" className="text-white font-bold">{tenant.name_ar}</Link>
         <div className="flex gap-6 text-sm text-white/40">
-          <Link href="/" className="hover:text-white transition-colors">الرئيسية</Link>
+          <Link href="./" className="hover:text-white transition-colors">الرئيسية</Link>
           <span className="text-white">المشاريع</span>
-          <Link href="/contact" className="hover:text-white transition-colors">تواصل</Link>
+          <Link href="./contact" className="hover:text-white transition-colors">تواصل</Link>
         </div>
       </nav>
 

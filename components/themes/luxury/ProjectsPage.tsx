@@ -14,11 +14,11 @@ export default function LuxuryProjectsPage({ tenant, projects }: { tenant: Tenan
     <div className="min-h-screen bg-[#080808]" dir="rtl">
       <div className="h-px bg-gradient-to-l from-transparent via-[#c9a84c] to-transparent" />
       <nav className="px-8 py-5 flex items-center justify-between max-w-7xl mx-auto">
-        <Link href="/" className="text-[#c9a84c] text-xs tracking-[0.3em] uppercase hover:text-[#c9a84c]/70 transition-colors">{tenant.name_ar}</Link>
+        <Link href="./" className="text-[#c9a84c] text-xs tracking-[0.3em] uppercase hover:text-[#c9a84c]/70 transition-colors">{tenant.name_ar}</Link>
         <div className="flex gap-8 text-[11px] text-white/30 tracking-[0.25em] uppercase">
-          <Link href="/" className="hover:text-[#c9a84c] transition-colors">رئيسية</Link>
+          <Link href="./" className="hover:text-[#c9a84c] transition-colors">رئيسية</Link>
           <span className="text-[#c9a84c]">مشاريع</span>
-          <Link href="/contact" className="hover:text-[#c9a84c] transition-colors">تواصل</Link>
+          <Link href="./contact" className="hover:text-[#c9a84c] transition-colors">تواصل</Link>
         </div>
       </nav>
 

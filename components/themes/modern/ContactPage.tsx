@@ -12,10 +12,10 @@ export default function ModernContactPage({ tenant }: { tenant: Tenant }) {
   return (
     <div className="min-h-screen bg-[#0f0f0f]" dir="rtl">
       <nav className="border-b border-white/5 px-6 h-16 flex items-center justify-between max-w-7xl mx-auto">
-        <Link href="/" className="text-white font-bold">{tenant.name_ar}</Link>
+        <Link href="./" className="text-white font-bold">{tenant.name_ar}</Link>
         <div className="flex gap-6 text-sm text-white/40">
-          <Link href="/" className="hover:text-white transition-colors">الرئيسية</Link>
-          <Link href="/projects" className="hover:text-white transition-colors">المشاريع</Link>
+          <Link href="./" className="hover:text-white transition-colors">الرئيسية</Link>
+          <Link href="./projects" className="hover:text-white transition-colors">المشاريع</Link>
           <span className="text-white">تواصل</span>
         </div>
       </nav>
