@@ -46,11 +46,17 @@ export async function middleware(request: NextRequest) {
     }
 
     if (!isRootSite) {
-      // Custom domain
-      return rewriteTenant(request, null, host, pathname)
+      // On Vercel, preview deployments get URLs like "project-hash.vercel.app"
+      // which differ from the production root domain (e.g. "project.vercel.app")
+      const isVercelPreview = rootHost.endsWith('.vercel.app') && host.endsWith('.vercel.app')
+      if (!isVercelPreview) {
+        // Truly unknown host → custom domain
+        return rewriteTenant(request, null, host, pathname)
+      }
+      // Vercel preview URL — treat as root site
     }
 
-    // isRootSite === true → fall through to main site logic
+    // isRootSite === true (or Vercel preview) → fall through to main site logic
   } else {
     // No root domain configured — cannot detect subdomains or custom domains
     // Treat ALL requests as main site (safe default, no 404s)
