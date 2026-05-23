@@ -206,13 +206,13 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
       </div>
 
       {/* Projects Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden overflow-x-auto">
         {projects.length === 0 ? (
           <div className="p-12 text-center text-gray-400">
             <p>لا توجد مشاريع بعد. ابدأ بإضافة مشروعك الأول!</p>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[480px]">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="text-right p-3 font-medium text-gray-600">المشروع</th>
@@ -264,7 +264,7 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
             <DialogTitle>{editProject ? 'تعديل المشروع' : 'مشروع جديد'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-2">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>الاسم (عربي) *</Label>
                 <Input value={form.title_ar} onChange={e => setForm(f => ({ ...f, title_ar: e.target.value }))} />
@@ -274,7 +274,7 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
                 <Input value={form.title_en} onChange={e => setForm(f => ({ ...f, title_en: e.target.value }))} dir="ltr" />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>الوصف (عربي)</Label>
                 <Textarea value={form.description_ar} onChange={e => setForm(f => ({ ...f, description_ar: e.target.value }))} rows={3} />
@@ -284,7 +284,7 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
                 <Textarea value={form.description_en} onChange={e => setForm(f => ({ ...f, description_en: e.target.value }))} rows={3} dir="ltr" />
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>التصنيف</Label>
                 <Select value={form.category} onValueChange={v => setForm(f => ({ ...f, category: v }))}>
