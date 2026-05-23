@@ -38,7 +38,11 @@ export default function DashboardSidebar({ tenant }: { tenant: Tenant }) {
   }
 
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? 'localhost:3000'
-  const siteUrl = `http://${tenant.slug}.${rootDomain}`
+  const isLocalhost = rootDomain.startsWith('localhost')
+  const proto = isLocalhost ? 'http' : 'https'
+  const siteUrl = tenant.custom_domain
+    ? `${proto}://${tenant.custom_domain}`
+    : `${proto}://${rootDomain}/${tenant.slug}`
 
   return (
     <aside className="w-64 bg-white border-l border-gray-200 flex flex-col min-h-screen sticky top-0">

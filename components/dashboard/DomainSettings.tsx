@@ -14,8 +14,12 @@ import { Copy, Globe, Lock } from 'lucide-react'
 
 export default function DomainSettings({ tenant }: { tenant: Tenant }) {
   const supabase = createClient()
-  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? 'yourplatform.com'
-  const subdomainUrl = `${tenant.slug}.${rootDomain}`
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? 'localhost:3000'
+  const isLocalhost = rootDomain.startsWith('localhost')
+  const proto = isLocalhost ? 'http' : 'https'
+  const siteUrl = tenant.custom_domain
+    ? `${proto}://${tenant.custom_domain}`
+    : `${proto}://${rootDomain}/${tenant.slug}`
 
   const [customDomain, setCustomDomain] = useState(tenant.custom_domain ?? '')
   const [saving, setSaving] = useState(false)
@@ -50,9 +54,9 @@ export default function DomainSettings({ tenant }: { tenant: Tenant }) {
         <CardContent>
           <div className="flex items-center gap-3">
             <code className="flex-1 bg-gray-100 rounded-lg px-4 py-3 text-sm font-mono" dir="ltr">
-              https://{subdomainUrl}
+              {siteUrl}
             </code>
-            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`https://${subdomainUrl}`)}>
+            <Button size="sm" variant="outline" onClick={() => copyToClipboard(siteUrl)}>
               <Copy className="h-4 w-4" />
             </Button>
           </div>
