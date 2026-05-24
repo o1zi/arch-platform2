@@ -4,7 +4,7 @@ import { ThemeProps, CustomThemeConfig } from '@/types'
 import { getSectorConfig } from '@/lib/sectors'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Phone, Mail, MapPin, ArrowUp, ChevronDown, CheckCircle } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
 
@@ -119,8 +119,7 @@ function accentBarStyle(pos: string | undefined): React.CSSProperties {
   return {}
 }
 
-function patternCSS(pattern: string | undefined, opacity: number) {
-  const op = opacity
+function patternCSS(pattern: string | undefined, _opacity: number) {
   if (pattern === 'dots')     return `radial-gradient(circle, var(--c-text) 1px, transparent 1px)`
   if (pattern === 'grid')     return `linear-gradient(var(--c-text) 1px, transparent 1px), linear-gradient(90deg, var(--c-text) 1px, transparent 1px)`
   if (pattern === 'diagonal') return `repeating-linear-gradient(45deg, var(--c-text) 0, var(--c-text) 1px, transparent 0, transparent 50%)`
@@ -204,8 +203,8 @@ export default function DynamicThemeEngine({
   const dec = config.decorations ?? {}
   const nav = config.navigation ?? {}
   const sec = config.sections ?? {}
-  const cards = config.cards ?? {}
-  const btns  = config.buttons ?? {}
+  const cards = useMemo(() => config.cards ?? {}, [config.cards])
+  const btns  = useMemo(() => config.buttons ?? {}, [config.buttons])
 
   const accentLine = dec.accentLine ?? false
   const fade       = fx.sectionFade ?? false
@@ -257,7 +256,6 @@ export default function DynamicThemeEngine({
     backgroundSize: pattern === 'diagonal' ? '8px 8px' : pattern === 'cross' ? '24px 24px' : '24px 24px',
     backgroundPosition: '0 0',
   } : {}
-  const patOpStyle: React.CSSProperties = pattern !== 'none' ? { opacity: patOp } : {}
 
   // Primary button
   const PrimaryBtn = useCallback(({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -549,7 +547,7 @@ export default function DynamicThemeEngine({
           <AccentTag label={sc.servicesLabel} show={accentLine} />
           <h2 className="text-4xl font-black mb-12 heading-text" style={{ fontFamily: 'var(--font-heading)', color: 'var(--c-text)' }}>ما نقدمه</h2>
           <div className="space-y-5">
-            {items.map(({ Icon, title, desc }, idx) => (
+            {items.map(({ Icon, title, desc }) => (
               <div key={title} className={`flex items-start gap-5 p-5 ${br} ${cHover}`} style={cardStyleVars(cards.style, glassCards)}>
                 <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded" style={{ backgroundColor: 'var(--c-primary)' }}>
                   <Icon className="w-5 h-5" style={{ color: 'var(--c-accent)' }} />
@@ -1069,9 +1067,6 @@ export default function DynamicThemeEngine({
     footer: SectionFooter,
   }
 
-  const altBg = dec.sectionBgAlt ?? false
-  let altCount = 0
-
   return (
     <div dir="rtl" style={{ ...buildCSSVars(config), fontFamily: 'var(--font-body)', backgroundColor: 'var(--c-bg)', fontSize: 'var(--font-bs)' }}>
       <style>{globalCSS}</style>
@@ -1100,7 +1095,6 @@ export default function DynamicThemeEngine({
         const Component = sectionComponents[key as SectionKey]
         if (!Component) return null
         if (key === 'hero') return <Component key={key} />
-        altCount++
         return (
           <FadeIn key={key} enabled={fade}>
             {i > 0 && <SectionDivider style={divider} />}
