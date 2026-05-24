@@ -166,37 +166,42 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
       </section>
 
       {/* FEATURED PROJECTS */}
-      {featuredProjects.length > 0 ? (
+      {projects.length > 0 ? (
         <section className="max-w-5xl mx-auto px-8 py-16">
           <div className="text-center mb-10">
             <p className="text-[#8b6914] text-xs tracking-[0.3em] uppercase mb-1">معرض الأعمال</p>
-            <h2 className="text-3xl font-black text-[#2c1a0e]">مشاريع مختارة</h2>
+            <h2 className="text-3xl font-black text-[#2c1a0e]">
+              {featuredProjects.length > 0 ? 'مشاريع مختارة' : 'مشاريعنا'}
+            </h2>
             <Ornament />
           </div>
 
-          {featuredProjects[0] && (
-            <Link href={`/${tenant.slug}/projects/${featuredProjects[0].id}`} className="group block mb-8">
+          {(featuredProjects.length > 0 ? featuredProjects : projects)[0] && (() => {
+            const p0 = (featuredProjects.length > 0 ? featuredProjects : projects)[0]
+            return (
+            <Link href={`/${tenant.slug}/projects/${p0.id}`} className="group block mb-8">
               <div className="relative aspect-[21/9] overflow-hidden border-2 border-[#2c1a0e]/10">
-                {featuredProjects[0].cover_image_url
-                  ? <Image src={featuredProjects[0].cover_image_url} alt={featuredProjects[0].title_ar} fill className="object-cover group-hover:scale-103 transition-transform duration-700" />
+                {p0.cover_image_url
+                  ? <Image src={p0.cover_image_url} alt={p0.title_ar} fill className="object-cover group-hover:scale-103 transition-transform duration-700" />
                   : <div className="w-full h-full bg-[#2c1a0e]/5 flex items-center justify-center">
-                      <span className="text-[#8b6914]/30 text-4xl font-black">{featuredProjects[0].title_ar.charAt(0)}</span>
+                      <span className="text-[#8b6914]/30 text-4xl font-black">{p0.title_ar.charAt(0)}</span>
                     </div>
                 }
-                {featuredProjects[0].is_featured && (
+                {p0.is_featured && (
                   <div className="absolute top-3 right-3 bg-[#8b6914] text-white text-xs px-2 py-0.5 tracking-widest uppercase">مميز</div>
                 )}
               </div>
               <div className="border-2 border-t-0 border-[#2c1a0e]/10 p-4 bg-white">
-                <p className="text-[#8b6914] text-xs tracking-widest uppercase">{featuredProjects[0].category ?? 'مشروع'}</p>
-                <h3 className="text-2xl font-black text-[#2c1a0e] mt-1">{featuredProjects[0].title_ar}</h3>
-                {featuredProjects[0].year && <p className="text-[#2c1a0e]/40 text-sm mt-1">{featuredProjects[0].year}</p>}
+                <p className="text-[#8b6914] text-xs tracking-widest uppercase">{p0.category ?? 'مشروع'}</p>
+                <h3 className="text-2xl font-black text-[#2c1a0e] mt-1">{p0.title_ar}</h3>
+                {p0.year && <p className="text-[#2c1a0e]/40 text-sm mt-1">{p0.year}</p>}
               </div>
             </Link>
-          )}
+            )
+          })()}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredProjects.slice(1, 4).map(p => (
+            {(featuredProjects.length > 0 ? featuredProjects : projects).slice(1, 4).map(p => (
               <Link key={p.id} href={`/${tenant.slug}/projects/${p.id}`} className="group block">
                 <div className="relative aspect-[4/3] overflow-hidden border border-[#2c1a0e]/10">
                   {p.cover_image_url

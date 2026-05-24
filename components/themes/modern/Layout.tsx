@@ -210,18 +210,20 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
         </div>
       </section>
 
-      {/* FEATURED PROJECTS */}
-      {featuredProjects.length > 0 ? (
+      {/* FEATURED PROJECTS — يعرض المميّزة أولاً، وإن لم تُحدَّد يعرض الكل */}
+      {projects.length > 0 ? (
         <section className="bg-white py-24 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-end justify-between mb-16">
-              <h2 className="text-5xl font-black text-black">مشاريع<br />مختارة</h2>
+              <h2 className="text-5xl font-black text-black">
+                {featuredProjects.length > 0 ? (<>مشاريع<br />مختارة</>) : 'مشاريعنا'}
+              </h2>
               <Link href={`/${tenant.slug}/projects`} className="text-black/40 hover:text-black text-sm transition-colors flex items-center gap-2">
                 جميع المشاريع <span>←</span>
               </Link>
             </div>
             <div className="grid grid-cols-12 gap-3">
-              {featuredProjects.slice(0, 5).map((p, i) => {
+              {(featuredProjects.length > 0 ? featuredProjects : projects).slice(0, 5).map((p, i) => {
                 const sizes = [
                   'col-span-12 md:col-span-7 aspect-[16/9]',
                   'col-span-12 md:col-span-5 aspect-[4/3]',

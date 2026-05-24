@@ -219,19 +219,21 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
       </section>
 
       {/* FEATURED PROJECTS */}
-      {featuredProjects.length > 0 ? (
+      {projects.length > 0 ? (
         <section className="py-24 px-8 max-w-7xl mx-auto">
           <div className="flex items-center gap-6 mb-16">
             <div className="h-px flex-1 bg-gradient-to-l from-[#c9a84c]/20 to-transparent" />
             <div className="text-center">
               <p className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase mb-1">معرض الأعمال</p>
-              <h2 className="text-3xl font-light text-white">مشاريعنا المختارة</h2>
+              <h2 className="text-3xl font-light text-white">
+                {featuredProjects.length > 0 ? 'مشاريعنا المختارة' : 'مشاريعنا'}
+              </h2>
             </div>
             <div className="h-px flex-1 bg-gradient-to-r from-[#c9a84c]/20 to-transparent" />
           </div>
 
           <div className="grid grid-cols-12 gap-3">
-            {featuredProjects.slice(0, 6).map((p, i) => {
+            {(featuredProjects.length > 0 ? featuredProjects : projects).slice(0, 6).map((p, i) => {
               const config = [
                 'col-span-12 md:col-span-8 aspect-video',
                 'col-span-12 md:col-span-4 aspect-[3/4]',

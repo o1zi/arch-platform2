@@ -141,11 +141,13 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
       </section>
 
       {/* FEATURED PROJECTS */}
-      {featuredProjects.length > 0 ? (
+      {projects.length > 0 ? (
         <section className="px-10 py-20 border-t border-gray-100">
-          <p className="text-[11px] text-gray-300 tracking-[0.3em] uppercase mb-12">مشاريع مختارة</p>
+          <p className="text-[11px] text-gray-300 tracking-[0.3em] uppercase mb-12">
+            {featuredProjects.length > 0 ? 'مشاريع مختارة' : 'مشاريعنا'}
+          </p>
           <div className="space-y-0">
-            {featuredProjects.map((p, i) => (
+            {(featuredProjects.length > 0 ? featuredProjects : projects).map((p, i) => (
               <Link key={p.id} href={`/${tenant.slug}/projects/${p.id}`}
                 className="group flex items-start gap-8 py-6 border-b border-gray-100 hover:border-gray-300 transition-colors">
                 <span className="text-[11px] text-gray-200 font-light w-8 pt-1 flex-shrink-0 group-hover:text-gray-400 transition-colors">

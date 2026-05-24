@@ -186,7 +186,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
       </section>
 
       {/* FEATURED PROJECTS */}
-      {featuredProjects.length > 0 ? (
+      {projects.length > 0 ? (
         <section className="border-t-4 border-red-600">
           <div className="px-6 py-8 flex items-center justify-between bg-red-600">
             <h2 className="text-3xl font-black uppercase tracking-tighter">أعمالنا</h2>
@@ -194,7 +194,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
               الكل ←
             </Link>
           </div>
-          {featuredProjects.slice(0, 4).map((p, i) => (
+          {(featuredProjects.length > 0 ? featuredProjects : projects).slice(0, 4).map((p, i) => (
             <Link key={p.id} href={`/${tenant.slug}/projects/${p.id}`} className="group flex items-stretch border-b border-white/10 hover:border-red-600 transition-colors">
               <div className="w-16 md:w-24 flex-shrink-0 flex items-center justify-center border-l border-white/10 group-hover:border-red-600 transition-colors">
                 <span className="text-white/20 font-black text-4xl group-hover:text-red-600 transition-colors">
