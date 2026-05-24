@@ -8,6 +8,9 @@ alter table custom_themes
   add column if not exists visibility text not null default 'public'
     check (visibility in ('public', 'private'));
 
+-- تأكد أن القوالب الموجودة مسبقاً تحمل القيمة الافتراضية
+update custom_themes set visibility = 'public' where visibility is null;
+
 -- جدول ربط القوالب الخاصة بالمشتركين المحددين
 create table if not exists custom_theme_tenants (
   id               uuid primary key default gen_random_uuid(),

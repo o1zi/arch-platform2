@@ -20,36 +20,43 @@ export default async function ThemePage() {
   const planOrder = { basic: 0, pro: 1, premium: 2 }
   const tenantPlanLevel = planOrder[tenant.plan]
 
-  // جلب القوالب العامة + القوالب الخاصة المخصصة لهذا المكتب معاً
-  const [{ data: publicThemes }, { data: privateAssignments }] = await Promise.all([
+  // ١. القوالب العامة — visibility = 'public' ومناسبة للباقة
+  const [{ data: publicThemes }, { data: assignedThemes }] = await Promise.all([
     supabase
       .from('custom_themes')
       .select('*')
       .eq('is_active', true)
       .eq('visibility', 'public')
       .order('created_at', { ascending: false }),
+
+    // ٢. القوالب الخاصة المخصصة لهذا المكتب تحديداً
     supabase
       .from('custom_theme_tenants')
-      .select('custom_theme:custom_themes(*)')
+      .select('custom_theme_id')
       .eq('tenant_id', tenant.id),
   ])
 
-  // القوالب العامة المتاحة حسب الباقة
   const availablePublic = ((publicThemes ?? []) as CustomTheme[]).filter(
     t => planOrder[t.plan_required] <= tenantPlanLevel
   )
 
-  // القوالب الخاصة المخصصة لهذا المكتب (بغض النظر عن الباقة)
-  const availablePrivate = (privateAssignments ?? [])
-    .map((a: { custom_theme: unknown }) => a.custom_theme as CustomTheme | null)
-    .filter((t): t is CustomTheme => t !== null && (t as CustomTheme).is_active === true)
+  // جلب تفاصيل القوالب الخاصة المخصصة (بعد معرفة الـ IDs)
+  const privateThemeIds = (assignedThemes ?? []).map((a: { custom_theme_id: string }) => a.custom_theme_id)
+  const publicIds = new Set(availablePublic.map(t => t.id))
+  // نستثني ما هو موجود في العامة تجنباً للتكرار
+  const newPrivateIds = privateThemeIds.filter(id => !publicIds.has(id))
 
-  // دمج القائمتين بدون تكرار
-  const allCustomThemeIds = new Set(availablePublic.map(t => t.id))
-  const availableCustomThemes = [
-    ...availablePublic,
-    ...availablePrivate.filter(t => !allCustomThemeIds.has(t.id)),
-  ]
+  let availablePrivate: CustomTheme[] = []
+  if (newPrivateIds.length > 0) {
+    const { data: privateThemes } = await supabase
+      .from('custom_themes')
+      .select('*')
+      .in('id', newPrivateIds)
+      .eq('is_active', true)
+    availablePrivate = (privateThemes ?? []) as CustomTheme[]
+  }
+
+  const availableCustomThemes = [...availablePublic, ...availablePrivate]
 
   return (
     <div className="space-y-6 max-w-5xl">
