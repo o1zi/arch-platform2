@@ -10,26 +10,7 @@ import {
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
-
-const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
-
-const SERVICES = [
-  { Icon: Building2, title: 'تصميم معماري', desc: 'تصميم مبدع وعملي يعكس هوية مكانك' },
-  { Icon: Layers, title: 'تصميم داخلي', desc: 'فضاءات داخلية أنيقة بتفصيل متقن' },
-  { Icon: Eye, title: 'إشراف على التنفيذ', desc: 'رقابة دقيقة تضمن أعلى معايير الجودة' },
-  { Icon: Lightbulb, title: 'استشارات هندسية', desc: 'حلول مبتكرة لكل تحديات مشروعك' },
-  { Icon: MapPin, title: 'تخطيط عمراني', desc: 'مجمعات ومدن تجمع الجمال والوظيفة' },
-  { Icon: ClipboardList, title: 'إدارة مشاريع', desc: 'تسليم في الوقت المحدد بأعلى كفاءة' },
-]
-
-const WHY_US = [
-  { Icon: Award, title: 'خبرة واسعة', desc: 'سنوات من الإبداع والتميز في مجال الهندسة' },
-  { Icon: Users, title: 'فريق متخصص', desc: 'مهندسون ومصممون بأعلى المؤهلات' },
-  { Icon: Clock, title: 'الالتزام بالمواعيد', desc: 'نلتزم بالجدول الزمني المتفق عليه دائماً' },
-  { Icon: Shield, title: 'جودة مضمونة', desc: 'معايير صارمة في كل مرحلة من مراحل التنفيذ' },
-  { Icon: Star, title: 'تصاميم مبتكرة', desc: 'حلول إبداعية تجمع الجمال والعملية' },
-  { Icon: CheckCircle2, title: 'متابعة مستمرة', desc: 'دعم كامل قبل وأثناء وبعد التنفيذ' },
-]
+import { getSectorConfig } from '@/lib/sectors'
 
 function WhatsAppIcon() {
   return (
@@ -39,7 +20,7 @@ function WhatsAppIcon() {
   )
 }
 
-export default function ModernLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
+export default function ModernLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures, sectorConfig }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -52,7 +33,8 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  const bio = tenant.bio_ar || DEFAULT_BIO
+  const sc = sectorConfig ?? getSectorConfig(tenant.sector)
+  const bio = tenant.bio_ar || sc.heroTagline
   const waPhone = tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
 
@@ -106,7 +88,7 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
           </div>
           <div className="flex items-center gap-8 text-sm text-white/50">
             <Link href={`/${tenant.slug}`} className="hover:text-white transition-colors">الرئيسية</Link>
-            <Link href={`/${tenant.slug}/projects`} className="hover:text-white transition-colors">المشاريع</Link>
+            <Link href={`/${tenant.slug}/projects`} className="hover:text-white transition-colors">{sc.portfolioLabel}</Link>
             <Link href={`/${tenant.slug}/contact`} className="bg-white text-black px-4 py-1.5 rounded-full font-medium hover:bg-white/90 transition-colors">تواصل</Link>
           </div>
         </div>
@@ -124,7 +106,7 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
         )}
         <div className="relative z-10 max-w-7xl mx-auto w-full">
           <div>
-            <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-4">مكتب هندسي</p>
+            <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-4">{sc.label}</p>
             <h1 className="text-6xl md:text-8xl font-black text-white leading-none mb-6">{tenant.name_ar}</h1>
             {tenant.name_en && <p className="text-white/30 text-lg font-light" dir="ltr">{tenant.name_en}</p>}
             {!tenant.cover_url && (
@@ -133,7 +115,7 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
           </div>
           <div className="mt-12 flex gap-4">
             <Link href={`/${tenant.slug}/projects`} className="bg-white text-black px-8 py-3 font-bold hover:bg-white/90 transition-colors">
-              استعرض المشاريع
+              استعرض {sc.portfolioLabel}
             </Link>
             <Link href={`/${tenant.slug}/contact`} className="border border-white/20 text-white px-8 py-3 font-medium hover:border-white/50 transition-colors">
               تواصل معنا
@@ -143,7 +125,7 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
             <div className="mt-16 pt-8 border-t border-white/10">
               <Link href={`/${tenant.slug}/projects`} className="group inline-block">
                 <span className="text-4xl font-black text-white group-hover:text-white/70 transition-colors">{projects.length}+</span>
-                <p className="text-white/30 text-xs mt-1 tracking-widest uppercase group-hover:text-white/50 transition-colors">مشروع منجز ←</p>
+                <p className="text-white/30 text-xs mt-1 tracking-widest uppercase group-hover:text-white/50 transition-colors">{sc.portfolioItemLabel} منجز ←</p>
               </Link>
             </div>
           )}
@@ -159,7 +141,7 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-black/30 text-xs tracking-[0.3em] uppercase mb-4">من نحن</p>
-            <h2 className="text-5xl font-black text-black mb-8 leading-tight">نبني أحلامك<br />بدقة وإبداع</h2>
+            <h2 className="text-5xl font-black text-black mb-8 leading-tight">{sc.aboutTitle}</h2>
             <p className="text-black/60 leading-loose">{bio}</p>
             {tenant.address_ar && (
               <p className="mt-6 text-black/40 text-sm flex items-start gap-2">
@@ -187,13 +169,13 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
       <section className="bg-[#0f0f0f] py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-4">خدماتنا</p>
+            <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-4">{sc.servicesLabel}</p>
             <h2 className="text-5xl font-black text-white">ما نقدمه لك</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
             {(customServices && customServices.length > 0
               ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
-              : SERVICES
+              : sc.services.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.desc }))
             ).map(({ Icon, title, desc }) => (
               <div key={title} className="bg-[#0f0f0f] p-8 hover:bg-white/5 transition-colors group">
                 <Icon className="w-8 h-8 text-white/20 mb-6 group-hover:text-white transition-colors" />
@@ -216,10 +198,10 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
           <div className="max-w-7xl mx-auto">
             <div className="flex items-end justify-between mb-16">
               <h2 className="text-5xl font-black text-black">
-                {featuredProjects.length > 0 ? (<>مشاريع<br />مختارة</>) : 'مشاريعنا'}
+                {featuredProjects.length > 0 ? sc.featuredLabel : sc.portfolioLabel}
               </h2>
               <Link href={`/${tenant.slug}/projects`} className="text-black/40 hover:text-black text-sm transition-colors flex items-center gap-2">
-                جميع المشاريع <span>←</span>
+                جميع {sc.portfolioLabel} <span>←</span>
               </Link>
             </div>
             <div className="grid grid-cols-12 gap-3">
@@ -282,7 +264,7 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(customFeatures && customFeatures.length > 0
               ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
-              : WHY_US
+              : sc.features.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.desc }))
             ).map(({ Icon, title, desc }) => (
               <div key={title} className="flex gap-4">
                 <div className="w-10 h-10 border border-white/10 flex items-center justify-center flex-shrink-0">
@@ -317,8 +299,8 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
       <section className="bg-white py-20 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
-            <h3 className="text-4xl font-black text-black mb-2">هل لديك مشروع؟</h3>
-            <p className="text-black/40">دعنا نحوّل فكرتك إلى واقع</p>
+            <h3 className="text-4xl font-black text-black mb-2">{sc.cta}</h3>
+            <p className="text-black/40">{sc.ctaDesc}</p>
           </div>
           <div className="flex gap-4 flex-wrap">
             {waUrl && (
@@ -350,7 +332,7 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
           <div>
             <h4 className="text-white/50 text-xs tracking-widest uppercase mb-6">روابط سريعة</h4>
             <div className="space-y-3">
-              {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل معنا']].map(([href, label]) => (
+              {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل معنا']].map(([href, label]) => (
                 <Link key={href} href={`/${tenant.slug}${href}`} className="block text-white/40 hover:text-white transition-colors text-sm">{label}</Link>
               ))}
             </div>

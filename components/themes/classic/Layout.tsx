@@ -10,26 +10,7 @@ import {
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
-
-const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
-
-const SERVICES = [
-  { Icon: Building2, title: 'تصميم معماري', desc: 'تصميم مبدع وعملي يعكس هوية مكانك' },
-  { Icon: Layers, title: 'تصميم داخلي', desc: 'فضاءات داخلية أنيقة بتفصيل متقن' },
-  { Icon: Eye, title: 'إشراف على التنفيذ', desc: 'رقابة دقيقة تضمن أعلى معايير الجودة' },
-  { Icon: Lightbulb, title: 'استشارات هندسية', desc: 'حلول مبتكرة لكل تحديات مشروعك' },
-  { Icon: MapPin, title: 'تخطيط عمراني', desc: 'مجمعات ومدن تجمع الجمال والوظيفة' },
-  { Icon: ClipboardList, title: 'إدارة مشاريع', desc: 'تسليم في الوقت المحدد بأعلى كفاءة' },
-]
-
-const WHY_US = [
-  { Icon: Award, title: 'خبرة واسعة', desc: 'سنوات من الإبداع والتميز في مجال الهندسة' },
-  { Icon: Users, title: 'فريق متخصص', desc: 'مهندسون ومصممون بأعلى المؤهلات' },
-  { Icon: Clock, title: 'الالتزام بالمواعيد', desc: 'نلتزم بالجدول الزمني المتفق عليه دائماً' },
-  { Icon: Shield, title: 'جودة مضمونة', desc: 'معايير صارمة في كل مرحلة من مراحل التنفيذ' },
-  { Icon: Star, title: 'تصاميم مبتكرة', desc: 'حلول إبداعية تجمع الجمال والعملية' },
-  { Icon: CheckCircle2, title: 'متابعة مستمرة', desc: 'دعم كامل قبل وأثناء وبعد التنفيذ' },
-]
+import { getSectorConfig } from '@/lib/sectors'
 
 function Ornament() {
   return (
@@ -49,7 +30,7 @@ function WhatsAppIcon() {
   )
 }
 
-export default function ClassicLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
+export default function ClassicLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures, sectorConfig }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -62,7 +43,8 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  const bio = tenant.bio_ar || DEFAULT_BIO
+  const sc = sectorConfig ?? getSectorConfig(tenant.sector)
+  const bio = tenant.bio_ar || sc.heroTagline
   const waPhone = tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
 
@@ -78,7 +60,7 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
       {/* TOP BAR */}
       <div className="border-b-2 border-[#2c1a0e] px-8 py-2 flex items-center justify-between text-[10px] tracking-[0.2em] text-[#2c1a0e]/50 uppercase">
         <span>{new Date().getFullYear()}</span>
-        <span>مكتب هندسي</span>
+        <span>{sc.label}</span>
         <div className="flex items-center gap-4">
           {tenant.phone && <span dir="ltr">{tenant.phone}</span>}
           {tenant.email && <span>{tenant.email}</span>}
@@ -96,7 +78,7 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
         {tenant.name_en && <p className="text-[#8b6914] text-sm mt-2 tracking-widest uppercase" dir="ltr">{tenant.name_en}</p>}
         <Ornament />
         <nav className="flex justify-center gap-10 text-sm text-[#2c1a0e]/70 tracking-widest uppercase">
-          {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'التواصل']].map(([href, label]) => (
+          {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'التواصل']].map(([href, label]) => (
             <Link key={href} href={`/${tenant.slug}${href}`} className="hover:text-[#8b6914] border-b border-transparent hover:border-[#8b6914] pb-0.5 transition-colors">{label}</Link>
           ))}
         </nav>
@@ -144,14 +126,14 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
       <section className="bg-white border-t border-b border-[#2c1a0e]/10 py-16 px-8">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[#8b6914] text-xs tracking-[0.3em] uppercase mb-1">خدماتنا</p>
+            <p className="text-[#8b6914] text-xs tracking-[0.3em] uppercase mb-1">{sc.servicesLabel}</p>
             <h2 className="text-3xl font-black text-[#2c1a0e]">ما نقدمه</h2>
             <Ornament />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             {(customServices && customServices.length > 0
               ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
-              : SERVICES
+              : sc.services.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.desc }))
             ).map(({ Icon, title, desc }) => (
               <div key={title} className="border border-[#8b6914]/20 p-6 text-center hover:border-[#8b6914] transition-colors">
                 <div className="w-10 h-10 border border-[#8b6914]/30 flex items-center justify-center mx-auto mb-4">
@@ -171,7 +153,7 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
           <div className="text-center mb-10">
             <p className="text-[#8b6914] text-xs tracking-[0.3em] uppercase mb-1">معرض الأعمال</p>
             <h2 className="text-3xl font-black text-[#2c1a0e]">
-              {featuredProjects.length > 0 ? 'مشاريع مختارة' : 'مشاريعنا'}
+              {featuredProjects.length > 0 ? sc.featuredLabel : sc.portfolioLabel}
             </h2>
             <Ornament />
           </div>
@@ -221,15 +203,15 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
 
           <div className="text-center mt-10 border-t border-[#2c1a0e]/10 pt-8">
             <Link href={`/${tenant.slug}/projects`} className="inline-block border-2 border-[#2c1a0e] text-[#2c1a0e] px-10 py-2.5 text-sm tracking-widest uppercase hover:bg-[#2c1a0e] hover:text-[#f5f0e8] transition-colors">
-              {projects.length > 6 ? `جميع المشاريع (${projects.length})` : 'جميع المشاريع'}
+              {projects.length > 6 ? `جميع ${sc.portfolioLabel} (${projects.length})` : `جميع ${sc.portfolioLabel}`}
             </Link>
           </div>
         </section>
       ) : (
         <section className="max-w-5xl mx-auto px-8 py-16 text-center">
-          <p className="text-[#8b6914] text-xs tracking-[0.3em] uppercase mb-2">المشاريع</p>
+          <p className="text-[#8b6914] text-xs tracking-[0.3em] uppercase mb-2">{sc.portfolioLabel}</p>
           <h2 className="text-3xl font-black text-[#2c1a0e]/20 mb-3">قريباً</h2>
-          <p className="text-[#2c1a0e]/40 text-sm">سيتم إضافة مشاريعنا قريباً</p>
+          <p className="text-[#2c1a0e]/40 text-sm">سيتم إضافة {sc.portfolioItemLabelPlural} قريباً</p>
         </section>
       )}
 
@@ -248,7 +230,7 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {(customFeatures && customFeatures.length > 0
               ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
-              : WHY_US
+              : sc.features.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.desc }))
             ).map(({ Icon, title, desc }) => (
               <div key={title} className="flex gap-4 p-4 border border-[#8b6914]/20 hover:border-[#8b6914]/50 transition-colors">
                 <Icon className="w-5 h-5 text-[#8b6914] flex-shrink-0 mt-0.5" />
@@ -265,8 +247,8 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
       {/* CTA */}
       <section className="bg-[#f5f0e8] border-t-4 border-double border-[#2c1a0e] py-16 px-8 text-center">
         <p className="text-[#8b6914] text-xs tracking-[0.3em] uppercase mb-3">ابدأ مشروعك</p>
-        <h3 className="text-4xl font-black text-[#2c1a0e] mb-6">هل لديك مشروع؟</h3>
-        <p className="text-[#2c1a0e]/50 mb-8 max-w-md mx-auto">دعنا نحوّل فكرتك إلى واقع بلمسة من الأناقة والإتقان</p>
+        <h3 className="text-4xl font-black text-[#2c1a0e] mb-6">{sc.cta}</h3>
+        <p className="text-[#2c1a0e]/50 mb-8 max-w-md mx-auto">{sc.ctaDesc}</p>
         <div className="flex gap-4 justify-center flex-wrap">
           {waUrl && (
             <a href={waUrl} target="_blank" rel="noopener noreferrer"
@@ -296,7 +278,7 @@ export default function ClassicLayout({ tenant, projects, featuredProjects, serv
           <div>
             <h4 className="text-[#8b6914] text-xs tracking-widest uppercase mb-4">روابط سريعة</h4>
             <div className="space-y-2">
-              {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل معنا']].map(([href, label]) => (
+              {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل معنا']].map(([href, label]) => (
                 <Link key={href} href={`/${tenant.slug}${href}`} className="block text-[#f5f0e8]/40 hover:text-[#8b6914] transition-colors text-sm">{label}</Link>
               ))}
             </div>

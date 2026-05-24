@@ -32,5 +32,5 @@ export function ThemeProjectsRenderer({ tenant, projects, customTheme, sectorCon
 
   // قالب مدمج
   const Page = renderers[tenant.theme] ?? renderers.modern
-  return <Page tenant={tenant} projects={projects} />
+  return <Page tenant={tenant} projects={projects} sectorConfig={resolvedSectorConfig} />
 }

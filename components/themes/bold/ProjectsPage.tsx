@@ -1,11 +1,22 @@
 'use client'
 
 import { Tenant, Project } from '@/types'
+import { SectorConfig, getSectorConfig } from '@/lib/sectors'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { BedDouble, Bath, Maximize2 } from 'lucide-react'
 
-export default function BoldProjectsPage({ tenant, projects }: { tenant: Tenant; projects: Project[] }) {
+export default function BoldProjectsPage({
+  tenant,
+  projects,
+  sectorConfig,
+}: {
+  tenant: Tenant
+  projects: Project[]
+  sectorConfig?: SectorConfig
+}) {
+  const sc = sectorConfig ?? getSectorConfig(tenant.sector)
   const categories = ['الكل', ...Array.from(new Set(projects.map(p => p.category).filter(Boolean))) as string[]]
   const [active, setActive] = useState('الكل')
   const filtered = active === 'الكل' ? projects : projects.filter(p => p.category === active)
@@ -16,7 +27,7 @@ export default function BoldProjectsPage({ tenant, projects }: { tenant: Tenant;
         <Link href={`/${tenant.slug}`} className="text-white font-black text-xl uppercase tracking-tighter">{tenant.name_ar}</Link>
         <div className="flex gap-0">
           <Link href={`/${tenant.slug}`} className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:text-white hover:bg-red-600 transition-all">الرئيسية</Link>
-          <span className="px-5 py-2 text-sm font-black uppercase bg-red-600 text-white">المشاريع</span>
+          <span className="px-5 py-2 text-sm font-black uppercase bg-red-600 text-white">{sc.portfolioLabel}</span>
           <Link href={`/${tenant.slug}/contact`} className="px-5 py-2 text-sm font-black uppercase text-white/40 hover:text-white hover:bg-red-600 transition-all">تواصل</Link>
         </div>
       </nav>
@@ -25,11 +36,11 @@ export default function BoldProjectsPage({ tenant, projects }: { tenant: Tenant;
       <div className="px-6 py-12 border-b border-white/10">
         <h1 className="text-7xl md:text-9xl font-black leading-none tracking-tighter"
           style={{ WebkitTextStroke: '2px white', color: 'transparent' }}>
-          المشاريع
+          {sc.portfolioLabel}
         </h1>
         <div className="flex items-center gap-4 mt-4">
           <div className="w-4 h-4 bg-red-600" />
-          <span className="text-white/30 font-black">{projects.length} مشروع</span>
+          <span className="text-white/30 font-black">{projects.length} {sc.portfolioItemLabel}</span>
         </div>
       </div>
 
@@ -48,7 +59,7 @@ export default function BoldProjectsPage({ tenant, projects }: { tenant: Tenant;
       {/* projects — large strips */}
       <div>
         {filtered.map((p, i) => (
-          <Link key={p.id} href={`/projects/${p.id}`}
+          <Link key={p.id} href={`/${tenant.slug}/projects/${p.id}`}
             className="group flex items-stretch border-b border-white/10 hover:border-red-600 transition-colors min-h-32">
             <div className="w-16 flex-shrink-0 flex items-center justify-center border-l border-white/5">
               <span className="text-white/10 font-black text-3xl group-hover:text-red-600 transition-colors">
@@ -60,11 +71,21 @@ export default function BoldProjectsPage({ tenant, projects }: { tenant: Tenant;
                 ? <Image src={p.cover_image_url} alt={p.title_ar} fill className="object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
                 : <div className="w-full h-full bg-white/5" />
               }
+              {sc.extraFields.status && p.status && (
+                <div className={`absolute top-2 right-2 px-2 py-0.5 text-[10px] font-black ${
+                  p.status === 'متاح' ? 'bg-green-500 text-white' :
+                  p.status === 'مباع' ? 'bg-red-500 text-white' :
+                  'bg-yellow-500 text-black'
+                }`}>{p.status}</div>
+              )}
             </div>
             <div className="flex-1 p-6 flex flex-col justify-center">
               {p.category && <span className="text-red-600 text-xs font-black uppercase tracking-widest mb-2">{p.category}</span>}
               <h2 className="text-2xl md:text-4xl font-black leading-tight group-hover:text-red-400 transition-colors">{p.title_ar}</h2>
-              <div className="flex gap-4 mt-2 text-white/20 text-sm font-black">
+              <div className="flex flex-wrap gap-4 mt-2 text-white/30 text-sm font-black">
+                {sc.extraFields.price && p.price && <span className="text-green-400">{p.price}</span>}
+                {sc.extraFields.area && p.area && <span className="flex items-center gap-1"><Maximize2 className="w-3 h-3" />{p.area}</span>}
+                {sc.extraFields.bedrooms && p.bedrooms && <span className="flex items-center gap-1"><BedDouble className="w-3 h-3" />{p.bedrooms}</span>}
                 {p.year && <span>{p.year}</span>}
                 {p.location_ar && <span>{p.location_ar}</span>}
               </div>
@@ -75,6 +96,12 @@ export default function BoldProjectsPage({ tenant, projects }: { tenant: Tenant;
           </Link>
         ))}
       </div>
+
+      {filtered.length === 0 && (
+        <div className="px-6 py-16 text-center">
+          <p className="text-white/20 font-black text-xl">لا توجد {sc.portfolioItemLabelPlural} في هذه الفئة</p>
+        </div>
+      )}
     </div>
   )
 }

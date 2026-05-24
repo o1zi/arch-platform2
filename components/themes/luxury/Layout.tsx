@@ -10,26 +10,7 @@ import {
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
-
-const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
-
-const SERVICES = [
-  { Icon: Building2, title: 'تصميم معماري', desc: 'تصميم مبدع وعملي يعكس هوية مكانك' },
-  { Icon: Layers, title: 'تصميم داخلي', desc: 'فضاءات داخلية أنيقة بتفصيل متقن' },
-  { Icon: Eye, title: 'إشراف على التنفيذ', desc: 'رقابة دقيقة تضمن أعلى معايير الجودة' },
-  { Icon: Lightbulb, title: 'استشارات هندسية', desc: 'حلول مبتكرة لكل تحديات مشروعك' },
-  { Icon: MapPin, title: 'تخطيط عمراني', desc: 'مجمعات ومدن تجمع الجمال والوظيفة' },
-  { Icon: ClipboardList, title: 'إدارة مشاريع', desc: 'تسليم في الوقت المحدد بأعلى كفاءة' },
-]
-
-const WHY_US = [
-  { Icon: Award, title: 'خبرة راسخة', desc: 'سنوات من الإبداع والتميز في عالم الهندسة' },
-  { Icon: Users, title: 'فريق النخبة', desc: 'مهندسون ومصممون من أرفع المستويات' },
-  { Icon: Clock, title: 'دقة التوقيت', desc: 'نلتزم بجداولنا الزمنية بلا تساهل' },
-  { Icon: Shield, title: 'جودة لا تُنافَس', desc: 'معايير صارمة في كل تفصيل من تفاصيل التنفيذ' },
-  { Icon: Star, title: 'الإبداع أولاً', desc: 'تصاميم استثنائية تتخطى المألوف' },
-  { Icon: CheckCircle2, title: 'رعاية مستمرة', desc: 'متابعة شخصية قبل وأثناء وبعد التسليم' },
-]
+import { getSectorConfig } from '@/lib/sectors'
 
 function WhatsAppIcon() {
   return (
@@ -43,7 +24,7 @@ function GoldLine() {
   return <div className="h-px bg-gradient-to-l from-transparent via-[#c9a84c]/40 to-transparent my-8" />
 }
 
-export default function LuxuryLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
+export default function LuxuryLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures, sectorConfig }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -56,7 +37,8 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  const bio = tenant.bio_ar || DEFAULT_BIO
+  const sc = sectorConfig ?? getSectorConfig(tenant.sector)
+  const bio = tenant.bio_ar || sc.heroTagline
   const waPhone = tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
 
@@ -100,7 +82,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
           <span className="text-[#c9a84c] text-xs tracking-[0.3em] uppercase">{tenant.name_ar}</span>
         </div>
         <nav className="hidden md:flex gap-8 text-[11px] text-white/30 tracking-[0.25em] uppercase">
-          {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل']].map(([href, label]) => (
+          {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل']].map(([href, label]) => (
             <Link key={href} href={`/${tenant.slug}${href}`} className="hover:text-[#c9a84c] transition-colors relative group">
               {label}
               <span className="absolute -bottom-1 right-0 w-0 h-px bg-[#c9a84c] group-hover:w-full transition-all duration-300" />
@@ -123,7 +105,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
         <div className="relative z-10 max-w-7xl mx-auto px-8 pb-20 w-full">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-px w-12 bg-[#c9a84c]" />
-            <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">مكتب هندسي</span>
+            <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">{sc.label}</span>
           </div>
 
           <h1 className="text-6xl md:text-8xl font-light text-white leading-tight mb-6">{tenant.name_ar}</h1>
@@ -147,7 +129,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
           {projects.length > 0 && (
             <div className="mt-16 pt-8 border-t border-[#c9a84c]/10">
               <span className="text-5xl font-light text-[#c9a84c]">{projects.length}</span>
-              <span className="text-white/20 text-[10px] tracking-[0.4em] uppercase mr-3">مشروع منجز</span>
+              <span className="text-white/20 text-[10px] tracking-[0.4em] uppercase mr-3">{sc.portfolioItemLabel} منجز</span>
             </div>
           )}
         </div>
@@ -196,7 +178,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
           <div className="text-center mb-16">
             <div className="flex items-center gap-6 mb-6 justify-center">
               <div className="h-px w-12 bg-gradient-to-l from-[#c9a84c]/30 to-transparent" />
-              <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">خدماتنا</span>
+              <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">{sc.servicesLabel}</span>
               <div className="h-px w-12 bg-gradient-to-r from-[#c9a84c]/30 to-transparent" />
             </div>
             <h2 className="text-3xl font-light text-white">ما نقدمه لك</h2>
@@ -204,7 +186,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
           <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-[#c9a84c]/5">
             {(customServices && customServices.length > 0
               ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
-              : SERVICES
+              : sc.services.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.desc }))
             ).map(({ Icon, title, desc }) => (
               <div key={title} className="bg-[#0a0a0a] p-8 group hover:bg-[#111] transition-colors text-center">
                 <div className="w-12 h-12 border border-[#c9a84c]/20 flex items-center justify-center mx-auto mb-5 group-hover:border-[#c9a84c]/50 transition-colors">
@@ -226,7 +208,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
             <div className="text-center">
               <p className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase mb-1">معرض الأعمال</p>
               <h2 className="text-3xl font-light text-white">
-                {featuredProjects.length > 0 ? 'مشاريعنا المختارة' : 'مشاريعنا'}
+                {featuredProjects.length > 0 ? sc.featuredLabel : sc.portfolioLabel}
               </h2>
             </div>
             <div className="h-px flex-1 bg-gradient-to-r from-[#c9a84c]/20 to-transparent" />
@@ -269,15 +251,15 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
 
           <div className="text-center mt-12">
             <Link href={`/${tenant.slug}/projects`} className="inline-block border border-[#c9a84c]/30 text-[#c9a84c]/60 hover:text-[#c9a84c] hover:border-[#c9a84c] px-12 py-3 text-[11px] tracking-[0.3em] uppercase transition-all">
-              {projects.length > 6 ? `جميع المشاريع — ${projects.length}` : 'جميع المشاريع'}
+              {projects.length > 6 ? `جميع ${sc.portfolioLabel} — ${projects.length}` : `جميع ${sc.portfolioLabel}`}
             </Link>
           </div>
         </section>
       ) : (
         <section className="py-24 px-8 max-w-7xl mx-auto text-center">
-          <p className="text-[#c9a84c]/30 text-[10px] tracking-[0.4em] uppercase mb-4">المشاريع</p>
+          <p className="text-[#c9a84c]/30 text-[10px] tracking-[0.4em] uppercase mb-4">{sc.portfolioLabel}</p>
           <h2 className="text-4xl font-light text-white/10 mb-3">قريباً</h2>
-          <p className="text-white/20 text-sm">سيتم إضافة مشاريعنا قريباً</p>
+          <p className="text-white/20 text-sm">سيتم إضافة {sc.portfolioItemLabelPlural} قريباً</p>
         </section>
       )}
 
@@ -295,7 +277,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(customFeatures && customFeatures.length > 0
               ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
-              : WHY_US
+              : sc.features.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.desc }))
             ).map(({ Icon, title, desc }) => (
               <div key={title} className="flex gap-4 p-6 border border-[#c9a84c]/10 hover:border-[#c9a84c]/30 transition-colors">
                 <div className="w-8 h-8 border border-[#c9a84c]/20 flex items-center justify-center flex-shrink-0">
@@ -320,7 +302,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
               <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">ابدأ مشروعك</span>
               <div className="h-px w-8 bg-[#c9a84c]/40" />
             </div>
-            <h3 className="text-4xl font-light text-white mb-4">هل لديك مشروع؟</h3>
+            <h3 className="text-4xl font-light text-white mb-4">{sc.cta}</h3>
             <p className="text-white/30 mb-10 max-w-md mx-auto text-sm leading-loose">دعنا نجعل مشروعك تحفة فنية تجمع بين الجمال والوظيفة</p>
             <div className="flex gap-4 justify-center flex-wrap">
               {waUrl && (
@@ -355,7 +337,7 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
           <div>
             <h4 className="text-[#c9a84c]/50 text-[10px] tracking-[0.3em] uppercase mb-5">روابط سريعة</h4>
             <div className="space-y-3">
-              {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل معنا']].map(([href, label]) => (
+              {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل معنا']].map(([href, label]) => (
                 <Link key={href} href={`/${tenant.slug}${href}`} className="block text-white/20 hover:text-[#c9a84c] transition-colors text-[11px] tracking-widest uppercase">{label}</Link>
               ))}
             </div>

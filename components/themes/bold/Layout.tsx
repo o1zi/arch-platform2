@@ -10,26 +10,7 @@ import {
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
-
-const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
-
-const SERVICES = [
-  { Icon: Building2, title: 'تصميم معماري', desc: 'تصميم مبدع وعملي يعكس هوية مكانك' },
-  { Icon: Layers, title: 'تصميم داخلي', desc: 'فضاءات داخلية أنيقة بتفصيل متقن' },
-  { Icon: Eye, title: 'إشراف على التنفيذ', desc: 'رقابة دقيقة تضمن أعلى معايير الجودة' },
-  { Icon: Lightbulb, title: 'استشارات هندسية', desc: 'حلول مبتكرة لكل تحديات مشروعك' },
-  { Icon: MapPin, title: 'تخطيط عمراني', desc: 'مجمعات ومدن تجمع الجمال والوظيفة' },
-  { Icon: ClipboardList, title: 'إدارة مشاريع', desc: 'تسليم في الوقت المحدد بأعلى كفاءة' },
-]
-
-const WHY_US = [
-  { Icon: Award, title: 'خبرة واسعة' },
-  { Icon: Users, title: 'فريق متخصص' },
-  { Icon: Clock, title: 'الالتزام بالمواعيد' },
-  { Icon: Shield, title: 'جودة مضمونة' },
-  { Icon: Star, title: 'تصاميم مبتكرة' },
-  { Icon: CheckCircle2, title: 'متابعة مستمرة' },
-]
+import { getSectorConfig } from '@/lib/sectors'
 
 function WhatsAppIcon() {
   return (
@@ -39,7 +20,7 @@ function WhatsAppIcon() {
   )
 }
 
-export default function BoldLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
+export default function BoldLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures, sectorConfig }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -52,7 +33,8 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  const bio = tenant.bio_ar || DEFAULT_BIO
+  const sc = sectorConfig ?? getSectorConfig(tenant.sector)
+  const bio = tenant.bio_ar || sc.heroTagline
   const waPhone = tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
 
@@ -84,7 +66,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
       <nav className={`sticky top-0 z-50 border-b-4 border-red-600 px-6 py-4 flex items-center justify-between bg-black transition-shadow ${scrolled ? 'shadow-2xl shadow-red-600/10' : ''}`}>
         <span className="text-white font-black text-xl uppercase tracking-tighter">{tenant.name_ar}</span>
         <div className="flex gap-0">
-          {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل']].map(([href, label]) => (
+          {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل']].map(([href, label]) => (
             <Link key={href} href={`/${tenant.slug}${href}`} className="px-5 py-2 text-sm font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-red-600 transition-all">{label}</Link>
           ))}
         </div>
@@ -102,7 +84,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
         <div className="relative z-10 max-w-6xl mx-auto w-full">
           <div className="inline-flex items-center gap-2 mb-6">
             <div className="w-3 h-3 bg-red-600" />
-            <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">مكتب هندسي</span>
+            <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">{sc.label}</span>
           </div>
           <h1 className="text-[15vw] md:text-[12vw] font-black leading-none mb-6 tracking-tighter"
             style={{ WebkitTextStroke: '2px white', color: 'transparent' }}>
@@ -114,7 +96,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
           )}
           <div className="mt-10 flex gap-4 flex-wrap">
             <Link href={`/${tenant.slug}/projects`} className="bg-red-600 hover:bg-red-700 text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
-              المشاريع
+              {sc.portfolioLabel}
             </Link>
             <Link href={`/${tenant.slug}/contact`} className="border-2 border-white/20 hover:border-white text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
               تواصل
@@ -123,7 +105,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
           {projects.length > 0 && (
             <div className="mt-12 pt-8 border-t border-white/10">
               <span className="text-5xl font-black text-red-600">{projects.length}</span>
-              <span className="text-white/30 text-sm font-black uppercase tracking-widest mr-3">مشروع منجز</span>
+              <span className="text-white/30 text-sm font-black uppercase tracking-widest mr-3">{sc.portfolioItemLabel} منجز</span>
             </div>
           )}
         </div>
@@ -165,7 +147,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
             <div>
               <div className="inline-flex items-center gap-2 mb-3">
                 <div className="w-3 h-3 bg-red-600" />
-                <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">خدماتنا</span>
+                <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">{sc.servicesLabel}</span>
               </div>
               <h2 className="text-4xl font-black uppercase">ما نقدمه</h2>
             </div>
@@ -173,7 +155,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
           <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/5">
             {(customServices && customServices.length > 0
               ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
-              : SERVICES
+              : sc.services.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.desc }))
             ).map(({ Icon, title, desc }) => (
               <div key={title} className="bg-black p-8 group hover:bg-red-600 transition-colors">
                 <Icon className="w-8 h-8 text-red-600 group-hover:text-white mb-4" />
@@ -222,16 +204,16 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
           {projects.length > 4 && (
             <div className="px-6 py-6 border-t border-white/10">
               <Link href={`/${tenant.slug}/projects`} className="font-black text-sm uppercase tracking-widest text-white/40 hover:text-red-600 transition-colors">
-                عرض جميع المشاريع ({projects.length}) ←
+                عرض جميع {sc.portfolioLabel} ({projects.length}) ←
               </Link>
             </div>
           )}
         </section>
       ) : (
         <section className="border-t-4 border-red-600 py-20 px-6 text-center">
-          <span className="text-red-600/30 text-xs font-black tracking-[0.3em] uppercase">المشاريع</span>
+          <span className="text-red-600/30 text-xs font-black tracking-[0.3em] uppercase">{sc.portfolioLabel}</span>
           <h2 className="text-6xl font-black text-white/10 mt-2 mb-3">COMING<br />SOON</h2>
-          <p className="text-white/30 text-sm">سيتم إضافة مشاريعنا قريباً</p>
+          <p className="text-white/30 text-sm">سيتم إضافة {sc.portfolioItemLabelPlural} قريباً</p>
         </section>
       )}
 
@@ -245,7 +227,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {(customFeatures && customFeatures.length > 0
               ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
-              : WHY_US.map(w => ({ ...w, desc: '' }))
+              : sc.features.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.desc }))
             ).map(({ Icon, title }, i) => (
               <div key={title} className="border border-white/10 p-6 flex items-center gap-4 hover:border-red-600 transition-colors group">
                 <span className="text-white/10 font-black text-3xl group-hover:text-red-600 transition-colors">
@@ -288,7 +270,7 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
           <div>
             <h4 className="text-red-600 text-xs font-black tracking-[0.3em] uppercase mb-4">روابط سريعة</h4>
             <div className="space-y-2">
-              {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل']].map(([href, label]) => (
+              {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل']].map(([href, label]) => (
                 <Link key={href} href={`/${tenant.slug}${href}`} className="block text-white/40 hover:text-red-600 transition-colors text-sm font-black uppercase tracking-widest">{label}</Link>
               ))}
             </div>

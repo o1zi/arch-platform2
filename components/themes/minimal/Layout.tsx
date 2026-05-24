@@ -10,26 +10,7 @@ import {
   Phone, Mail, ArrowUp,
 } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
-
-const DEFAULT_BIO = 'نحن مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة ومتكاملة، نسعى دائماً لتحقيق أعلى معايير الجودة والإبداع في كل مشروع نتولاه.'
-
-const SERVICES = [
-  { Icon: Building2, title: 'تصميم معماري', desc: 'تصميم مبدع وعملي يعكس هوية مكانك' },
-  { Icon: Layers, title: 'تصميم داخلي', desc: 'فضاءات داخلية أنيقة بتفصيل متقن' },
-  { Icon: Eye, title: 'إشراف على التنفيذ', desc: 'رقابة دقيقة تضمن أعلى معايير الجودة' },
-  { Icon: Lightbulb, title: 'استشارات هندسية', desc: 'حلول مبتكرة لكل تحديات مشروعك' },
-  { Icon: MapPin, title: 'تخطيط عمراني', desc: 'مجمعات ومدن تجمع الجمال والوظيفة' },
-  { Icon: ClipboardList, title: 'إدارة مشاريع', desc: 'تسليم في الوقت المحدد بأعلى كفاءة' },
-]
-
-const WHY_US = [
-  { Icon: Award, title: 'خبرة واسعة', desc: 'سنوات من الإبداع والتميز في مجال الهندسة' },
-  { Icon: Users, title: 'فريق متخصص', desc: 'مهندسون ومصممون بأعلى المؤهلات' },
-  { Icon: Clock, title: 'الالتزام بالمواعيد', desc: 'نلتزم بالجدول الزمني المتفق عليه دائماً' },
-  { Icon: Shield, title: 'جودة مضمونة', desc: 'معايير صارمة في كل مرحلة من مراحل التنفيذ' },
-  { Icon: Star, title: 'تصاميم مبتكرة', desc: 'حلول إبداعية تجمع الجمال والعملية' },
-  { Icon: CheckCircle2, title: 'متابعة مستمرة', desc: 'دعم كامل قبل وأثناء وبعد التنفيذ' },
-]
+import { getSectorConfig } from '@/lib/sectors'
 
 function WhatsAppIcon() {
   return (
@@ -39,7 +20,7 @@ function WhatsAppIcon() {
   )
 }
 
-export default function MinimalLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures }: ThemeProps) {
+export default function MinimalLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures, sectorConfig }: ThemeProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
 
@@ -52,7 +33,8 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  const bio = tenant.bio_ar || DEFAULT_BIO
+  const sc = sectorConfig ?? getSectorConfig(tenant.sector)
+  const bio = tenant.bio_ar || sc.heroTagline
   const waPhone = tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
 
@@ -74,7 +56,7 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
           <span className="text-[11px] text-gray-400 tracking-[0.25em] uppercase">{tenant.name_ar}</span>
         </div>
         <nav className="flex gap-8 text-[11px] text-gray-300 tracking-[0.2em] uppercase">
-          <Link href={`/${tenant.slug}/projects`} className="hover:text-gray-700 transition-colors">مشاريع</Link>
+          <Link href={`/${tenant.slug}/projects`} className="hover:text-gray-700 transition-colors">{sc.portfolioLabel}</Link>
           <Link href={`/${tenant.slug}/contact`} className="hover:text-gray-700 transition-colors">تواصل</Link>
         </nav>
       </header>
@@ -87,7 +69,7 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
         <p className="text-gray-400 font-light text-base leading-loose max-w-sm">{bio}</p>
         <div className="mt-10 flex gap-6">
           <Link href={`/${tenant.slug}/projects`} className="text-[11px] text-gray-900 tracking-[0.2em] uppercase border-b border-gray-900 pb-0.5 hover:text-gray-400 hover:border-gray-400 transition-colors">
-            استعرض المشاريع
+            استعرض {sc.portfolioLabel}
           </Link>
           <Link href={`/${tenant.slug}/contact`} className="text-[11px] text-gray-300 tracking-[0.2em] uppercase border-b border-gray-200 pb-0.5 hover:text-gray-700 transition-colors">
             تواصل معنا
@@ -101,7 +83,7 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
         {projects.length > 0 && (
           <div className="mt-12 flex items-baseline gap-2">
             <span className="text-5xl font-extralight text-gray-900">{projects.length}</span>
-            <span className="text-[11px] text-gray-300 tracking-[0.2em] uppercase">مشروع منجز</span>
+            <span className="text-[11px] text-gray-300 tracking-[0.2em] uppercase">{sc.portfolioItemLabel} منجز</span>
           </div>
         )}
       </section>
@@ -123,11 +105,11 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
 
       {/* SERVICES */}
       <section className="px-10 py-20 border-t border-gray-100 bg-gray-50">
-        <p className="text-[11px] text-gray-300 tracking-[0.3em] uppercase mb-12">خدماتنا</p>
+        <p className="text-[11px] text-gray-300 tracking-[0.3em] uppercase mb-12">{sc.servicesLabel}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
           {(customServices && customServices.length > 0
             ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
-            : SERVICES
+            : sc.services.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.desc }))
           ).map(({ Icon, title, desc }, i) => (
             <div key={title} className={`py-6 flex gap-6 items-start ${i % 2 === 0 ? 'md:border-l border-gray-200' : ''} border-b border-gray-200`}>
               <Icon className="w-4 h-4 text-gray-300 mt-1 flex-shrink-0" />
@@ -144,7 +126,7 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
       {projects.length > 0 ? (
         <section className="px-10 py-20 border-t border-gray-100">
           <p className="text-[11px] text-gray-300 tracking-[0.3em] uppercase mb-12">
-            {featuredProjects.length > 0 ? 'مشاريع مختارة' : 'مشاريعنا'}
+            {featuredProjects.length > 0 ? sc.featuredLabel : sc.portfolioLabel}
           </p>
           <div className="space-y-0">
             {(featuredProjects.length > 0 ? featuredProjects : projects).map((p, i) => (
@@ -172,7 +154,7 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
             ))}
           </div>
           <Link href={`/${tenant.slug}/projects`} className="inline-block mt-10 text-[11px] text-gray-300 tracking-[0.2em] uppercase hover:text-gray-700 transition-colors border-b border-transparent hover:border-gray-300 pb-0.5">
-            {projects.length > 6 ? `جميع المشاريع (${projects.length})` : 'جميع المشاريع'}
+            {projects.length > 6 ? `جميع ${sc.portfolioLabel} (${projects.length})` : `جميع ${sc.portfolioLabel}`}
           </Link>
         </section>
       ) : (
@@ -188,7 +170,7 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {(customFeatures && customFeatures.length > 0
             ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
-            : WHY_US
+            : sc.features.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.desc }))
           ).map(({ Icon, title, desc }) => (
             <div key={title} className="flex gap-4">
               <Icon className="w-4 h-4 text-gray-300 mt-0.5 flex-shrink-0" />
@@ -206,7 +188,7 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-[11px] text-gray-500 tracking-[0.3em] uppercase mb-2">ابدأ مشروعك</p>
-            <h3 className="text-3xl font-extralight text-white">هل لديك مشروع؟</h3>
+            <h3 className="text-3xl font-extralight text-white">{sc.cta}</h3>
           </div>
           <div className="flex gap-4">
             {waUrl && (
@@ -233,7 +215,7 @@ export default function MinimalLayout({ tenant, projects, featuredProjects, serv
           <div>
             <span className="text-[10px] text-gray-300 tracking-[0.3em] uppercase block mb-4">روابط</span>
             <div className="space-y-2">
-              {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل']].map(([href, label]) => (
+              {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل']].map(([href, label]) => (
                 <Link key={href} href={`/${tenant.slug}${href}`} className="block text-gray-300 hover:text-gray-700 transition-colors text-[11px] tracking-widest uppercase">{label}</Link>
               ))}
             </div>
