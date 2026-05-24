@@ -148,7 +148,7 @@ export default function ProjectsManager({
       coverUrl = urlData.publicUrl
     }
 
-    const payload = {
+    const basePayload = {
       tenant_id: tenant.id,
       title_ar: form.title_ar,
       title_en: form.title_en || null,
@@ -159,6 +159,9 @@ export default function ProjectsManager({
       year: form.year ? parseInt(form.year) : null,
       is_featured: form.is_featured,
       cover_image_url: coverUrl,
+    }
+
+    const sectorFields = {
       price: form.price || null,
       area: form.area || null,
       status: form.status || null,
@@ -167,18 +170,29 @@ export default function ProjectsManager({
       tags: form.tags ? form.tags.split(',').map(t => t.trim()).filter(Boolean) : null,
     }
 
+    const fullPayload = { ...basePayload, ...sectorFields }
+
     let savedProjectId = editProject?.id ?? ''
 
     if (editProject) {
-      const { data, error } = await supabase.from('projects').update(payload).eq('id', editProject.id).select().single()
+      let { data, error } = await supabase.from('projects').update(fullPayload).eq('id', editProject.id).select().single()
+      if (error && error.message?.includes('column')) {
+        const fallback = await supabase.from('projects').update(basePayload).eq('id', editProject.id).select().single()
+        data = fallback.data; error = fallback.error
+      }
       if (error) { toast.error('فشل التحديث'); setSaving(false); return }
       setProjects(prev => prev.map(p => p.id === editProject.id ? { ...p, ...data } : p))
       toast.success('تم تحديث المشروع')
     } else {
-      const { data, error } = await supabase.from('projects').insert({ ...payload, sort_order: projects.length }).select().single()
-      if (error) { toast.error('فشل الإضافة'); setSaving(false); return }
-      savedProjectId = data.id
-      setProjects(prev => [...prev, data])
+      let { data, error } = await supabase.from('projects').insert({ ...fullPayload, sort_order: projects.length }).select().single()
+      if (error && error.message?.includes('column')) {
+        const fallback = await supabase.from('projects').insert({ ...basePayload, sort_order: projects.length }).select().single()
+        data = fallback.data; error = fallback.error
+        if (!error) toast('تنبيه: بعض الحقول المتقدمة لم تُحفظ. يرجى تشغيل Migration 005 في Supabase.', { duration: 6000 })
+      }
+      if (error) { toast.error('فشل الإضافة: ' + error.message); setSaving(false); return }
+      savedProjectId = data!.id
+      setProjects(prev => [...prev, data!])
       toast.success('تم إضافة المشروع')
     }
 
