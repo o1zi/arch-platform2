@@ -4,11 +4,7 @@ import { ThemeProps } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import {
-  Building2, Layers, Eye, Lightbulb, MapPin, ClipboardList,
-  Award, Users, Clock, Shield, Star, CheckCircle2,
-  Phone, Mail, ArrowUp,
-} from 'lucide-react'
+import { Phone, Mail, ArrowUp } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
 import { getSectorConfig } from '@/lib/sectors'
 

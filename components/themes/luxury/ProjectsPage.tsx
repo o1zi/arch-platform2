@@ -5,7 +5,7 @@ import { SectorConfig, getSectorConfig } from '@/lib/sectors'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { BedDouble, Bath, Maximize2 } from 'lucide-react'
+import { BedDouble, Maximize2 } from 'lucide-react'
 
 export default function LuxuryProjectsPage({
   tenant,
