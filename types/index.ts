@@ -113,27 +113,142 @@ export interface CustomThemeColors {
   background: string
   text: string
   textLight: string
+  // ألوان اختيارية موسّعة
+  accentSecondary?: string   // لون تأكيد ثانٍ للتدرجات والتفاصيل
+  cardBg?: string            // خلفية البطاقات (افتراضي: secondary)
+  border?: string            // لون الحدود العامة
+  navBg?: string             // خلفية شريط التنقل (افتراضي: primary)
+  navText?: string           // لون نصوص التنقل (افتراضي: background)
 }
 
 export interface CustomThemeConfig {
+  // ── الألوان ──────────────────────────────────────────────────────────────
   colors: CustomThemeColors
+
+  // ── الخطوط ──────────────────────────────────────────────────────────────
   fonts: {
     heading: string
     body: string
+    headingWeight?: 400 | 600 | 700 | 800 | 900
+    bodyWeight?: 300 | 400 | 500
+    bodySize?: 'sm' | 'md' | 'lg'
+    letterSpacing?: 'tight' | 'normal' | 'wide' | 'wider'
+    lineHeight?: 'tight' | 'normal' | 'relaxed' | 'loose'
+    uppercase?: boolean      // العناوين بأحرف كبيرة
   }
+
+  // ── الـ Hero ──────────────────────────────────────────────────────────────
   hero: {
-    style: 'fullscreen' | 'split' | 'centered' | 'minimal'
+    style: 'fullscreen' | 'split' | 'centered' | 'minimal' | 'split-reverse' | 'cinematic'
+    height?: 'half' | 'screen' | 'tall'
     overlayOpacity: number
+    overlayStyle?: 'gradient' | 'flat' | 'radial' | 'vignette' | 'diagonal'
     textAlign: 'right' | 'center' | 'left'
+    showLogo?: boolean
+    ctaPrimaryText?: string   // نص الزر الرئيسي (افتراضي: "استعرض المشاريع")
+    ctaSecondaryText?: string // نص الزر الثانوي (افتراضي: "تواصل معنا")
+    ctaStyle?: 'solid' | 'outline' | 'ghost' | 'gradient'
+    tagOverride?: string      // تعديل نص الـ tag فوق العنوان
+    showScrollIndicator?: boolean // سهم "انتقل للأسفل"
   }
+
+  // ── التخطيط العام ─────────────────────────────────────────────────────────
   layout: {
     borderRadius: 'none' | 'sm' | 'md' | 'lg' | 'full'
     spacing: 'compact' | 'normal' | 'spacious'
     sections: Array<'hero' | 'about' | 'services' | 'projects' | 'features' | 'cta' | 'footer'>
+    maxWidth?: 'narrow' | 'normal' | 'wide' | 'full'
   }
+
+  // ── شريط التنقل ──────────────────────────────────────────────────────────
+  navigation?: {
+    style?: 'solid' | 'transparent' | 'blur' | 'glass' | 'bordered'
+    height?: 'compact' | 'normal' | 'tall'
+    position?: 'sticky' | 'fixed' | 'static'
+    showBorder?: boolean
+    logoSize?: 'sm' | 'md' | 'lg'
+    ctaInNav?: boolean        // عرض زر CTA في التنقل
+  }
+
+  // ── البطاقات (الخدمات والمميزات) ──────────────────────────────────────────
+  cards?: {
+    style?: 'flat' | 'elevated' | 'bordered' | 'glass' | 'filled' | 'ghost'
+    padding?: 'compact' | 'normal' | 'large'
+    iconShape?: 'circle' | 'square' | 'rounded' | 'diamond' | 'none'
+    accentBar?: 'none' | 'right' | 'left' | 'top' | 'bottom'
+    hoverEffect?: 'lift' | 'glow' | 'border' | 'scale' | 'fill' | 'none'
+    showNumber?: boolean      // أرقام تسلسلية على البطاقات
+  }
+
+  // ── الأزرار ───────────────────────────────────────────────────────────────
+  buttons?: {
+    style?: 'solid' | 'outline' | 'ghost' | 'gradient' | 'pill'
+    size?: 'sm' | 'md' | 'lg'
+    glow?: boolean
+    uppercase?: boolean
+    hoverScale?: boolean
+  }
+
+  // ── شبكة المشاريع ─────────────────────────────────────────────────────────
   projectsGrid: {
     columns: 2 | 3 | 4
-    style: 'grid' | 'masonry' | 'list'
+    style: 'grid' | 'masonry' | 'list' | 'magazine' | 'filmstrip'
+    imageRatio?: 'square' | '4/3' | '16/9' | '3/4' | 'dynamic'
+    captionStyle?: 'overlay' | 'below' | 'slide' | 'minimal' | 'floating'
+    hoverEffect?: 'zoom' | 'lift' | 'fade' | 'reveal' | 'none'
+  }
+
+  // ── إعدادات الأقسام الفردية ───────────────────────────────────────────────
+  sections?: {
+    aboutLayout?: 'side-by-side' | 'stacked' | 'reversed' | 'card' | 'timeline'
+    aboutShowStats?: boolean  // أرقام إحصائية (سنوات الخبرة، المشاريع...)
+    servicesStyle?: 'card-grid' | 'icon-list' | 'horizontal-scroll' | 'numbered' | 'minimal'
+    featuresStyle?: 'icon-list' | 'card-grid' | 'numbered' | 'minimal' | 'checklist'
+    ctaLayout?: 'split' | 'centered' | 'banner' | 'minimal' | 'floating'
+    ctaBg?: 'primary' | 'accent' | 'background' | 'gradient'
+    footerColumns?: 2 | 3 | 4
+    footerStyle?: 'dark' | 'light' | 'accent' | 'minimal'
+    footerShowSocial?: boolean
+  }
+
+  // ── التأثيرات البصرية (CSS-only, لا JavaScript ثقيل) ─────────────────────
+  effects?: {
+    sectionFade?: boolean     // fade-in + slide-up عند الـ scroll
+    hoverLift?: boolean       // رفع البطاقات عند hover (عام)
+    smoothScroll?: boolean    // تمرير سلس
+    accentGlow?: boolean      // توهج حول الأزرار والأيقونات
+    glassEffect?: boolean     // glassmorphism للـ Nav والبطاقات
+    projectZoom?: boolean     // تكبير صور المشاريع عند hover
+    buttonScale?: boolean     // تكبير الأزرار عند hover
+    animatedUnderline?: boolean // خط متحرك على الروابط
+    pulseAccent?: boolean     // نبضة على عناصر accent
+  }
+
+  // ── الزخارف والأنماط ──────────────────────────────────────────────────────
+  decorations?: {
+    sectionDivider?: 'none' | 'line' | 'gradient' | 'dots-row' | 'wave' | 'slash'
+    backgroundPattern?: 'none' | 'dots' | 'grid' | 'diagonal' | 'cross'
+    patternOpacity?: number   // شفافية النمط 0-1 (افتراضي: 0.04)
+    accentLine?: boolean      // خط ملون على جانب العناوين الرئيسية
+    sectionBgAlt?: boolean    // تبادل خلفيات الأقسام (bg / secondary)
+    cardCornerDot?: boolean   // نقطة لونية في زاوية البطاقة
+    sectionLabel?: boolean    // رقم القسم كزخرفة خلفية كبيرة
+  }
+
+  // ── التواصل ───────────────────────────────────────────────────────────────
+  contactStyle?: {
+    layout?: 'grid' | 'list' | 'centered' | 'side-by-side'
+    cardStyle?: 'flat' | 'glass' | 'bordered' | 'filled'
+    socialStyle?: 'icons' | 'pills' | 'text' | 'outlined'
+    showWhatsappFloat?: boolean
+    mapStyle?: 'embedded' | 'button' | 'none'
+  }
+
+  // ── بصمة القالب (metadata) ────────────────────────────────────────────────
+  visualPreset?: {
+    themeMood?: string        // وصف حر للمزاج (للأدمن فقط)
+    density?: 'minimal' | 'normal' | 'rich'
+    contrast?: 'low' | 'normal' | 'high'
   }
 }
 

@@ -1,123 +1,55 @@
-# دليل بناء قوالب الموقع — Theme Builder Guide
+# دليل بناء القوالب الاحترافية — Theme Builder Guide v3.0
 
-> هذا الدليل يشرح بالتفصيل كيفية إنشاء قالب مخصص يعمل مع المنصة.
-> اقرأه كاملاً قبل البدء.
-
----
-
-## ما هو القالب؟
-
-القالب هو ملف `.zip` يحتوي على إعدادات JSON تصف الشكل البصري للموقع:
-الألوان، الخطوط، ترتيب الأقسام، وأسلوب العرض.
-
-لا يحتوي القالب على كود برمجي — فقط إعدادات يقرأها محرك القوالب ويُنشئ الموقع تلقائياً.
+> **هذا الدليل هو المرجع الكامل لبناء قوالب خرافية.**  
+> كل خيار موثق هنا مُطبَّق فعلياً في محرك القوالب.  
+> اقرأ القسم المناسب وابنِ ما تريد.
 
 ---
 
-## الصفحات التي يؤثر عليها القالب
+## نظرة عامة على المحرك
 
-القالب المخصص يُطبَّق على **جميع صفحات موقع المكتب** تلقائياً:
-
-| الصفحة | الرابط | ما يتغير |
-|--------|--------|----------|
-| **الرئيسية** | `/` | الـ Hero، الأقسام، الألوان، الخطوط |
-| **المشاريع** | `/projects` | شبكة المشاريع، الفلاتر، الـ Nav، الألوان |
-| **تفاصيل المشروع** | `/projects/[id]` | الـ Nav، ألوان التفاصيل، معرض الصور |
-| **التواصل** | `/contact` | الـ Nav، بطاقات التواصل، الخريطة، الألوان |
+القالب = ملف `theme.json` يُعبّأ بالإعدادات البصرية.  
+المحرك يقرأ هذا الملف ويبني الموقع كاملاً تلقائياً — بدون كود.
 
 ```
-رفع القالب في الأدمن
-        ↓
-المكتب يختار القالب من داشبورده
-        ↓
-يطبَّق على كل صفحات الموقع تلقائياً ↓
-  ┌────────┐  ┌──────────┐  ┌──────────┐  ┌─────────┐
-  │ الرئيسية│  │ المشاريع │  │تفاصيل مشروع│  │ التواصل │
-  └────────┘  └──────────┘  └──────────┘  └─────────┘
+theme.json
+    ↓
+DynamicThemeEngine
+    ↓
+┌──────────┬──────────────┬──────────────┬────────────┐
+│الرئيسية │ المشاريع     │ تفاصيل مشروع │  التواصل   │
+└──────────┴──────────────┴──────────────┴────────────┘
+```
+
+**الأقسام القابلة للتخصيص في الرئيسية:**
+```
+hero → about → services → projects → features → cta → footer
+(مرتّبة كما تريد، أو احذف ما لا تريده)
 ```
 
 ---
 
-## ما يتحكم به `projectsGrid` في صفحة المشاريع
-
-إعداد `projectsGrid` في `theme.json` يؤثر مباشرة على **شكل عرض المشاريع** في صفحة `/projects`:
-
-### `style: "grid"` — شبكة منتظمة
-```
-┌──────┐ ┌──────┐ ┌──────┐
-│ مشروع│ │ مشروع│ │ مشروع│
-└──────┘ └──────┘ └──────┘
-┌──────┐ ┌──────┐ ┌──────┐
-│ مشروع│ │ مشروع│ │ مشروع│
-└──────┘ └──────┘ └──────┘
-```
-
-### `style: "list"` — قائمة أفقية
-```
-┌────┬────────────────────────────┐
-│IMG │ اسم المشروع — التصنيف     │
-└────┴────────────────────────────┘
-┌────┬────────────────────────────┐
-│IMG │ اسم المشروع — التصنيف     │
-└────┴────────────────────────────┘
-```
-
-### `style: "masonry"` — تدرجي
-```
-┌──────┐ ┌──────────┐
-│      │ │          │
-│      │ └──────────┘
-└──────┘ ┌──────┐
-┌────────┐│      │
-│        ││      │
-└────────┘└──────┘
-```
-
----
-
-## ما يتحكم به القالب في صفحة التواصل
-
-صفحة التواصل تأخذ **كل الألوان والخطوط** من القالب وتطبّقها على:
-- شريط التنقل (Nav) — نفس لون `primary`
-- بطاقات معلومات التواصل (الهاتف، الإيميل، العنوان) — لون `secondary` + أيقونات `accent`
-- أزرار السوشيال ميديا — لون `secondary`
-- زر واتساب — ثابت أخضر (`#25D366`) في كل القوالب
-- خريطة Google Maps — تظهر لو أضاف المكتب رابطها
-
----
-
-## هيكل ملف ZIP
-
-```
-my-theme.zip
-├── theme.json          ← إلزامي — قلب القالب
-├── preview.jpg         ← موصى به — صورة معاينة (1280×720 أو أكبر)
-└── fonts/              ← اختياري — خطوط مخصصة
-    ├── Heading-Bold.woff2
-    └── Body-Regular.woff2
-```
-
-### قواعد الملفات:
-- `theme.json` **إلزامي** — بدونه يُرفض القالب
-- `preview.jpg` يمكن أن يكون `.png` أو `.webp` أو `.jpeg`
-- الخطوط تقبل صيغ: `.woff2` (مفضّل)، `.woff`، `.ttf`، `.otf`
-- حجم ZIP الكامل: حد أقصى **20MB**
-
----
-
-## ملف theme.json — الشرح الكامل
+## هيكل ملف theme.json الكامل
 
 ```json
 {
-  "name_ar": "اسم القالب بالعربي",
-  "name_en": "Theme Name in English",
-  "description_ar": "وصف قصير للقالب وطابعه",
+  "name_ar": "اسم القالب",
+  "name_en": "Theme Name",
+  "description_ar": "وصف قصير للطابع والمزاج",
 
-  "colors": { ... },
-  "fonts":  { ... },
-  "hero":   { ... },
-  "layout": { ... },
-  "projectsGrid": { ... }
+  "colors":       { ... },
+  "fonts":        { ... },
+  "hero":         { ... },
+  "layout":       { ... },
+  "navigation":   { ... },
+  "cards":        { ... },
+  "buttons":      { ... },
+  "projectsGrid": { ... },
+  "sections":     { ... },
+  "effects":      { ... },
+  "decorations":  { ... },
+  "contactStyle": { ... },
+  "visualPreset": { ... }
 }
 ```
 
@@ -127,29 +59,60 @@ my-theme.zip
 
 ```json
 "colors": {
-  "primary":    "#0f0f0f",
-  "secondary":  "#1a1a1a",
-  "accent":     "#c9a84c",
-  "background": "#ffffff",
-  "text":       "#111111",
-  "textLight":  "#888888"
+  "primary":         "#0f0f0f",
+  "secondary":       "#1a1a1a",
+  "accent":          "#c9a84c",
+  "accentSecondary": "#e8c87a",
+  "background":      "#f8f5f0",
+  "text":            "#1a1a1a",
+  "textLight":       "#888888",
+  "cardBg":          "#f0ece6",
+  "border":          "#e0d8ce",
+  "navBg":           "#0a0a0a",
+  "navText":         "#ffffff"
 }
 ```
 
-| الحقل | أين يُستخدم في الصفحات الثلاث |
-|-------|-------------------------------|
-| `primary` | Nav + Hero + Footer + Header صفحة المشاريع + Header صفحة التواصل |
-| `secondary` | بطاقات الخدمات + بطاقات التواصل + خلفية فلاتر المشاريع |
-| `accent` | الأزرار + الأيقونات + التسميات البارزة في كل الصفحات |
-| `background` | الأقسام الفاتحة في الرئيسية + خلفية تفاصيل المشروع |
-| `text` | النص الرئيسي في كل الصفحات |
-| `textLight` | التفاصيل الثانوية + التصنيفات + الأوصاف |
+| الحقل | أين يُستخدم | إلزامي؟ |
+|-------|-------------|---------|
+| `primary` | Nav، Hero، Footer، خلفية الأقسام الداكنة | ✅ |
+| `secondary` | بطاقات الخدمات، أقسام متبادلة | ✅ |
+| `accent` | الأزرار، الأيقونات، التسميات المميزة | ✅ |
+| `accentSecondary` | التدرجات (gradient buttons/CTA) | ❌ افتراضي: نفس accent |
+| `background` | الخلفية الرئيسية والأقسام الفاتحة | ✅ |
+| `text` | النص الرئيسي في كل الصفحات | ✅ |
+| `textLight` | النصوص الثانوية والأوصاف | ✅ |
+| `cardBg` | خلفية بطاقات الخدمات والمميزات | ❌ افتراضي: secondary |
+| `border` | الحدود والخطوط الفاصلة | ❌ افتراضي: مشتق من primary |
+| `navBg` | خلفية شريط التنقل فقط | ❌ افتراضي: primary |
+| `navText` | نصوص التنقل والأزرار عليه | ❌ افتراضي: background |
 
 ### قواعد الألوان:
-- ✅ يجب أن تكون بصيغة **HEX فقط**: `#rrggbb` أو `#rgb`
-- ❌ لا تُقبل: `rgb(...)`, `hsl(...)`, أسماء الألوان (`red`, `blue`)
-- تأكد من **التباين** بين `primary` و `background` لقراءة جيدة
-- `accent` يجب أن يكون مرئياً على خلفيتَي `primary` و `background`
+- صيغة HEX فقط: `#rrggbb` أو `#rgb`
+- `accent` يجب أن يتباين مع كل من `primary` و `background`
+- `primary` داكن + `background` فاتح = أفضل قراءة
+
+### أمثلة لوحات ألوان جاهزة:
+
+```json
+// ── الذهب الفاخر
+{ "primary":"#0a0a0a", "secondary":"#141414", "accent":"#c9a84c", "accentSecondary":"#e8c87a", "background":"#fafaf8", "text":"#1a1a1a", "textLight":"#888" }
+
+// ── الأزرق المعماري
+{ "primary":"#0d1b2a", "secondary":"#1b2a3b", "accent":"#4e8cff", "background":"#f0f4ff", "text":"#0d1b2a", "textLight":"#6b7a99" }
+
+// ── الأحمر الياباني
+{ "primary":"#17120e", "secondary":"#231c16", "accent":"#d14d41", "background":"#f8f2ea", "text":"#1f1a15", "textLight":"#80766e" }
+
+// ── الأخضر الطبيعي
+{ "primary":"#1a2a1a", "secondary":"#243524", "accent":"#6aaa5c", "background":"#f4f9f2", "text":"#1a2a1a", "textLight":"#6b8060" }
+
+// ── الفضي المعاصر
+{ "primary":"#1c1c1e", "secondary":"#2c2c2e", "accent":"#aeaeb2", "background":"#f2f2f7", "text":"#1c1c1e", "textLight":"#8e8e93" }
+
+// ── الوردي العصري
+{ "primary":"#1a0a14", "secondary":"#2a1020", "accent":"#e8508a", "accentSecondary":"#f094c0", "background":"#fff8fb", "text":"#1a0a14", "textLight":"#88506a" }
+```
 
 ---
 
@@ -158,358 +121,831 @@ my-theme.zip
 ```json
 "fonts": {
   "heading": "Playfair Display",
-  "body":    "Tajawal"
+  "body":    "Tajawal",
+  "headingWeight": 700,
+  "bodyWeight":    400,
+  "bodySize":      "md",
+  "letterSpacing": "normal",
+  "lineHeight":    "relaxed",
+  "uppercase":     false
 }
 ```
 
-| الحقل | أين يُستخدم |
-|-------|-------------|
-| `heading` | عنوان المكتب + H1 + H2 في كل الصفحات |
-| `body` | كل نصوص الموقع — الرئيسية والمشاريع والتواصل |
+| الحقل | القيم المتاحة | الافتراضي |
+|-------|-------------|-----------|
+| `heading` | أي خط من Google Fonts | — |
+| `body` | أي خط من Google Fonts | — |
+| `headingWeight` | `400` `600` `700` `800` `900` | `700` |
+| `bodyWeight` | `300` `400` `500` | `400` |
+| `bodySize` | `"sm"` `"md"` `"lg"` | `"md"` |
+| `letterSpacing` | `"tight"` `"normal"` `"wide"` `"wider"` | `"normal"` |
+| `lineHeight` | `"tight"` `"normal"` `"relaxed"` `"loose"` | `"relaxed"` |
+| `uppercase` | `true` `false` | `false` |
 
 ### خطوط عربية موصى بها:
 ```
-Tajawal          ← بسيط وعصري (الأكثر شيوعاً)
-Cairo            ← واضح ومقروء
-Almarai          ← احترافي للشركات
-Noto Kufi Arabic ← تقليدي وأنيق
-Amiri            ← فاخر وكلاسيكي
+Tajawal          ← بسيط وعصري — الأكثر انتشاراً
+Cairo            ← واضح ومقروء جداً
+Almarai          ← احترافي مؤسسي
+Noto Kufi Arabic ← كوفي تقليدي أنيق
+Amiri            ← فاخر كلاسيكي للعناوين
+El Messiri       ← حديث ومميز
+IBM Plex Arabic  ← تقني ونظيف
 ```
 
-### خطوط إنجليزية موصى بها للعناوين:
+### خطوط عناوين إنجليزية موصى بها (للعلامات التجارية):
 ```
-Playfair Display ← فاخر وكلاسيكي
-Montserrat       ← عصري وهندسي
-Raleway          ← أنيق وخفيف
+Playfair Display ← فاخر كلاسيكي
+Cormorant Garamond ← أناقة طويلة
+Montserrat       ← هندسي معاصر
+Raleway          ← خفيف وأنيق
 Bebas Neue       ← جريء وقوي
-Inter            ← بسيط ومحترف
+DM Serif Display ← مميز وعصري
+Cinzel           ← روماني فخم
 ```
 
-> **ملاحظة:** الخطوط تُحمَّل تلقائياً من Google Fonts في كل الصفحات باسمها.
-> تأكد من كتابة الاسم بالضبط كما يظهر في [fonts.google.com](https://fonts.google.com)
+### تركيبات ناجحة:
+```json
+{ "heading": "Cormorant Garamond", "body": "Tajawal", "headingWeight": 700, "uppercase": false }
+{ "heading": "Bebas Neue", "body": "Cairo", "headingWeight": 400, "uppercase": true, "letterSpacing": "wide" }
+{ "heading": "Amiri", "body": "Amiri", "headingWeight": 700, "lineHeight": "loose" }
+{ "heading": "Montserrat", "body": "Almarai", "headingWeight": 900, "letterSpacing": "tight" }
+```
 
 ---
 
-## ٣. قسم Hero — `hero`
-
-> يؤثر على الصفحة الرئيسية فقط
+## ٣. الـ Hero — `hero`
 
 ```json
 "hero": {
-  "style":          "fullscreen",
-  "overlayOpacity": 0.5,
-  "textAlign":      "right"
+  "style":              "fullscreen",
+  "height":             "screen",
+  "overlayOpacity":     0.55,
+  "overlayStyle":       "gradient",
+  "textAlign":          "right",
+  "showLogo":           true,
+  "ctaPrimaryText":     "استعرض مشاريعنا",
+  "ctaSecondaryText":   "تواصل معنا",
+  "ctaStyle":           "solid",
+  "tagOverride":        "مكتب هندسي معماري",
+  "showScrollIndicator": true
 }
 ```
 
-### `style` — أسلوب الـ Hero
+### `style` — أسلوب الـ Hero (6 أساليب):
 
 | القيمة | الوصف |
 |--------|-------|
-| `"fullscreen"` | يغطي الشاشة كاملاً مع صورة خلفية وتدرج لوني |
-| `"split"` | تقسيم نصفين: نص على اليمين، صورة على اليسار |
-| `"centered"` | النص في المنتصف مع صورة خلفية شبه شفافة |
-| `"minimal"` | نص فقط بدون صورة خلفية، بسيط وهادئ |
+| `"fullscreen"` | صورة كاملة + تدرج لوني + نص في الأسفل |
+| `"cinematic"` | مثل fullscreen لكن بحجم ضخم وتأثير سينمائي |
+| `"split"` | نصف نص + نصف صورة (نص يمين) |
+| `"split-reverse"` | نصف نص + نصف صورة (صورة يمين) |
+| `"centered"` | كل شيء في المنتصف فوق الصورة |
+| `"minimal"` | نص فقط بدون صورة خلفية — بسيط وفاخر |
 
-**توضيح بصري:**
-```
-fullscreen:              split:                  centered:              minimal:
-┌────────────────┐      ┌───────┬───────┐       ┌────────────────┐    ┌────────────────┐
-│ ░░░░░░░░░░░░░░ │      │ اسم  │ [IMG] │       │ ░░ اسم ░░░░░░ │    │                │
-│ ░░░░░░░░░░░░░░ │      │ نص   │       │       │ ░░ نص  ░░░░░░ │    │ اسم المكتب     │
-│                │      │ زر   │       │       │ ░░ زر  ░░░░░░ │    │ نبذة قصيرة     │
-│ اسم المكتب    │      └───────┴───────┘       └────────────────┘    │ [زر] [زر]     │
-│ [زر1] [زر2]  │                                                      └────────────────┘
-└────────────────┘
-```
+### `height` — ارتفاع الـ Hero:
+| القيمة | الارتفاع |
+|--------|---------|
+| `"half"` | 55% من الشاشة |
+| `"screen"` | 100% من الشاشة (افتراضي) |
+| `"tall"` | 100vh كامل مع padding إضافي |
 
-### `overlayOpacity` — شفافية طبقة اللون فوق الصورة
-- قيمة بين `0` (لا طبقة) و `1` (طبقة معتمة كلياً)
-- **موصى به:** `0.4` للصور الداكنة، `0.6` للصور الفاتحة
-- يؤثر فقط على أسلوبَي `fullscreen` و `centered`
-
-### `textAlign` — محاذاة النص
+### `overlayStyle` — نمط الطبقة الداكنة فوق الصورة:
 | القيمة | التأثير |
 |--------|---------|
-| `"right"` | النص يميناً (مناسب للعربي) |
-| `"center"` | النص في الوسط |
-| `"left"` | النص يساراً |
+| `"gradient"` | تدرج من الأسفل للأعلى (افتراضي) |
+| `"flat"` | طبقة سوداء موحدة |
+| `"radial"` | ظلام من الأطراف للمركز |
+| `"vignette"` | تأثير vignette كلاسيكي |
+| `"diagonal"` | تدرج بزاوية 135 درجة |
+
+### `ctaStyle` — شكل الأزرار في الـ Hero:
+```
+"solid"    ← زر ملون معتم (افتراضي)
+"outline"  ← زر بحد شفاف
+"ghost"    ← زر بدون خلفية
+"gradient" ← زر بتدرج accent → accentSecondary
+```
 
 ---
 
-## ٤. تخطيط الصفحة الرئيسية — `layout`
+## ٤. التخطيط العام — `layout`
 
 ```json
 "layout": {
   "borderRadius": "md",
   "spacing":      "normal",
-  "sections": ["hero", "about", "services", "projects", "features", "cta", "footer"]
+  "maxWidth":     "normal",
+  "sections":     ["hero", "about", "services", "projects", "features", "cta", "footer"]
 }
 ```
 
-### `borderRadius` — حواف الأشكال (يُطبَّق على كل الصفحات)
-
+### `borderRadius` — حواف كل العناصر:
 | القيمة | التأثير |
 |--------|---------|
-| `"none"` | حواف حادة تماماً — مظهر معماري قوي |
-| `"sm"` | حواف ناعمة جداً — `4px` |
-| `"md"` | حواف متوسطة — `8px` (الافتراضي) |
-| `"lg"` | حواف دائرية — `16px` |
-| `"full"` | دائري تماماً للأزرار |
+| `"none"` | حواف حادة 90° — معماري وقوي |
+| `"sm"` | حواف ناعمة جداً 4px |
+| `"md"` | حواف متوسطة 8px (الافتراضي) |
+| `"lg"` | حواف دائرية 16px |
+| `"full"` | دائري تماماً (للأزرار والشعارات) |
 
-> `borderRadius` يؤثر على: الأزرار، البطاقات، صور المشاريع، بطاقات التواصل — في كل الصفحات
+### `spacing` — المسافات بين الأقسام:
+| القيمة | الـ padding العمودي |
+|--------|---------------------|
+| `"compact"` | 48px — مكثف |
+| `"normal"` | 80px — متوازن |
+| `"spacious"` | 112px — فاخر ومتسع |
 
-### `spacing` — المسافات العمودية بين الأقسام (الرئيسية فقط)
+### `maxWidth` — أقصى عرض للمحتوى:
+| القيمة | العرض |
+|--------|-------|
+| `"narrow"` | 896px — للمحتوى الطويل |
+| `"normal"` | 1280px (افتراضي) |
+| `"wide"` | 1536px — للتصاميم الكاملة |
+| `"full"` | بلا حد — يمتد للحافة |
 
-| القيمة | التأثير |
-|--------|---------|
-| `"compact"` | مسافات صغيرة — 48px |
-| `"normal"` | مسافات متوازنة — 80px |
-| `"spacious"` | مسافات واسعة فاخرة — 128px |
+### `sections` — ترتيب الأقسام وإظهارها:
+```json
+// الترتيب الكامل
+["hero", "about", "services", "projects", "features", "cta", "footer"]
 
-### `sections` — ترتيب أقسام الصفحة الرئيسية
+// محرك صور فقط
+["hero", "projects", "cta", "footer"]
 
-هذه المصفوفة **تحدد ما يظهر وبأي ترتيب في الصفحة الرئيسية فقط**:
+// تركيز على الخدمات
+["hero", "services", "features", "about", "cta", "footer"]
 
-| القسم | المحتوى |
-|-------|---------|
-| `"hero"` | **إلزامي** — الشعار والنص الرئيسي والأزرار |
-| `"about"` | من نحن — النبذة التعريفية وصورة الغلاف |
-| `"services"` | ما نقدمه لك — شبكة الخدمات |
-| `"projects"` | المشاريع المميزة — معرض الصور |
-| `"features"` | ما يميزنا — نقاط التميز |
-| `"cta"` | دعوة للتواصل — أزرار واتساب وتواصل |
-| `"footer"` | الفوتر — روابط وتواصل |
-
-> ⚠️ **`"hero"` إلزامي** — القالب يُرفض إذا لم يكن موجوداً في المصفوفة
+// بسيط جداً
+["hero", "projects", "footer"]
+```
+> ⚠️ `"hero"` دائماً أول وإلزامي
 
 ---
 
-## ٥. شبكة المشاريع — `projectsGrid`
+## ٥. شريط التنقل — `navigation`
 
-> يؤثر على **الصفحة الرئيسية وصفحة المشاريع معاً**
+```json
+"navigation": {
+  "style":      "solid",
+  "height":     "normal",
+  "position":   "sticky",
+  "showBorder": false,
+  "logoSize":   "md",
+  "ctaInNav":   false
+}
+```
+
+| الحقل | القيم | الافتراضي |
+|-------|-------|-----------|
+| `style` | `"solid"` `"transparent"` `"blur"` `"glass"` `"bordered"` | `"solid"` |
+| `height` | `"compact"` `"normal"` `"tall"` | `"normal"` |
+| `position` | `"sticky"` `"fixed"` `"static"` | `"sticky"` |
+| `showBorder` | `true` `false` | `false` |
+| `logoSize` | `"sm"` `"md"` `"lg"` | `"md"` |
+| `ctaInNav` | `true` `false` | `false` |
+
+### `style` — مظهر الـ Nav:
+```
+"solid"       ← خلفية معتمة ثابتة (navBg)
+"transparent" ← شفاف في الـ Hero يتحول لـ solid عند الـ scroll
+"blur"        ← glassmorphism مع blur عند الـ scroll
+"glass"       ← glassmorphism دائم
+"bordered"    ← solid مع خط سفلي بلون accent
+```
+
+---
+
+## ٦. البطاقات — `cards`
+
+```json
+"cards": {
+  "style":       "elevated",
+  "padding":     "normal",
+  "iconShape":   "square",
+  "accentBar":   "right",
+  "hoverEffect": "lift",
+  "showNumber":  false
+}
+```
+
+### `style` — مظهر البطاقات:
+| القيمة | الوصف |
+|--------|-------|
+| `"flat"` | بدون ظل أو حد — بسيط تماماً |
+| `"elevated"` | ظل خفيف يعطي عمقاً (افتراضي) |
+| `"bordered"` | حد خارجي بلون border |
+| `"glass"` | glassmorphism — backdrop-filter blur |
+| `"filled"` | خلفية بلون primary |
+| `"ghost"` | بدون خلفية — نص فقط |
+
+### `iconShape` — شكل مربع الأيقونة:
+```
+"circle"  ← دائري
+"square"  ← مربع (افتراضي)
+"rounded" ← مربع بحواف ناعمة
+"diamond" ← معيّن (مدوّر 45°)
+"none"    ← بدون مربع — الأيقونة مباشرة
+```
+
+### `accentBar` — شريط ملون على البطاقة:
+```
+"none"   ← بدون شريط (افتراضي)
+"right"  ← شريط 3px على اليمين (مناسب للـ RTL)
+"left"   ← شريط على اليسار
+"top"    ← شريط أعلى البطاقة
+"bottom" ← شريط أسفل البطاقة
+```
+
+### `hoverEffect` — تأثير الـ Hover:
+```
+"lift"   ← ارتفاع للأعلى (الأجمل)
+"glow"   ← ظل توهج
+"scale"  ← تكبير خفيف
+"border" ← حد يظهر بلون accent
+"fill"   ← يتحول لون accent عند hover
+"none"   ← بدون تأثير
+```
+
+---
+
+## ٧. الأزرار — `buttons`
+
+```json
+"buttons": {
+  "style":      "solid",
+  "size":       "md",
+  "glow":       false,
+  "uppercase":  false,
+  "hoverScale": false
+}
+```
+
+### `style` — شكل الأزرار:
+```
+"solid"    ← معتم بلون accent
+"outline"  ← بحد بلون accent
+"ghost"    ← بدون خلفية — نص بلون accent فقط
+"gradient" ← تدرج accent → accentSecondary
+"pill"     ← بيضاوي كامل
+```
+
+### `size`:
+```
+"sm" ← صغير  — px-5 py-2
+"md" ← متوسط — px-8 py-3 (افتراضي)
+"lg" ← كبير  — px-10 py-4
+```
+
+---
+
+## ٨. شبكة المشاريع — `projectsGrid`
 
 ```json
 "projectsGrid": {
-  "columns": 3,
-  "style":   "grid"
+  "columns":      3,
+  "style":        "grid",
+  "imageRatio":   "4/3",
+  "captionStyle": "overlay",
+  "hoverEffect":  "zoom"
 }
 ```
 
-### `columns` — عدد الأعمدة
+### `style` — أسلوب عرض المشاريع (5 أساليب):
 
-| القيمة | الشاشة الكبيرة | الجوال |
-|--------|----------------|--------|
-| `2` | عمودان | عمود واحد |
-| `3` | ثلاثة أعمدة | عمود أو عمودان |
-| `4` | أربعة أعمدة | عمودان |
+| القيمة | الوصف | الأفضل لـ |
+|--------|-------|-----------|
+| `"grid"` | شبكة منتظمة — الأكثر شيوعاً | كل القطاعات |
+| `"masonry"` | ارتفاعات متفاوتة (CSS columns) | التصوير والتصميم |
+| `"list"` | قائمة أفقية مع صورة صغيرة | المقاولات والقانون |
+| `"magazine"` | أول مشروع ضخم + شبكة جانبية | العقارات والهندسة |
+| `"filmstrip"` | أفقي قابل للتمرير | التصوير والتصميم الداخلي |
 
-### `style` — أسلوب العرض
+### `imageRatio` — نسبة أبعاد الصور:
+```
+"square" ← 1:1 — متوازن
+"4/3"    ← أفقي كلاسيكي (افتراضي)
+"16/9"   ← سينمائي عريض
+"3/4"    ← عمودي — للتصوير والداخلي
+"dynamic" ← نسبة 4/3 (محجوز للتطوير)
+```
 
-| القيمة | الوصف | أين يظهر |
-|--------|-------|----------|
-| `"grid"` | شبكة منتظمة — صور مربعة | الرئيسية + المشاريع |
-| `"list"` | قائمة أفقية — صورة صغيرة + نص | المشاريع فقط* |
-| `"masonry"` | تدرجي كـ Pinterest | الرئيسية + المشاريع |
+### `captionStyle` — عرض اسم المشروع:
+```
+"overlay"  ← يظهر عند hover كطبقة شفافة (افتراضي)
+"below"    ← أسفل الصورة دائماً مرئي
+"slide"    ← يصعد من الأسفل عند hover
+"minimal"  ← نص خفيف شبه مخفي عند hover
+"floating" ← بطاقة بيضاء تظهر فوق الصورة
+```
 
-> *في الصفحة الرئيسية يُستخدم `grid` تلقائياً إذا اخترت `list`
+### `hoverEffect` — تأثير الـ Hover على الصور:
+```
+"zoom"   ← تكبير خفيف (scale 1.08)
+"fade"   ← تعتيم خفيف
+"lift"   ← رفع البطاقة بالكامل
+"reveal" ← إظهار تدريجي
+"none"   ← بدون تأثير
+```
 
 ---
 
-## مثال كامل — قالب "الأناقة الداكنة"
+## ٩. الأقسام الفردية — `sections`
+
+```json
+"sections": {
+  "aboutLayout":    "side-by-side",
+  "aboutShowStats": false,
+  "servicesStyle":  "card-grid",
+  "featuresStyle":  "icon-list",
+  "ctaLayout":      "split",
+  "ctaBg":          "background",
+  "footerColumns":  3,
+  "footerStyle":    "dark",
+  "footerShowSocial": true
+}
+```
+
+### `aboutLayout` — تخطيط قسم "من نحن":
+```
+"side-by-side" ← نص يمين + صورة يسار (افتراضي)
+"reversed"     ← صورة يمين + نص يسار
+"stacked"      ← صورة فوق النص
+"card"         ← كل الأقسام داخل بطاقة واحدة
+```
+
+### `servicesStyle` — عرض الخدمات:
+```
+"card-grid"        ← بطاقات في شبكة (افتراضي)
+"icon-list"        ← قائمة مع أيقونات
+"numbered"         ← بطاقات مع أرقام تسلسلية كبيرة
+"minimal"          ← قائمة بسيطة بدون بطاقات
+```
+
+### `featuresStyle` — عرض المميزات:
+```
+"icon-list"  ← قائمة مع أيقونة ومربع (افتراضي)
+"card-grid"  ← بطاقات في شبكة
+"numbered"   ← أرقام كبيرة كتصميم
+"checklist"  ← قائمة مع علامات ✓
+"minimal"    ← قائمة نص بسيطة
+```
+
+### `ctaLayout` — تخطيط قسم الـ CTA:
+```
+"split"    ← نص يمين + أزرار يسار (افتراضي)
+"centered" ← كل شيء في المنتصف
+"banner"   ← شريط ضيق مع حدود accent
+"minimal"  ← سطر واحد أعلى border-top
+```
+
+### `ctaBg` — خلفية قسم الـ CTA:
+```
+"background" ← نفس خلفية الصفحة (افتراضي)
+"primary"    ← خلفية داكنة
+"accent"     ← لون accent مشبع
+"gradient"   ← تدرج accent → accentSecondary
+```
+
+### `footerStyle` — مظهر الـ Footer:
+```
+"dark"        ← داكن (primary) — الافتراضي
+"light"       ← فاتح (background)
+"accent"      ← بلون accent
+"minimal"     ← فاتح مع border-top فقط
+```
+
+---
+
+## ١٠. التأثيرات البصرية — `effects`
+
+> كل هذه التأثيرات مبنية بـ CSS/JavaScript بسيط — لا مكتبات ثقيلة
+
+```json
+"effects": {
+  "sectionFade":      true,
+  "hoverLift":        true,
+  "smoothScroll":     true,
+  "accentGlow":       false,
+  "glassEffect":      false,
+  "projectZoom":      true,
+  "buttonScale":      false,
+  "animatedUnderline": false,
+  "pulseAccent":      false
+}
+```
+
+| التأثير | الوصف | موصى به لـ |
+|---------|-------|-----------|
+| `sectionFade` | كل قسم يظهر بـ fade-in + slide-up عند الـ scroll | الفخامة والحداثة |
+| `hoverLift` | البطاقات ترتفع عند hover (عام للكل) | كل القوالب |
+| `smoothScroll` | تمرير سلس `scroll-behavior: smooth` | كل القوالب |
+| `accentGlow` | توهج حول أزرار الـ CTA | القوالب الجريئة |
+| `glassEffect` | glassmorphism للـ Nav والبطاقات | القوالب الداكنة |
+| `projectZoom` | تكبير ناعم لصور المشاريع عند hover | التصوير والعقارات |
+| `buttonScale` | الأزرار تكبر قليلاً عند hover | أي قالب جريء |
+| `animatedUnderline` | خط ينزلق أسفل الروابط عند hover | القوالب الأنيقة |
+| `pulseAccent` | نبضة خفيفة على عناصر CTA | الـ Landing Pages |
+
+---
+
+## ١١. الزخارف والأنماط — `decorations`
+
+```json
+"decorations": {
+  "sectionDivider":    "gradient",
+  "backgroundPattern": "dots",
+  "patternOpacity":    0.04,
+  "accentLine":        true,
+  "sectionBgAlt":      true,
+  "cardCornerDot":     false,
+  "sectionLabel":      false
+}
+```
+
+### `sectionDivider` — الفاصل بين الأقسام:
+```
+"none"      ← بدون فاصل (افتراضي)
+"line"      ← خط رفيع بلون border
+"gradient"  ← خط بتدرج accent
+"dots-row"  ← ثلاث نقاط والوسطى accent
+"wave"      ← موجة SVG
+"slash"     ← شرطة مائلة بلون accent
+```
+
+### `backgroundPattern` — نمط خلفية خفي:
+```
+"none"     ← بدون نمط (افتراضي)
+"dots"     ← نقاط منتظمة
+"grid"     ← شبكة خطوط
+"diagonal" ← خطوط مائلة
+"cross"    ← شبكة + خطوط أفقية
+```
+
+### `patternOpacity` — شفافية النمط:
+```
+0.02  ← خفي جداً (موصى به للنصوص الكثيرة)
+0.04  ← الافتراضي — متوازن
+0.08  ← ملحوظ قليلاً
+0.12  ← واضح
+```
+
+### `accentLine` — خط accent بجانب التسمية الصغيرة فوق العناوين:
+```json
+"accentLine": true  ← ─── خدماتنا ──
+"accentLine": false ←     خدماتنا
+```
+
+### `sectionBgAlt`:
+```json
+true  ← الأقسام تتبادل bg و secondary (أعمق بصرياً)
+false ← كل قسم يختار لونه (افتراضي)
+```
+
+---
+
+## ١٢. التواصل — `contactStyle`
+
+```json
+"contactStyle": {
+  "layout":            "grid",
+  "cardStyle":         "bordered",
+  "socialStyle":       "pills",
+  "showWhatsappFloat": true,
+  "mapStyle":          "embedded"
+}
+```
+
+| الحقل | القيم | الافتراضي |
+|-------|-------|-----------|
+| `layout` | `"grid"` `"list"` `"centered"` `"side-by-side"` | `"grid"` |
+| `cardStyle` | `"flat"` `"glass"` `"bordered"` `"filled"` | `"bordered"` |
+| `socialStyle` | `"icons"` `"pills"` `"text"` `"outlined"` | `"text"` |
+| `showWhatsappFloat` | `true` `false` | `true` |
+| `mapStyle` | `"embedded"` `"button"` `"none"` | `"embedded"` |
+
+---
+
+## ١٣. بصمة القالب — `visualPreset`
+
+```json
+"visualPreset": {
+  "themeMood": "luxury_dark",
+  "density":   "rich",
+  "contrast":  "high"
+}
+```
+
+هذا القسم وصفي للأدمن فقط — لا يؤثر على الكود. يساعدك في توثيق طابع القالب.
+
+---
+
+## أمثلة قوالب كاملة
+
+---
+
+### مثال ١ — "الأناقة الذهبية" (فاخر داكن)
 
 ```json
 {
-  "name_ar": "الأناقة الداكنة",
-  "name_en": "Elegant Dark",
-  "description_ar": "قالب فاخر بألوان داكنة وذهبية، مناسب للمكاتب الراقية",
+  "name_ar": "الأناقة الذهبية",
+  "name_en": "Golden Elegance",
+  "description_ar": "قالب فاخر بالأسود والذهب لمكاتب الصف الأول",
 
   "colors": {
-    "primary":    "#0a0a0a",
-    "secondary":  "#161616",
-    "accent":     "#c9a84c",
-    "background": "#f8f5f0",
-    "text":       "#1a1a1a",
-    "textLight":  "#888888"
+    "primary": "#0a0808", "secondary": "#141010",
+    "accent": "#c9a84c", "accentSecondary": "#e8c87a",
+    "background": "#f8f4ed", "text": "#1a1510", "textLight": "#8a7a6a",
+    "navBg": "#050303", "navText": "#f8f4ed"
   },
-
   "fonts": {
-    "heading": "Playfair Display",
-    "body":    "Tajawal"
+    "heading": "Cormorant Garamond", "body": "Tajawal",
+    "headingWeight": 700, "letterSpacing": "normal", "lineHeight": "relaxed"
   },
-
   "hero": {
-    "style":          "fullscreen",
-    "overlayOpacity": 0.6,
-    "textAlign":      "right"
+    "style": "cinematic", "height": "screen",
+    "overlayOpacity": 0.65, "overlayStyle": "vignette",
+    "textAlign": "right", "showScrollIndicator": true,
+    "ctaPrimaryText": "اكتشف أعمالنا", "ctaStyle": "solid"
   },
-
   "layout": {
-    "borderRadius": "none",
-    "spacing":      "spacious",
-    "sections": ["hero", "about", "services", "projects", "features", "cta", "footer"]
+    "borderRadius": "none", "spacing": "spacious", "maxWidth": "normal",
+    "sections": ["hero","about","services","projects","features","cta","footer"]
   },
-
+  "navigation": { "style": "glass", "height": "normal", "position": "sticky" },
+  "cards": {
+    "style": "elevated", "padding": "large",
+    "iconShape": "square", "accentBar": "right",
+    "hoverEffect": "lift"
+  },
+  "buttons": { "style": "solid", "size": "md", "glow": true },
   "projectsGrid": {
-    "columns": 3,
-    "style":   "grid"
-  }
+    "columns": 3, "style": "magazine",
+    "imageRatio": "4/3", "captionStyle": "overlay", "hoverEffect": "zoom"
+  },
+  "sections": {
+    "aboutLayout": "side-by-side", "aboutShowStats": true,
+    "servicesStyle": "card-grid", "featuresStyle": "icon-list",
+    "ctaLayout": "centered", "ctaBg": "primary",
+    "footerColumns": 3, "footerStyle": "dark"
+  },
+  "effects": {
+    "sectionFade": true, "hoverLift": true, "smoothScroll": true,
+    "accentGlow": true, "projectZoom": true
+  },
+  "decorations": {
+    "sectionDivider": "gradient", "backgroundPattern": "none",
+    "accentLine": true, "sectionBgAlt": false
+  },
+  "visualPreset": { "themeMood": "luxury_dark", "density": "rich", "contrast": "high" }
 }
 ```
 
 ---
 
-## مثال كامل — قالب "النور الأبيض"
-
-```json
-{
-  "name_ar": "النور الأبيض",
-  "name_en": "Pure White",
-  "description_ar": "قالب بسيط وهادئ بألوان فاتحة نظيفة",
-
-  "colors": {
-    "primary":    "#2c3e50",
-    "secondary":  "#34495e",
-    "accent":     "#3498db",
-    "background": "#ffffff",
-    "text":       "#2c3e50",
-    "textLight":  "#7f8c8d"
-  },
-
-  "fonts": {
-    "heading": "Cairo",
-    "body":    "Cairo"
-  },
-
-  "hero": {
-    "style":          "split",
-    "overlayOpacity": 0.4,
-    "textAlign":      "right"
-  },
-
-  "layout": {
-    "borderRadius": "md",
-    "spacing":      "normal",
-    "sections": ["hero", "services", "projects", "features", "footer"]
-  },
-
-  "projectsGrid": {
-    "columns": 3,
-    "style":   "grid"
-  }
-}
-```
-
----
-
-## مثال كامل — قالب "البساطة المطلقة"
+### مثال ٢ — "البساطة المطلقة" (Minimal فاخر)
 
 ```json
 {
   "name_ar": "البساطة المطلقة",
   "name_en": "Pure Minimal",
-  "description_ar": "أقل هو أكثر — مساحات بيضاء وتركيز كامل على المحتوى",
+  "description_ar": "أقل هو أكثر — مساحات بيضاء وتركيز على المحتوى",
 
   "colors": {
-    "primary":    "#ffffff",
-    "secondary":  "#f5f5f5",
-    "accent":     "#000000",
-    "background": "#ffffff",
-    "text":       "#111111",
-    "textLight":  "#999999"
+    "primary": "#111111", "secondary": "#f5f5f5",
+    "accent": "#111111", "background": "#ffffff",
+    "text": "#111111", "textLight": "#999999",
+    "navBg": "#ffffff", "navText": "#111111"
   },
-
   "fonts": {
-    "heading": "Raleway",
-    "body":    "Almarai"
+    "heading": "DM Serif Display", "body": "Almarai",
+    "headingWeight": 400, "bodyWeight": 300, "bodySize": "md",
+    "letterSpacing": "normal", "lineHeight": "loose"
   },
-
   "hero": {
-    "style":          "minimal",
-    "overlayOpacity": 0,
-    "textAlign":      "right"
+    "style": "minimal", "overlayOpacity": 0,
+    "textAlign": "right",
+    "ctaPrimaryText": "أعمالنا", "ctaSecondaryText": "تواصل",
+    "ctaStyle": "outline"
   },
-
   "layout": {
-    "borderRadius": "none",
-    "spacing":      "spacious",
-    "sections": ["hero", "projects", "cta", "footer"]
+    "borderRadius": "none", "spacing": "spacious", "maxWidth": "narrow",
+    "sections": ["hero", "projects", "about", "cta", "footer"]
   },
-
+  "navigation": { "style": "solid", "height": "compact", "showBorder": true },
+  "cards": { "style": "ghost", "padding": "normal", "iconShape": "none", "hoverEffect": "none" },
+  "buttons": { "style": "outline", "size": "md", "uppercase": false },
   "projectsGrid": {
-    "columns": 4,
-    "style":   "list"
+    "columns": 3, "style": "grid",
+    "imageRatio": "4/3", "captionStyle": "below", "hoverEffect": "fade"
+  },
+  "sections": {
+    "aboutLayout": "stacked",
+    "servicesStyle": "minimal", "featuresStyle": "minimal",
+    "ctaLayout": "minimal", "ctaBg": "background",
+    "footerColumns": 2, "footerStyle": "minimal"
+  },
+  "effects": {
+    "sectionFade": true, "hoverLift": false, "smoothScroll": true,
+    "accentGlow": false, "projectZoom": false, "animatedUnderline": true
+  },
+  "decorations": {
+    "sectionDivider": "line", "backgroundPattern": "none",
+    "accentLine": false, "sectionBgAlt": false
   }
 }
 ```
 
 ---
 
-## كيفية الرفع
+### مثال ٣ — "طوكيو الليلية" (Pixel Japan — قابل للبناء)
 
-1. أنشئ مجلداً جديداً باسم قالبك
-2. ضع `theme.json` مكتوباً بالكامل
-3. ضع `preview.jpg` (صورة معاينة 1280×720 على الأقل)
-4. اضغط المجلد كـ ZIP
-5. افتح لوحة الأدمن → **القوالب** → **رفع قالب جديد**
-6. ارفع الـ ZIP واختر الباقة المطلوبة
-7. انتظر رسالة النجاح — القالب يظهر فوراً لأصحاب المكاتب عند اختيار القالب
+```json
+{
+  "name_ar": "طوكيو الليلية",
+  "name_en": "Tokyo Night",
+  "description_ar": "مستوحى من أحياء كيوتو الليلية — دافئ وفاخر وعصري",
+
+  "colors": {
+    "primary": "#17120e", "secondary": "#231c16",
+    "accent": "#d14d41", "accentSecondary": "#e8806a",
+    "background": "#f8f2ea", "text": "#1f1a15", "textLight": "#80766e",
+    "navBg": "#100d09", "navText": "#f8f2ea",
+    "cardBg": "#f0e8df", "border": "#e0d4c8"
+  },
+  "fonts": {
+    "heading": "Amiri", "body": "Tajawal",
+    "headingWeight": 700, "bodyWeight": 400,
+    "bodySize": "md", "lineHeight": "relaxed", "letterSpacing": "normal"
+  },
+  "hero": {
+    "style": "fullscreen", "height": "screen",
+    "overlayOpacity": 0.62, "overlayStyle": "vignette",
+    "textAlign": "right", "showScrollIndicator": true,
+    "tagOverride": "فن العمارة الحديثة",
+    "ctaPrimaryText": "استعرض الأعمال",
+    "ctaSecondaryText": "تواصل معنا",
+    "ctaStyle": "solid"
+  },
+  "layout": {
+    "borderRadius": "sm", "spacing": "spacious", "maxWidth": "normal",
+    "sections": ["hero","about","services","projects","features","cta","footer"]
+  },
+  "navigation": { "style": "glass", "height": "normal", "position": "sticky" },
+  "cards": {
+    "style": "elevated", "padding": "large",
+    "iconShape": "square", "accentBar": "right", "hoverEffect": "lift",
+    "showNumber": false
+  },
+  "buttons": { "style": "solid", "size": "md", "glow": false, "hoverScale": true },
+  "projectsGrid": {
+    "columns": 4, "style": "magazine",
+    "imageRatio": "4/3", "captionStyle": "slide", "hoverEffect": "zoom"
+  },
+  "sections": {
+    "aboutLayout": "reversed", "aboutShowStats": true,
+    "servicesStyle": "numbered", "featuresStyle": "card-grid",
+    "ctaLayout": "centered", "ctaBg": "primary",
+    "footerColumns": 3, "footerStyle": "dark", "footerShowSocial": true
+  },
+  "effects": {
+    "sectionFade": true, "hoverLift": true, "smoothScroll": true,
+    "accentGlow": false, "glassEffect": false,
+    "projectZoom": true, "buttonScale": true, "animatedUnderline": false
+  },
+  "decorations": {
+    "sectionDivider": "dots-row", "backgroundPattern": "dots",
+    "patternOpacity": 0.03, "accentLine": true,
+    "sectionBgAlt": false, "cardCornerDot": false
+  },
+  "contactStyle": {
+    "layout": "grid", "cardStyle": "bordered",
+    "socialStyle": "pills", "showWhatsappFloat": true
+  },
+  "visualPreset": { "themeMood": "tokyo_warmth", "density": "rich", "contrast": "normal" }
+}
+```
 
 ---
 
-## أخطاء شائعة
+### مثال ٤ — "الجريء الحديث" (Bold Contrast)
+
+```json
+{
+  "name_ar": "الجريء الحديث",
+  "name_en": "Bold Modern",
+  "description_ar": "أسود وأبيض مع لكنة حمراء — لمكاتب المقاولات والإنشاء",
+
+  "colors": {
+    "primary": "#0a0a0a", "secondary": "#151515",
+    "accent": "#e63946", "accentSecondary": "#ff6b6b",
+    "background": "#ffffff", "text": "#0a0a0a", "textLight": "#666666",
+    "navBg": "#000000", "navText": "#ffffff",
+    "cardBg": "#f8f8f8"
+  },
+  "fonts": {
+    "heading": "Bebas Neue", "body": "Cairo",
+    "headingWeight": 400, "bodyWeight": 400,
+    "bodySize": "md", "letterSpacing": "wide", "lineHeight": "normal",
+    "uppercase": true
+  },
+  "hero": {
+    "style": "split", "height": "screen",
+    "overlayOpacity": 0.5, "overlayStyle": "flat",
+    "textAlign": "right",
+    "ctaPrimaryText": "أعمالنا", "ctaStyle": "solid",
+    "ctaSecondaryText": "تواصل"
+  },
+  "layout": {
+    "borderRadius": "none", "spacing": "normal", "maxWidth": "wide",
+    "sections": ["hero","services","projects","features","about","cta","footer"]
+  },
+  "navigation": { "style": "solid", "height": "compact", "ctaInNav": true },
+  "cards": {
+    "style": "bordered", "padding": "normal",
+    "iconShape": "square", "accentBar": "top",
+    "hoverEffect": "border", "showNumber": true
+  },
+  "buttons": { "style": "solid", "size": "lg", "uppercase": true, "hoverScale": true },
+  "projectsGrid": {
+    "columns": 3, "style": "grid",
+    "imageRatio": "16/9", "captionStyle": "overlay", "hoverEffect": "lift"
+  },
+  "sections": {
+    "aboutLayout": "side-by-side",
+    "servicesStyle": "numbered", "featuresStyle": "checklist",
+    "ctaLayout": "banner", "ctaBg": "accent",
+    "footerColumns": 3, "footerStyle": "dark"
+  },
+  "effects": {
+    "sectionFade": false, "hoverLift": true, "smoothScroll": true,
+    "accentGlow": true, "projectZoom": true, "buttonScale": true
+  },
+  "decorations": {
+    "sectionDivider": "slash", "backgroundPattern": "none",
+    "accentLine": true, "sectionBgAlt": true
+  }
+}
+```
+
+---
+
+## كيفية رفع القالب
+
+```
+1. أنشئ مجلداً
+   └── my-theme/
+       ├── theme.json    ← الملف الرئيسي
+       └── preview.jpg   ← صورة 1280×720
+
+2. اضغط كـ ZIP
+
+3. الأدمن → القوالب → رفع قالب → اختر الـ ZIP
+
+4. حدد:
+   - الخطة المطلوبة (basic / pro / premium)
+   - الظهور (عام / خاص لمكتب محدد)
+
+5. يظهر فوراً في قائمة القوالب
+```
+
+---
+
+## الأخطاء الشائعة
 
 | الخطأ | السبب | الحل |
 |-------|-------|------|
-| `theme.json غير موجود` | نسيت الملف أو خطأ في الاسم | تأكد الاسم بالضبط `theme.json` |
-| `theme.json غير صالح` | خطأ في صياغة JSON | استخدم [jsonlint.com](https://jsonlint.com) للتحقق |
-| `colors.accent يجب أن يكون HEX` | كتبت اللون بصيغة خاطئة | استخدم `#rrggbb` فقط |
-| `hero.style غير معروف` | قيمة خاطئة | استخدم: `fullscreen`, `split`, `centered`, `minimal` |
-| `layout.sections يجب أن يحتوي على hero` | نسيت إضافة `"hero"` | أضف `"hero"` للمصفوفة |
-| `overlayOpacity` خارج النطاق | قيمة أكبر من 1 أو أصغر من 0 | استخدم قيمة بين `0` و `1` |
-| القالب لا يظهر في صفحة المشاريع | — | لا حاجة لأي إعداد إضافي — يطبَّق تلقائياً |
+| القالب لا يُحمَّل | `theme.json` غير صالح | تحقق بـ [jsonlint.com](https://jsonlint.com) |
+| الخط لا يظهر | خطأ في الاسم | انسخ الاسم بالضبط من [fonts.google.com](https://fonts.google.com) |
+| الأزرار بدون توهج | `effects.accentGlow: false` | غيّرها لـ `true` |
+| Hero بدون صورة | `tenant.cover_url` فارغ | المكتب لم يرفع صورة غلاف |
+| الـ Glass لا يعمل | المتصفح لا يدعم `backdrop-filter` | تجاهل — يظهر في Chrome/Safari |
+| `"sections": []` فارغة | القالب لن يعرض شيئاً | أضف `"hero"` على الأقل |
+| accentSecondary لا يظهر | `ctaStyle` ليس `"gradient"` أو `ctaBg` ليس `"gradient"` | غيّر أحدهما |
 
 ---
 
-## نصائح لقالب احترافي
+## نصائح الاحترافيين
 
-### الألوان
-- 🎨 **لا تستخدم أكثر من 3 ألوان رئيسية** — primary، accent، background
-- ✅ اختبر التباين على [contrast-checker.com](https://contrast-checker.com)
-- 🌗 `primary` داكن + `background` فاتح = أفضل قراءة في كل الصفحات
+**للقوالب الداكنة:**
+- استخدم `navText: "#ffffff"` صريحاً لضمان التباين
+- `glassEffect: true` يبدو رائعاً على الخلفيات الداكنة
+- `accentGlow: true` يعطي عمقاً بصرياً
 
-### الخطوط
-- 📝 **خط واحد للكل مقبول** — لا مشكلة في كتابة نفس الخط في `heading` و `body`
-- 🔤 استخدم خطاً عربياً لـ `body` دائماً (Tajawal أو Cairo موصى بهما)
-- ❌ لا تستخدم خطوط لا تدعم العربية لـ `body` — ستظهر مكسورة في صفحة التواصل والمشاريع
+**للقوالب الفاتحة:**
+- `backgroundPattern: "dots"` مع `patternOpacity: 0.03` يضيف عمقاً خفياً
+- `sectionDivider: "gradient"` أجمل من `"line"`
+- `cards.style: "elevated"` أفضل من `"bordered"` في الخلفيات الفاتحة
 
-### الـ Hero
-- 📸 `fullscreen` الأجمل مع صورة غلاف قوية
-- 🔲 `split` يعمل عندما تريد نصاً مقروءاً بجانب الصورة
-- ⬜ `minimal` للمكاتب التي تفضل البساطة
+**للقوالب الفاخرة:**
+- `hero.style: "cinematic"` + `effects.sectionFade: true` = احترافي جداً
+- `projectsGrid.style: "magazine"` للعقارات والهندسة
+- `sections.aboutShowStats: true` يضيف مصداقية
 
-### شبكة المشاريع
-- 🖼️ `grid` مع `columns: 3` هو الأكثر توازناً لمعظم المكاتب
-- 📋 `list` مع `columns: 2` جيد لمكاتب تريد عرض تفاصيل المشروع مباشرة
-- ✅ الإعداد يؤثر على الرئيسية وصفحة المشاريع معاً
-
-### المعاينة
-- 📸 صورة `preview.jpg` مهمة جداً — هي ما يراه أصحاب المكاتب في داشبورد الاختيار
-- اجعلها تعكس الألوان الحقيقية للقالب
-- أبعاد موصى بها: **1280 × 720** أو **1920 × 1080**
+**للقوالب البسيطة:**
+- `hero.style: "minimal"` + `layout.borderRadius: "none"` = تصميم نظيف
+- `effects.*: false` كلها = أسرع في التحميل
+- `cards.style: "ghost"` + `hoverEffect: "none"` = بساطة مطلقة
 
 ---
 
-## ما لا يمكن تخصيصه بالقالب
-
-هذه العناصر ثابتة ومدمجة في المنصة — يتحكم بها المكتب من داشبورده:
-- اسم المكتب ونبذته التعريفية
-- شعار المكتب وصورة الغلاف
-- قائمة المشاريع وصورها
-- الخدمات والمميزات (يضيفها المكتب بنفسه)
-- معلومات التواصل وروابط السوشيال ميديا
-- خريطة Google Maps
-
----
-
-*آخر تحديث: 2026-05-24 | إصدار 2.0*
+*آخر تحديث: مايو 2026 — إصدار 3.0 | يتوافق مع DynamicThemeEngine v3*
