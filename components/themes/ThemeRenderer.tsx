@@ -4,8 +4,9 @@ import ClassicLayout from './classic/Layout'
 import BoldLayout from './bold/Layout'
 import MinimalLayout from './minimal/Layout'
 import LuxuryLayout from './luxury/Layout'
+import DynamicThemeEngine from './DynamicThemeEngine'
 
-const themes = {
+const builtInThemes = {
   modern: ModernLayout,
   classic: ClassicLayout,
   bold: BoldLayout,
@@ -13,7 +14,30 @@ const themes = {
   luxury: LuxuryLayout,
 }
 
-export function ThemeRenderer({ tenant, projects, featuredProjects, services, features }: ThemeProps) {
-  const Layout = themes[tenant.theme] ?? themes.modern
-  return <Layout tenant={tenant} projects={projects} featuredProjects={featuredProjects} services={services} features={features} />
+export function ThemeRenderer({ tenant, projects, featuredProjects, services, features, customTheme }: ThemeProps) {
+  // إذا كان للمكتب قالب مخصص مرفوع من الأدمن → استخدمه
+  if (customTheme?.config) {
+    return (
+      <DynamicThemeEngine
+        config={customTheme.config}
+        tenant={tenant}
+        projects={projects}
+        featuredProjects={featuredProjects}
+        services={services}
+        features={features}
+      />
+    )
+  }
+
+  // وإلا استخدم أحد القوالب المدمجة الخمسة
+  const Layout = builtInThemes[tenant.theme] ?? builtInThemes.modern
+  return (
+    <Layout
+      tenant={tenant}
+      projects={projects}
+      featuredProjects={featuredProjects}
+      services={services}
+      features={features}
+    />
+  )
 }

@@ -95,12 +95,60 @@ export interface ContentBlock {
   created_at: string
 }
 
+// ── القوالب المخصصة ──────────────────────────────────────────────────────────
+
+export interface CustomThemeColors {
+  primary: string
+  secondary: string
+  accent: string
+  background: string
+  text: string
+  textLight: string
+}
+
+export interface CustomThemeConfig {
+  colors: CustomThemeColors
+  fonts: {
+    heading: string
+    body: string
+  }
+  hero: {
+    style: 'fullscreen' | 'split' | 'centered' | 'minimal'
+    overlayOpacity: number
+    textAlign: 'right' | 'center' | 'left'
+  }
+  layout: {
+    borderRadius: 'none' | 'sm' | 'md' | 'lg' | 'full'
+    spacing: 'compact' | 'normal' | 'spacious'
+    sections: Array<'hero' | 'about' | 'services' | 'projects' | 'features' | 'cta' | 'footer'>
+  }
+  projectsGrid: {
+    columns: 2 | 3 | 4
+    style: 'grid' | 'masonry' | 'list'
+  }
+}
+
+export interface CustomTheme {
+  id: string
+  name_ar: string
+  name_en: string | null
+  description_ar: string | null
+  preview_url: string | null
+  config: CustomThemeConfig
+  fonts: Array<{ name: string; url: string }>
+  is_active: boolean
+  plan_required: Plan
+  created_by: string | null
+  created_at: string
+}
+
 export interface ThemeProps {
   tenant: Tenant
   projects: Project[]
   featuredProjects: Project[]
   services: ContentBlock[]
   features: ContentBlock[]
+  customTheme?: CustomTheme | null
 }
 
 export const PLAN_LIMITS = {

@@ -4,13 +4,14 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
-import { LayoutDashboard, Building2, CreditCard, LogOut, ShieldCheck } from 'lucide-react'
+import { LayoutDashboard, Building2, CreditCard, LogOut, ShieldCheck, Palette } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const navItems = [
   { href: '/admin', label: 'لوحة التحكم', icon: LayoutDashboard },
   { href: '/admin/tenants', label: 'المكاتب', icon: Building2 },
   { href: '/admin/subscriptions', label: 'الاشتراكات', icon: CreditCard },
+  { href: '/admin/themes', label: 'القوالب', icon: Palette },
 ]
 
 export default function AdminSidebar() {

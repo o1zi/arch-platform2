@@ -16,7 +16,12 @@
       "Bash(git commit *)",
       "Bash(git remote *)",
       "Bash(git branch *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(npx tsc *)",
+      "Bash(node -e \"const l = require\\('lucide-react'\\); console.log\\(Object.keys\\(l\\).filter\\(k => k.match\\(/share|link|globe|external|at|hash/i\\)\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(npx next *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)"
     ]
   }
 }
