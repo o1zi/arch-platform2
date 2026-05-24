@@ -1,6 +1,7 @@
 'use client'
 
 import { Tenant, Project, CustomThemeConfig } from '@/types'
+import { SectorConfig, getSectorConfig } from '@/lib/sectors'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -10,6 +11,7 @@ interface Props {
   tenant: Tenant
   projects: Project[]
   config: CustomThemeConfig
+  sectorConfig?: SectorConfig
 }
 
 function buildCSSVars(config: CustomThemeConfig): React.CSSProperties {
@@ -37,7 +39,8 @@ function gridColsClass(cols: number) {
   }[cols] ?? 'grid-cols-1 sm:grid-cols-3'
 }
 
-export default function DynamicProjectsPage({ tenant, projects, config }: Props) {
+export default function DynamicProjectsPage({ tenant, projects, config, sectorConfig }: Props) {
+  const sc = sectorConfig ?? getSectorConfig(tenant.sector)
   const [activeCategory, setActiveCategory] = useState('الكل')
   const br = borderRadiusClass(config.layout.borderRadius)
   const cols = config.projectsGrid.columns
@@ -66,7 +69,7 @@ export default function DynamicProjectsPage({ tenant, projects, config }: Props)
           </div>
           <div className="flex items-center gap-6 text-sm">
             <Link href={`/${tenant.slug}`} style={{ color: 'var(--c-bg)' }} className="opacity-70 hover:opacity-100 transition-opacity">الرئيسية</Link>
-            <Link href={`/${tenant.slug}/projects`} style={{ color: 'var(--c-bg)' }} className="font-bold">المشاريع</Link>
+            <Link href={`/${tenant.slug}/projects`} style={{ color: 'var(--c-bg)' }} className="font-bold">{sc.portfolioLabel}</Link>
             <Link href={`/${tenant.slug}/contact`} className={`px-4 py-1.5 font-medium ${br}`}
               style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-bg)' }}>
               تواصل
@@ -78,12 +81,12 @@ export default function DynamicProjectsPage({ tenant, projects, config }: Props)
       {/* Header */}
       <div className="py-16 px-6" style={{ backgroundColor: 'var(--c-primary)' }}>
         <div className="max-w-7xl mx-auto">
-          <p className="text-xs tracking-[0.3em] uppercase mb-3" style={{ color: 'var(--c-accent)' }}>أعمالنا</p>
+          <p className="text-xs tracking-[0.3em] uppercase mb-3" style={{ color: 'var(--c-accent)' }}>{sc.featuredLabel}</p>
           <h1 className="text-5xl font-black" style={{ fontFamily: 'var(--font-heading)', color: 'var(--c-bg)' }}>
-            المشاريع
+            {sc.portfolioLabel}
           </h1>
           <p className="mt-3 text-sm" style={{ color: 'var(--c-text-light)' }}>
-            {projects.length} مشروع منجز
+            {projects.length} {sc.portfolioItemLabel} منجز
           </p>
         </div>
       </div>
@@ -114,7 +117,7 @@ export default function DynamicProjectsPage({ tenant, projects, config }: Props)
       <main className="max-w-7xl mx-auto px-6 py-16">
         {filtered.length === 0 ? (
           <div className="text-center py-24" style={{ color: 'var(--c-text-light)' }}>
-            <p className="text-xl">لا توجد مشاريع في هذا التصنيف</p>
+            <p className="text-xl">لا توجد {sc.portfolioItemLabelPlural} في هذا التصنيف</p>
           </div>
         ) : style === 'list' ? (
           <div className="space-y-4">

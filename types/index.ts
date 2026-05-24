@@ -1,6 +1,7 @@
 export type Theme = 'modern' | 'classic' | 'bold' | 'minimal' | 'luxury'
 export type Plan = 'basic' | 'pro' | 'premium'
 export type TenantUserRole = 'owner' | 'editor'
+export type Sector = 'engineering' | 'contractor' | 'real_estate' | 'interior_design' | 'photography' | 'legal' | 'medical' | 'general'
 
 export interface Tenant {
   id: string
@@ -24,6 +25,8 @@ export interface Tenant {
   theme: Theme
   is_active: boolean
   plan: Plan
+  sector: Sector
+  whatsapp: string | null
   subscription_start: string | null
   subscription_end: string | null
   created_at: string
@@ -51,6 +54,12 @@ export interface Project {
   cover_image_url: string | null
   sort_order: number
   is_featured: boolean
+  price: string | null
+  area: string | null
+  status: string | null
+  bedrooms: number | null
+  bathrooms: number | null
+  tags: string[] | null
   deleted_at: string | null
   created_at: string
   updated_at: string
@@ -158,6 +167,7 @@ export interface ThemeProps {
   services: ContentBlock[]
   features: ContentBlock[]
   customTheme?: CustomTheme | null
+  sectorConfig?: import('@/lib/sectors').SectorConfig
 }
 
 export const PLAN_LIMITS = {

@@ -1,4 +1,5 @@
 import { ThemeProps } from '@/types'
+import { getSectorConfig } from '@/lib/sectors'
 import ModernLayout from './modern/Layout'
 import ClassicLayout from './classic/Layout'
 import BoldLayout from './bold/Layout'
@@ -14,7 +15,9 @@ const builtInThemes = {
   luxury: LuxuryLayout,
 }
 
-export function ThemeRenderer({ tenant, projects, featuredProjects, services, features, customTheme }: ThemeProps) {
+export function ThemeRenderer({ tenant, projects, featuredProjects, services, features, customTheme, sectorConfig }: ThemeProps) {
+  const resolvedSectorConfig = sectorConfig ?? getSectorConfig(tenant.sector)
+
   // إذا كان للمكتب قالب مخصص مرفوع من الأدمن → استخدمه
   if (customTheme?.config) {
     return (
@@ -25,6 +28,7 @@ export function ThemeRenderer({ tenant, projects, featuredProjects, services, fe
         featuredProjects={featuredProjects}
         services={services}
         features={features}
+        sectorConfig={resolvedSectorConfig}
       />
     )
   }
@@ -38,6 +42,7 @@ export function ThemeRenderer({ tenant, projects, featuredProjects, services, fe
       featuredProjects={featuredProjects}
       services={services}
       features={features}
+      sectorConfig={resolvedSectorConfig}
     />
   )
 }

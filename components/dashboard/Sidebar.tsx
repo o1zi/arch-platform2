@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Tenant } from '@/types'
+import { getSectorConfig } from '@/lib/sectors'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
@@ -22,20 +23,21 @@ import {
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-const navItems = [
-  { href: '/dashboard', label: 'الرئيسية', icon: LayoutDashboard },
-  { href: '/dashboard/profile', label: 'معلومات المكتب', icon: User },
-  { href: '/dashboard/projects', label: 'المشاريع', icon: FolderOpen },
-  { href: '/dashboard/services', label: 'الخدمات والمميزات', icon: LayoutList },
-  { href: '/dashboard/theme', label: 'القالب', icon: Palette },
-  { href: '/dashboard/domain', label: 'الدومين', icon: Globe },
-  { href: '/dashboard/subscription', label: 'الاشتراك', icon: CreditCard },
-]
-
 export default function DashboardSidebar({ tenant }: { tenant: Tenant }) {
   const pathname = usePathname()
   const router = useRouter()
   const [open, setOpen] = useState(false)
+
+  const sectorCfg = getSectorConfig(tenant.sector)
+  const navItems = [
+    { href: '/dashboard', label: 'الرئيسية', icon: LayoutDashboard },
+    { href: '/dashboard/profile', label: sectorCfg.profileLabel, icon: User },
+    { href: '/dashboard/projects', label: sectorCfg.portfolioLabel, icon: FolderOpen },
+    { href: '/dashboard/services', label: sectorCfg.servicesLabel, icon: LayoutList },
+    { href: '/dashboard/theme', label: 'القالب', icon: Palette },
+    { href: '/dashboard/domain', label: 'الدومين', icon: Globe },
+    { href: '/dashboard/subscription', label: 'الاشتراك', icon: CreditCard },
+  ]
 
   async function handleLogout() {
     const supabase = createClient()

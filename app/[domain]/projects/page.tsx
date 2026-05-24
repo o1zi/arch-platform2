@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Project } from '@/types'
 import { ThemeProjectsRenderer } from '@/components/themes/ThemeProjectsRenderer'
 import { getCustomTheme } from '@/lib/get-custom-theme'
+import { getSectorConfig } from '@/lib/sectors'
 
 export default async function TenantProjectsPage({ params }: { params: { domain: string } }) {
   const tenant = await getTenantByIdentifier(params.domain)
@@ -20,11 +21,14 @@ export default async function TenantProjectsPage({ params }: { params: { domain:
     getCustomTheme(tenant.id),
   ])
 
+  const sectorConfig = getSectorConfig(tenant.sector)
+
   return (
     <ThemeProjectsRenderer
       tenant={tenant}
       projects={(projects ?? []) as Project[]}
       customTheme={customTheme}
+      sectorConfig={sectorConfig}
     />
   )
 }

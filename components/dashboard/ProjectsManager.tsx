@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Tenant, Project, PLAN_LIMITS } from '@/types'
+import { SectorConfig } from '@/lib/sectors'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -15,8 +16,6 @@ import { toast } from 'sonner'
 import { Plus, Pencil, Trash2, Star } from 'lucide-react'
 import Image from 'next/image'
 
-const CATEGORIES = ['سكني', 'تجاري', 'صناعي', 'ترفيهي', 'حكومي', 'تعليمي']
-
 interface ProjectForm {
   title_ar: string
   title_en: string
@@ -26,14 +25,29 @@ interface ProjectForm {
   location_ar: string
   year: string
   is_featured: boolean
+  price: string
+  area: string
+  status: string | null
+  bedrooms: string
+  bathrooms: string
+  tags: string
 }
 
 const emptyForm: ProjectForm = {
   title_ar: '', title_en: '', description_ar: '', description_en: '',
   category: null, location_ar: '', year: '', is_featured: false,
+  price: '', area: '', status: null, bedrooms: '', bathrooms: '', tags: '',
 }
 
-export default function ProjectsManager({ tenant, projects: initial }: { tenant: Tenant; projects: Project[] }) {
+export default function ProjectsManager({
+  tenant,
+  projects: initial,
+  sectorConfig,
+}: {
+  tenant: Tenant
+  projects: Project[]
+  sectorConfig: SectorConfig
+}) {
   const supabase = createClient()
   const [projects, setProjects] = useState(initial)
   const [open, setOpen] = useState(false)
@@ -69,6 +83,10 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
       description_ar: p.description_ar ?? '', description_en: p.description_en ?? '',
       category: p.category ?? null, location_ar: p.location_ar ?? '',
       year: p.year?.toString() ?? '', is_featured: p.is_featured,
+      price: p.price ?? '', area: p.area ?? '',
+      status: p.status ?? null,
+      bedrooms: p.bedrooms?.toString() ?? '', bathrooms: p.bathrooms?.toString() ?? '',
+      tags: (p.tags ?? []).join(', '),
     })
     setCoverPreview(p.cover_image_url)
     setCoverFile(null)
@@ -141,6 +159,12 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
       year: form.year ? parseInt(form.year) : null,
       is_featured: form.is_featured,
       cover_image_url: coverUrl,
+      price: form.price || null,
+      area: form.area || null,
+      status: form.status || null,
+      bedrooms: form.bedrooms ? parseInt(form.bedrooms) : null,
+      bathrooms: form.bathrooms ? parseInt(form.bathrooms) : null,
+      tags: form.tags ? form.tags.split(',').map(t => t.trim()).filter(Boolean) : null,
     }
 
     let savedProjectId = editProject?.id ?? ''
@@ -200,7 +224,7 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
       <div className="flex justify-between items-center">
         <Button onClick={openNew} disabled={atLimit} className="gap-2">
           <Plus className="h-4 w-4" />
-          مشروع جديد
+          {sectorConfig.portfolioItemLabel} جديد
         </Button>
         {atLimit && <p className="text-sm text-amber-600">وصلت للحد الأقصى لباقتك</p>}
       </div>
@@ -209,15 +233,23 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden overflow-x-auto">
         {projects.length === 0 ? (
           <div className="p-12 text-center text-gray-400">
-            <p>لا توجد مشاريع بعد. ابدأ بإضافة مشروعك الأول!</p>
+            <p>لا توجد {sectorConfig.portfolioItemLabelPlural} بعد. ابدأ بإضافة {sectorConfig.portfolioItemLabel} الأول!</p>
           </div>
         ) : (
           <table className="w-full text-sm min-w-[480px]">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="text-right p-3 font-medium text-gray-600">المشروع</th>
+                <th className="text-right p-3 font-medium text-gray-600">{sectorConfig.portfolioItemLabel}</th>
                 <th className="text-right p-3 font-medium text-gray-600 hidden sm:table-cell">التصنيف</th>
-                <th className="text-right p-3 font-medium text-gray-600 hidden md:table-cell">السنة</th>
+                {sectorConfig.extraFields.price && (
+                  <th className="text-right p-3 font-medium text-gray-600 hidden md:table-cell">السعر</th>
+                )}
+                {sectorConfig.extraFields.status && (
+                  <th className="text-right p-3 font-medium text-gray-600 hidden md:table-cell">الحالة</th>
+                )}
+                {!sectorConfig.extraFields.price && !sectorConfig.extraFields.status && (
+                  <th className="text-right p-3 font-medium text-gray-600 hidden md:table-cell">السنة</th>
+                )}
                 <th className="text-center p-3 font-medium text-gray-600">مميّز</th>
                 <th className="text-right p-3 font-medium text-gray-600">إجراءات</th>
               </tr>
@@ -236,7 +268,19 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
                   <td className="p-3 hidden sm:table-cell">
                     {project.category && <Badge variant="secondary">{project.category}</Badge>}
                   </td>
-                  <td className="p-3 hidden md:table-cell text-gray-500">{project.year}</td>
+                  {sectorConfig.extraFields.price && (
+                    <td className="p-3 hidden md:table-cell text-gray-700 font-medium">{project.price}</td>
+                  )}
+                  {sectorConfig.extraFields.status && (
+                    <td className="p-3 hidden md:table-cell">
+                      {project.status && (
+                        <Badge variant={project.status === 'متاح' ? 'default' : 'secondary'}>{project.status}</Badge>
+                      )}
+                    </td>
+                  )}
+                  {!sectorConfig.extraFields.price && !sectorConfig.extraFields.status && (
+                    <td className="p-3 hidden md:table-cell text-gray-500">{project.year}</td>
+                  )}
                   <td className="p-3 text-center">
                     {project.is_featured && <Star className="h-4 w-4 text-amber-500 mx-auto" />}
                   </td>
@@ -261,7 +305,7 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" dir="rtl">
           <DialogHeader>
-            <DialogTitle>{editProject ? 'تعديل المشروع' : 'مشروع جديد'}</DialogTitle>
+            <DialogTitle>{editProject ? `تعديل ${sectorConfig.portfolioItemLabel}` : `${sectorConfig.portfolioItemLabel} جديد`}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -284,13 +328,14 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
                 <Textarea value={form.description_en} onChange={e => setForm(f => ({ ...f, description_en: e.target.value }))} rows={3} dir="ltr" />
               </div>
             </div>
+            {/* التصنيف + الموقع + السنة */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>التصنيف</Label>
-                <Select value={form.category} onValueChange={v => setForm(f => ({ ...f, category: v }))}>
+                <Select value={form.category ?? ''} onValueChange={v => setForm(f => ({ ...f, category: v }))}>
                   <SelectTrigger><SelectValue placeholder="اختر..." /></SelectTrigger>
                   <SelectContent>
-                    {CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    {sectorConfig.categories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -303,6 +348,58 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
                 <Input type="number" value={form.year} onChange={e => setForm(f => ({ ...f, year: e.target.value }))} placeholder="2024" />
               </div>
             </div>
+
+            {/* الحقول الإضافية حسب القطاع */}
+            {(sectorConfig.extraFields.price || sectorConfig.extraFields.area || sectorConfig.extraFields.status) && (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {sectorConfig.extraFields.price && (
+                  <div className="space-y-2">
+                    <Label>السعر</Label>
+                    <Input value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} placeholder="مثال: 750,000 ريال" />
+                  </div>
+                )}
+                {sectorConfig.extraFields.area && (
+                  <div className="space-y-2">
+                    <Label>المساحة</Label>
+                    <Input value={form.area} onChange={e => setForm(f => ({ ...f, area: e.target.value }))} placeholder="مثال: 250 م²" />
+                  </div>
+                )}
+                {sectorConfig.extraFields.status && sectorConfig.statusOptions && (
+                  <div className="space-y-2">
+                    <Label>الحالة</Label>
+                    <Select value={form.status ?? ''} onValueChange={v => setForm(f => ({ ...f, status: v }))}>
+                      <SelectTrigger><SelectValue placeholder="اختر..." /></SelectTrigger>
+                      <SelectContent>
+                        {sectorConfig.statusOptions.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* غرف النوم ودورات المياه (للعقاري) */}
+            {sectorConfig.extraFields.bedrooms && (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>غرف النوم</Label>
+                  <Input type="number" value={form.bedrooms} onChange={e => setForm(f => ({ ...f, bedrooms: e.target.value }))} placeholder="0" />
+                </div>
+                <div className="space-y-2">
+                  <Label>دورات المياه</Label>
+                  <Input type="number" value={form.bathrooms} onChange={e => setForm(f => ({ ...f, bathrooms: e.target.value }))} placeholder="0" />
+                </div>
+              </div>
+            )}
+
+            {/* وسوم */}
+            {sectorConfig.extraFields.tags && (
+              <div className="space-y-2">
+                <Label>وسوم (افصل بفاصلة)</Label>
+                <Input value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="مثال: تسليم مفتاح، تقسيط، جاهز" />
+              </div>
+            )}
+
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -311,7 +408,7 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
                 onChange={e => setForm(f => ({ ...f, is_featured: e.target.checked }))}
                 className="h-4 w-4"
               />
-              <Label htmlFor="featured">مشروع مميّز (يظهر في الصفحة الرئيسية)</Label>
+              <Label htmlFor="featured">{sectorConfig.portfolioItemLabel} مميّز (يظهر في الصفحة الرئيسية)</Label>
             </div>
             <div className="space-y-2">
               <Label>صورة الغلاف</Label>
@@ -390,8 +487,8 @@ export default function ProjectsManager({ tenant, projects: initial }: { tenant:
       <AlertDialog open={!!deleteId} onOpenChange={o => !o && setDeleteId(null)}>
         <AlertDialogContent dir="rtl">
           <AlertDialogHeader>
-            <AlertDialogTitle>حذف المشروع</AlertDialogTitle>
-            <AlertDialogDescription>هل أنت متأكد من حذف هذا المشروع؟ لا يمكن التراجع عن هذا الإجراء.</AlertDialogDescription>
+            <AlertDialogTitle>حذف {sectorConfig.portfolioItemLabel}</AlertDialogTitle>
+            <AlertDialogDescription>هل أنت متأكد من حذف هذا {sectorConfig.portfolioItemLabel}؟ لا يمكن التراجع عن هذا الإجراء.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>إلغاء</AlertDialogCancel>

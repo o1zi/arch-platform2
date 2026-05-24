@@ -1,6 +1,7 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Tenant, Project, PLAN_LIMITS } from '@/types'
+import { getSectorConfig } from '@/lib/sectors'
 import ProjectsManager from '@/components/dashboard/ProjectsManager'
 
 export default async function ProjectsPage() {
@@ -24,15 +25,22 @@ export default async function ProjectsPage() {
     .is('deleted_at', null)
     .order('sort_order', { ascending: true })
 
+  const sectorConfig = getSectorConfig(tenant.sector)
+  const limit = PLAN_LIMITS[tenant.plan].projects
+
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-2xl font-bold">المشاريع</h1>
+        <h1 className="text-2xl font-bold">{sectorConfig.portfolioLabel}</h1>
         <p className="text-gray-500 mt-1">
-          {projects?.length ?? 0} / {PLAN_LIMITS[tenant.plan].projects === Infinity ? '∞' : PLAN_LIMITS[tenant.plan].projects} مشروع
+          {projects?.length ?? 0} / {limit === Infinity ? '∞' : limit} {sectorConfig.portfolioItemLabel}
         </p>
       </div>
-      <ProjectsManager tenant={tenant} projects={(projects ?? []) as Project[]} />
+      <ProjectsManager
+        tenant={tenant}
+        projects={(projects ?? []) as Project[]}
+        sectorConfig={sectorConfig}
+      />
     </div>
   )
 }

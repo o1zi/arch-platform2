@@ -1,4 +1,5 @@
 import { Tenant, Project, CustomTheme } from '@/types'
+import { SectorConfig, getSectorConfig } from '@/lib/sectors'
 import ModernProjects from './modern/ProjectsPage'
 import ClassicProjects from './classic/ProjectsPage'
 import BoldProjects from './bold/ProjectsPage'
@@ -10,6 +11,7 @@ interface ThemeProjectsProps {
   tenant: Tenant
   projects: Project[]
   customTheme?: CustomTheme | null
+  sectorConfig?: SectorConfig
 }
 
 const renderers = {
@@ -20,10 +22,12 @@ const renderers = {
   luxury: LuxuryProjects,
 }
 
-export function ThemeProjectsRenderer({ tenant, projects, customTheme }: ThemeProjectsProps) {
+export function ThemeProjectsRenderer({ tenant, projects, customTheme, sectorConfig }: ThemeProjectsProps) {
+  const resolvedSectorConfig = sectorConfig ?? getSectorConfig(tenant.sector)
+
   // قالب مخصص مرفوع من الأدمن
   if (customTheme?.config) {
-    return <DynamicProjectsPage tenant={tenant} projects={projects} config={customTheme.config} />
+    return <DynamicProjectsPage tenant={tenant} projects={projects} config={customTheme.config} sectorConfig={resolvedSectorConfig} />
   }
 
   // قالب مدمج

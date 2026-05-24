@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { Tenant } from '@/types'
+import { getSectorConfig } from '@/lib/sectors'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -32,6 +33,7 @@ export default async function AdminTenantsPage() {
           <thead className="bg-gray-50 border-b">
             <tr>
               <th className="text-right p-3 font-medium text-gray-600">المكتب</th>
+              <th className="text-right p-3 font-medium text-gray-600 hidden md:table-cell">القطاع</th>
               <th className="text-right p-3 font-medium text-gray-600 hidden sm:table-cell">الباقة</th>
               <th className="text-right p-3 font-medium text-gray-600">الحالة</th>
               <th className="text-right p-3 font-medium text-gray-600 hidden lg:table-cell">انتهاء الاشتراك</th>
@@ -48,6 +50,9 @@ export default async function AdminTenantsPage() {
                   <td className="p-3">
                     <p className="font-medium">{t.name_ar}</p>
                     <p className="text-xs text-gray-400" dir="ltr">{t.slug}</p>
+                  </td>
+                  <td className="p-3 hidden md:table-cell">
+                    <span className="text-xs text-gray-600">{getSectorConfig(t.sector).label}</span>
                   </td>
                   <td className="p-3 hidden sm:table-cell">
                     <Badge variant="outline" className="capitalize">{t.plan}</Badge>

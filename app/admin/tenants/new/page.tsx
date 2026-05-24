@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plan } from '@/types'
+import { ALL_SECTORS, Sector } from '@/lib/sectors'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -31,6 +32,7 @@ export default function NewTenantPage() {
     email: '',
     password: '',
     plan: 'basic' as Plan,
+    sector: 'engineering' as Sector,
     subscription_start: new Date().toISOString().split('T')[0],
     subscription_end: new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0],
     notes: '',
@@ -109,8 +111,20 @@ export default function NewTenantPage() {
         </Card>
 
         <Card className="mt-4">
-          <CardHeader><CardTitle>الاشتراك</CardTitle></CardHeader>
+          <CardHeader><CardTitle>القطاع والاشتراك</CardTitle></CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>القطاع</Label>
+              <Select value={form.sector} onValueChange={(v) => v && set('sector', v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {ALL_SECTORS.map(s => (
+                    <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-gray-500">يحدد نوع الأعمال والتصنيفات — لا يمكن تغييره لاحقاً</p>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>الباقة</Label>

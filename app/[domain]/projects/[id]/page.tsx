@@ -3,6 +3,7 @@ import { getTenantByIdentifier } from '@/lib/tenant'
 import { createClient } from '@/lib/supabase/server'
 import { Project, ProjectImage } from '@/types'
 import { getCustomTheme } from '@/lib/get-custom-theme'
+import { getSectorConfig } from '@/lib/sectors'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -25,6 +26,7 @@ export default async function ProjectDetailPage({ params }: { params: { domain: 
   if (!project) notFound()
   const p = project as Project & { images: ProjectImage[] }
   const images = (p.images ?? []).sort((a, b) => a.sort_order - b.sort_order)
+  const sectorConfig = getSectorConfig(tenant.sector)
 
   // ألوان القالب المخصص أو افتراضية
   const colors = customTheme?.config?.colors
@@ -85,7 +87,7 @@ export default async function ProjectDetailPage({ params }: { params: { domain: 
         <Link href={`/${tenant.slug}/projects`}
           className="text-sm mb-8 block flex items-center gap-1 hover:opacity-70 transition-opacity"
           style={{ color: accentColor }}>
-          ← العودة للمشاريع
+          ← العودة لـ{sectorConfig.portfolioLabel}
         </Link>
 
         {/* Meta */}
@@ -117,6 +119,58 @@ export default async function ProjectDetailPage({ params }: { params: { domain: 
             <h2 className="text-xl mt-1 font-light" dir="ltr" style={{ color: textLight }}>{p.title_en}</h2>
           )}
         </div>
+
+        {/* بطاقة الخصائص — تظهر فقط للعقاري أو من لديه حقول إضافية */}
+        {(p.price || p.area || p.bedrooms || p.bathrooms || p.status) && (
+          <div className="mb-8 grid grid-cols-2 sm:grid-cols-4 gap-3 p-5 rounded-xl"
+            style={{ backgroundColor: secondaryBg }}>
+            {p.price && (
+              <div className="text-center p-2">
+                <p className="text-xl font-black" style={{ color: accentColor }}>{p.price}</p>
+                <p className="text-xs mt-0.5" style={{ color: textLight }}>السعر</p>
+              </div>
+            )}
+            {p.area && (
+              <div className="text-center p-2">
+                <p className="text-xl font-black" style={{ color: textColor }}>{p.area}</p>
+                <p className="text-xs mt-0.5" style={{ color: textLight }}>المساحة</p>
+              </div>
+            )}
+            {p.bedrooms != null && (
+              <div className="text-center p-2">
+                <p className="text-xl font-black" style={{ color: textColor }}>{p.bedrooms}</p>
+                <p className="text-xs mt-0.5" style={{ color: textLight }}>غرف النوم</p>
+              </div>
+            )}
+            {p.bathrooms != null && (
+              <div className="text-center p-2">
+                <p className="text-xl font-black" style={{ color: textColor }}>{p.bathrooms}</p>
+                <p className="text-xs mt-0.5" style={{ color: textLight }}>دورات المياه</p>
+              </div>
+            )}
+            {p.status && (
+              <div className="col-span-full mt-1 flex justify-center">
+                <span className="text-sm font-bold px-4 py-1 rounded-full"
+                  style={{ backgroundColor: p.status === 'متاح' ? '#dcfce7' : p.status === 'مباع' ? '#fee2e2' : '#fef9c3',
+                           color: p.status === 'متاح' ? '#166534' : p.status === 'مباع' ? '#991b1b' : '#854d0e' }}>
+                  {p.status}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* الوسوم */}
+        {p.tags && p.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            {p.tags.map(tag => (
+              <span key={tag} className="text-xs px-3 py-1 rounded-full border"
+                style={{ borderColor: secondaryBg, color: textLight }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
 
         {p.description_ar && (
           <p className="leading-relaxed text-lg mb-12" style={{ color: textLight }}>{p.description_ar}</p>

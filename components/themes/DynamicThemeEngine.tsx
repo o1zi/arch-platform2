@@ -1,6 +1,7 @@
 'use client'
 
 import { ThemeProps, CustomThemeConfig } from '@/types'
+import { getSectorConfig } from '@/lib/sectors'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
@@ -47,9 +48,10 @@ function gridColsClass(cols: number) {
   return { 2: 'grid-cols-1 sm:grid-cols-2', 3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3', 4: 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4' }[cols] ?? 'grid-cols-1 sm:grid-cols-3'
 }
 
-export default function DynamicThemeEngine({ config, tenant, projects, featuredProjects, services: customServices, features: customFeatures }: EngineProps) {
+export default function DynamicThemeEngine({ config, tenant, projects, featuredProjects, services: customServices, features: customFeatures, sectorConfig }: EngineProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
+  const sc = sectorConfig ?? getSectorConfig(tenant.sector)
 
   useEffect(() => {
     const fn = () => { setScrolled(window.scrollY > 60); setShowTop(window.scrollY > 400) }
@@ -57,7 +59,7 @@ export default function DynamicThemeEngine({ config, tenant, projects, featuredP
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  const bio = tenant.bio_ar ?? 'مكتب هندسي متخصص في تقديم حلول معمارية مبتكرة.'
+  const bio = tenant.bio_ar ?? sc.heroTagline
   const waPhone = tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
   const sp = spacingClass(config.layout.spacing)
@@ -89,7 +91,7 @@ export default function DynamicThemeEngine({ config, tenant, projects, featuredP
             {!tenant.cover_url && <p className="text-sm leading-loose mb-8 max-w-sm" style={{ color: 'var(--c-text-light)' }}>{bio}</p>}
             <div className="flex gap-3 flex-wrap">
               <Link href={`/${tenant.slug}/projects`} className={`px-8 py-3 font-bold transition-opacity hover:opacity-90 ${br}`} style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-bg)' }}>
-                استعرض المشاريع
+                استعرض {sc.portfolioLabel}
               </Link>
               <Link href={`/${tenant.slug}/contact`} className={`px-8 py-3 font-medium border transition-colors hover:opacity-90 ${br}`} style={{ borderColor: 'var(--c-bg)', color: 'var(--c-bg)' }}>
                 تواصل معنا
@@ -123,7 +125,7 @@ export default function DynamicThemeEngine({ config, tenant, projects, featuredP
             <h1 className="text-5xl md:text-7xl font-black mb-6" style={{ fontFamily: 'var(--font-heading)', color: 'var(--c-bg)' }}>{tenant.name_ar}</h1>
             {!tenant.cover_url && <p className="text-sm leading-loose mb-8" style={{ color: 'var(--c-text-light)' }}>{bio}</p>}
             <div className="flex gap-3 justify-center flex-wrap">
-              <Link href={`/${tenant.slug}/projects`} className={`px-8 py-3 font-bold ${br}`} style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-bg)' }}>استعرض المشاريع</Link>
+              <Link href={`/${tenant.slug}/projects`} className={`px-8 py-3 font-bold ${br}`} style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-bg)' }}>استعرض {sc.portfolioLabel}</Link>
               <Link href={`/${tenant.slug}/contact`} className={`px-8 py-3 border font-medium ${br}`} style={{ borderColor: 'var(--c-text-light)', color: 'var(--c-bg)' }}>تواصل معنا</Link>
             </div>
           </div>
@@ -164,7 +166,7 @@ export default function DynamicThemeEngine({ config, tenant, projects, featuredP
           {!tenant.cover_url && <p className="text-sm leading-loose max-w-sm mb-8" style={{ color: 'var(--c-text-light)' }}>{bio}</p>}
           <div className="flex gap-4 flex-wrap">
             <Link href={`/${tenant.slug}/projects`} className={`px-8 py-3 font-bold transition-opacity hover:opacity-90 ${br}`} style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-bg)' }}>
-              استعرض المشاريع
+              استعرض {sc.portfolioLabel}
             </Link>
             <Link href={`/${tenant.slug}/contact`} className={`px-8 py-3 font-medium border transition-colors ${br}`} style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'var(--c-bg)' }}>
               تواصل معنا
@@ -263,11 +265,11 @@ export default function DynamicThemeEngine({ config, tenant, projects, featuredP
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: 'var(--c-accent)' }}>أعمالنا</p>
-              <h2 className="text-4xl font-black" style={{ fontFamily: 'var(--font-heading)', color: 'var(--c-text)' }}>مشاريع مختارة</h2>
+              <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: 'var(--c-accent)' }}>{sc.featuredLabel}</p>
+              <h2 className="text-4xl font-black" style={{ fontFamily: 'var(--font-heading)', color: 'var(--c-text)' }}>{sc.portfolioItemLabelPlural} مختارة</h2>
             </div>
             <Link href={`/${tenant.slug}/projects`} className="text-sm transition-colors" style={{ color: 'var(--c-text-light)' }}>
-              جميع المشاريع ←
+              جميع {sc.portfolioLabel} ←
             </Link>
           </div>
           {style === 'list' ? (
@@ -390,7 +392,7 @@ export default function DynamicThemeEngine({ config, tenant, projects, featuredP
         <div>
           <h4 className="text-xs tracking-widest uppercase mb-6" style={{ color: 'var(--c-text-light)' }}>روابط سريعة</h4>
           <div className="space-y-3">
-            {[['/', 'الرئيسية'], ['/projects', 'المشاريع'], ['/contact', 'تواصل معنا']].map(([href, label]) => (
+            {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل معنا']].map(([href, label]) => (
               <Link key={href} href={`/${tenant.slug}${href}`} className="block text-sm transition-colors" style={{ color: 'var(--c-text-light)' }}>
                 {label}
               </Link>
@@ -459,7 +461,7 @@ export default function DynamicThemeEngine({ config, tenant, projects, featuredP
           </div>
           <div className="flex items-center gap-6 text-sm">
             <Link href={`/${tenant.slug}`} className="transition-opacity hover:opacity-70" style={{ color: 'var(--c-bg)' }}>الرئيسية</Link>
-            <Link href={`/${tenant.slug}/projects`} className="transition-opacity hover:opacity-70" style={{ color: 'var(--c-bg)' }}>المشاريع</Link>
+            <Link href={`/${tenant.slug}/projects`} className="transition-opacity hover:opacity-70" style={{ color: 'var(--c-bg)' }}>{sc.portfolioLabel}</Link>
             <Link href={`/${tenant.slug}/contact`} className={`px-4 py-1.5 font-medium ${br}`}
               style={{ backgroundColor: 'var(--c-accent)', color: 'var(--c-bg)' }}>
               تواصل

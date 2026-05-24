@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   if (!adminRecord) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const body = await req.json()
-  const { name_ar, slug, email, password, plan, subscription_start, subscription_end, notes } = body
+  const { name_ar, slug, email, password, plan, sector, subscription_start, subscription_end, notes } = body
 
   // Create auth user
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       name_ar,
       slug,
       plan,
+      sector: sector || 'engineering',
       subscription_start: subscription_start || null,
       subscription_end: subscription_end || null,
       is_active: true,

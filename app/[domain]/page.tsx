@@ -3,6 +3,7 @@ import { getTenantByIdentifier } from '@/lib/tenant'
 import { createClient } from '@/lib/supabase/server'
 import { Project, ContentBlock, CustomTheme } from '@/types'
 import { ThemeRenderer } from '@/components/themes/ThemeRenderer'
+import { getSectorConfig } from '@/lib/sectors'
 
 export default async function TenantHomePage({ params }: { params: { domain: string } }) {
   const tenant = await getTenantByIdentifier(params.domain)
@@ -44,6 +45,7 @@ export default async function TenantHomePage({ params }: { params: { domain: str
   const features = allBlocks.filter(b => b.type === 'feature')
 
   const customTheme = (customThemeResult.data ?? null) as CustomTheme | null
+  const sectorConfig = getSectorConfig(tenant.sector)
 
   return (
     <ThemeRenderer
@@ -53,6 +55,7 @@ export default async function TenantHomePage({ params }: { params: { domain: str
       services={services}
       features={features}
       customTheme={customTheme}
+      sectorConfig={sectorConfig}
     />
   )
 }
