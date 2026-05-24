@@ -138,8 +138,17 @@ export interface CustomTheme {
   fonts: Array<{ name: string; url: string }>
   is_active: boolean
   plan_required: Plan
+  visibility: 'public' | 'private'
   created_by: string | null
   created_at: string
+}
+
+export interface CustomThemeTenant {
+  id: string
+  custom_theme_id: string
+  tenant_id: string
+  assigned_by: string | null
+  assigned_at: string
 }
 
 export interface ThemeProps {

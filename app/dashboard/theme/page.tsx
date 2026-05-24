@@ -17,20 +17,39 @@ export default async function ThemePage() {
   if (!tenantUser) redirect('/login')
   const tenant = (tenantUser as unknown as { tenants: Tenant & { custom_theme_id?: string | null } }).tenants
 
-  // جلب القوالب المخصصة النشطة المتاحة لباقة هذا المكتب
   const planOrder = { basic: 0, pro: 1, premium: 2 }
   const tenantPlanLevel = planOrder[tenant.plan]
 
-  const { data: customThemes } = await supabase
-    .from('custom_themes')
-    .select('*')
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
+  // جلب القوالب العامة + القوالب الخاصة المخصصة لهذا المكتب معاً
+  const [{ data: publicThemes }, { data: privateAssignments }] = await Promise.all([
+    supabase
+      .from('custom_themes')
+      .select('*')
+      .eq('is_active', true)
+      .eq('visibility', 'public')
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('custom_theme_tenants')
+      .select('custom_theme:custom_themes(*)')
+      .eq('tenant_id', tenant.id),
+  ])
 
-  // فلترة القوالب حسب الباقة: المكتب يرى القوالب التي تناسب باقته أو أقل
-  const availableCustomThemes = ((customThemes ?? []) as CustomTheme[]).filter(
+  // القوالب العامة المتاحة حسب الباقة
+  const availablePublic = ((publicThemes ?? []) as CustomTheme[]).filter(
     t => planOrder[t.plan_required] <= tenantPlanLevel
   )
+
+  // القوالب الخاصة المخصصة لهذا المكتب (بغض النظر عن الباقة)
+  const availablePrivate = (privateAssignments ?? [])
+    .map((a: { custom_theme: unknown }) => a.custom_theme as CustomTheme | null)
+    .filter((t): t is CustomTheme => t !== null && (t as CustomTheme).is_active === true)
+
+  // دمج القائمتين بدون تكرار
+  const allCustomThemeIds = new Set(availablePublic.map(t => t.id))
+  const availableCustomThemes = [
+    ...availablePublic,
+    ...availablePrivate.filter(t => !allCustomThemeIds.has(t.id)),
+  ]
 
   return (
     <div className="space-y-6 max-w-5xl">

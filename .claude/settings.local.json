@@ -21,7 +21,8 @@
       "Bash(node -e \"const l = require\\('lucide-react'\\); console.log\\(Object.keys\\(l\\).filter\\(k => k.match\\(/share|link|globe|external|at|hash/i\\)\\).join\\('\\\\n'\\)\\)\")",
       "Bash(npx next *)",
       "Bash(npm install *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(mkdir -p \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro - Copy\\\\app\\\\api\\\\admin\\\\themes\\\\[id]\\\\tenants\" && echo done)"
     ]
   }
 }
