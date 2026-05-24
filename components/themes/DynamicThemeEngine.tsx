@@ -119,7 +119,7 @@ function accentBarStyle(pos: string | undefined): React.CSSProperties {
   return {}
 }
 
-function patternCSS(pattern: string | undefined, _opacity: number) {
+function patternCSS(pattern: string | undefined) {
   if (pattern === 'dots')     return `radial-gradient(circle, var(--c-text) 1px, transparent 1px)`
   if (pattern === 'grid')     return `linear-gradient(var(--c-text) 1px, transparent 1px), linear-gradient(90deg, var(--c-text) 1px, transparent 1px)`
   if (pattern === 'diagonal') return `repeating-linear-gradient(45deg, var(--c-text) 0, var(--c-text) 1px, transparent 0, transparent 50%)`
@@ -252,7 +252,7 @@ export default function DynamicThemeEngine({
 
   // Pattern background style
   const patStyle: React.CSSProperties = pattern !== 'none' ? {
-    backgroundImage: patternCSS(pattern, patOp),
+    backgroundImage: patternCSS(pattern),
     backgroundSize: pattern === 'diagonal' ? '8px 8px' : pattern === 'cross' ? '24px 24px' : '24px 24px',
     backgroundPosition: '0 0',
   } : {}
