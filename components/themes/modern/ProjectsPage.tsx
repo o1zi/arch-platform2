@@ -5,7 +5,8 @@ import { SectorConfig, getSectorConfig } from '@/lib/sectors'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { BedDouble, Bath, Maximize2 } from 'lucide-react'
+import { BedDouble, Bath, Maximize2, Menu, X } from 'lucide-react'
+import { SocialFloat } from '@/components/themes/shared/SocialFloat'
 
 export default function ModernProjectsPage({
   tenant,
@@ -19,19 +20,49 @@ export default function ModernProjectsPage({
   const sc = sectorConfig ?? getSectorConfig(tenant.sector)
   const categories = ['الكل', ...Array.from(new Set(projects.map(p => p.category).filter(Boolean))) as string[]]
   const [active, setActive] = useState('الكل')
+  const [menuOpen, setMenuOpen] = useState(false)
   const filtered = active === 'الكل' ? projects : projects.filter(p => p.category === active)
+  const waPhone = tenant.whatsapp?.replace(/\D/g, '') || tenant.phone?.replace(/\D/g, '')
+
+  const navLinks = [
+    { href: `/${tenant.slug}`, label: 'الرئيسية' },
+    { href: `/${tenant.slug}/projects`, label: sc.portfolioLabel, active: true },
+    { href: `/${tenant.slug}/contact`, label: 'تواصل' },
+  ]
 
   return (
     <div className="min-h-screen bg-[#0f0f0f]" dir="rtl">
       {/* top nav */}
-      <nav className="border-b border-white/5 px-6 h-16 flex items-center justify-between max-w-7xl mx-auto">
+      <nav className="border-b border-white/5 px-6 h-16 flex items-center justify-between max-w-7xl mx-auto sticky top-0 bg-[#0f0f0f]/95 backdrop-blur z-50">
         <Link href={`/${tenant.slug}`} className="text-white font-bold">{tenant.name_ar}</Link>
-        <div className="flex gap-6 text-sm text-white/40">
-          <Link href={`/${tenant.slug}`} className="hover:text-white transition-colors">الرئيسية</Link>
-          <span className="text-white">{sc.portfolioLabel}</span>
-          <Link href={`/${tenant.slug}/contact`} className="hover:text-white transition-colors">تواصل</Link>
+        <div className="hidden md:flex gap-6 text-sm text-white/40">
+          {navLinks.map(l => (
+            <Link key={l.href} href={l.href} className={l.active ? 'text-white' : 'hover:text-white transition-colors'}>{l.label}</Link>
+          ))}
         </div>
+        <button className="md:hidden text-white/60 hover:text-white" onClick={() => setMenuOpen(true)}><Menu className="w-6 h-6" /></button>
       </nav>
+
+      {/* Mobile drawer */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-[100] md:hidden">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setMenuOpen(false)} />
+          <div className="absolute top-0 right-0 bottom-0 w-72 bg-[#111] flex flex-col">
+            <div className="flex items-center justify-between p-5 border-b border-white/10">
+              <span className="text-white font-bold text-sm">{tenant.name_ar}</span>
+              <button onClick={() => setMenuOpen(false)} className="text-white/40"><X className="w-5 h-5" /></button>
+            </div>
+            <nav className="p-4 flex flex-col gap-1">
+              {navLinks.map(l => (
+                <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
+                  className={`px-4 py-3 text-sm rounded transition-colors ${l.active ? 'bg-white text-black font-bold' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>
+                  {l.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* header */}
@@ -127,6 +158,13 @@ export default function ModernProjectsPage({
           </div>
         )}
       </div>
+
+      <SocialFloat
+        whatsapp={waPhone}
+        snapchat_url={tenant.snapchat_url}
+        tiktok_url={tenant.tiktok_url}
+        whatsapp_note={tenant.whatsapp_note}
+      />
     </div>
   )
 }

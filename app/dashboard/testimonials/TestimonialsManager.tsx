@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Switch } from '@/components/ui/switch'
 import { Plus, Trash2, Save, Star } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -123,13 +122,14 @@ export default function TestimonialsManager({ tenantId, initialTestimonials }: P
               <CardTitle className="text-sm font-medium flex items-center justify-between">
                 <span>رأي {index + 1}</span>
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2">
-                    <Switch
-                      checked={item.is_active}
-                      onCheckedChange={v => updateField(index, 'is_active', v)}
-                    />
-                    <span className="text-xs text-gray-500">{item.is_active ? 'ظاهر' : 'مخفي'}</span>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => updateField(index, 'is_active', !item.is_active)}
+                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${item.is_active ? 'bg-gray-900' : 'bg-gray-200'}`}
+                  >
+                    <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${item.is_active ? 'translate-x-4' : 'translate-x-1'}`} />
+                  </button>
+                  <span className="text-xs text-gray-500">{item.is_active ? 'ظاهر' : 'مخفي'}</span>
                   <Button
                     variant="ghost"
                     size="sm"

@@ -5,7 +5,8 @@ import { SectorConfig, getSectorConfig } from '@/lib/sectors'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { BedDouble, Bath, Maximize2 } from 'lucide-react'
+import { BedDouble, Bath, Maximize2, Menu, X } from 'lucide-react'
+import { SocialFloat } from '@/components/themes/shared/SocialFloat'
 
 export default function ClassicProjectsPage({
   tenant,
@@ -19,19 +20,51 @@ export default function ClassicProjectsPage({
   const sc = sectorConfig ?? getSectorConfig(tenant.sector)
   const categories = ['الكل', ...Array.from(new Set(projects.map(p => p.category).filter(Boolean))) as string[]]
   const [active, setActive] = useState('الكل')
+  const [menuOpen, setMenuOpen] = useState(false)
   const filtered = active === 'الكل' ? projects : projects.filter(p => p.category === active)
+  const waPhone = tenant.whatsapp?.replace(/\D/g, '') || tenant.phone?.replace(/\D/g, '')
 
   return (
     <div className="min-h-screen bg-[#f5f0e8]" dir="rtl">
       <div className="border-b-2 border-[#2c1a0e] px-8 py-2 flex items-center justify-between text-[10px] tracking-[0.2em] text-[#2c1a0e]/50 uppercase">
         <span>{sc.portfolioLabel}</span>
-        <Link href={`/${tenant.slug}`} className="hover:text-[#8b6914] transition-colors">{tenant.name_ar}</Link>
+        <div className="flex items-center gap-4">
+          <Link href={`/${tenant.slug}`} className="hover:text-[#8b6914] transition-colors hidden md:block">{tenant.name_ar}</Link>
+          <button className="md:hidden text-[#2c1a0e]/60 hover:text-[#8b6914]" onClick={() => setMenuOpen(true)}>
+            <Menu className="w-4 h-4" />
+          </button>
+        </div>
       </div>
+
+      {/* Mobile drawer */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-[100] md:hidden">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setMenuOpen(false)} />
+          <div className="absolute top-0 right-0 bottom-0 w-64 bg-[#faf6f0] border-l-2 border-[#2c1a0e]/20 flex flex-col">
+            <div className="flex items-center justify-between p-5 border-b border-[#2c1a0e]/10">
+              <span className="text-xs text-[#2c1a0e]/60 tracking-widest uppercase">{tenant.name_ar}</span>
+              <button onClick={() => setMenuOpen(false)} className="text-[#2c1a0e]/40"><X className="w-4 h-4" /></button>
+            </div>
+            <nav className="p-4 flex flex-col gap-1">
+              {[
+                { href: `/${tenant.slug}`, label: 'الرئيسية' },
+                { href: `/${tenant.slug}/projects`, label: sc.portfolioLabel, active: true },
+                { href: `/${tenant.slug}/contact`, label: 'التواصل' },
+              ].map(l => (
+                <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
+                  className={`px-4 py-3 text-xs tracking-widest uppercase transition-colors ${l.active ? 'text-[#8b6914]' : 'text-[#2c1a0e]/60 hover:text-[#8b6914]'}`}>
+                  {l.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
 
       <header className="border-b-2 border-[#2c1a0e]/20 px-8 py-6 text-center">
         <h1 className="text-4xl font-black text-[#2c1a0e]">{sc.portfolioLabel}</h1>
         <p className="text-[#2c1a0e]/40 text-sm mt-1">{projects.length} {sc.portfolioItemLabel}</p>
-        <nav className="flex justify-center gap-8 mt-4 text-xs text-[#2c1a0e]/60 tracking-widest uppercase">
+        <nav className="hidden md:flex justify-center gap-8 mt-4 text-xs text-[#2c1a0e]/60 tracking-widest uppercase">
           <Link href={`/${tenant.slug}`} className="hover:text-[#8b6914]">الرئيسية</Link>
           <span className="text-[#8b6914]">{sc.portfolioLabel}</span>
           <Link href={`/${tenant.slug}/contact`} className="hover:text-[#8b6914]">التواصل</Link>
@@ -107,6 +140,14 @@ export default function ClassicProjectsPage({
       <footer className="border-t-2 border-double border-[#2c1a0e] px-8 py-6 text-center text-xs text-[#2c1a0e]/40 tracking-widest">
         {tenant.name_ar} &mdash; {new Date().getFullYear()}
       </footer>
+
+      <SocialFloat
+        whatsapp={waPhone}
+        snapchat_url={tenant.snapchat_url}
+        tiktok_url={tenant.tiktok_url}
+        whatsapp_note={tenant.whatsapp_note}
+      />
     </div>
   )
 }
+

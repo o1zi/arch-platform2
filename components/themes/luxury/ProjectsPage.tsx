@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { BedDouble, Maximize2 } from 'lucide-react'
+import { SocialFloat } from '@/components/themes/shared/SocialFloat'
 
 export default function LuxuryProjectsPage({
   tenant,
@@ -19,6 +20,7 @@ export default function LuxuryProjectsPage({
   const sc = sectorConfig ?? getSectorConfig(tenant.sector)
   const categories = ['الكل', ...Array.from(new Set(projects.map(p => p.category).filter(Boolean))) as string[]]
   const [active, setActive] = useState('الكل')
+  const waPhone = tenant.whatsapp?.replace(/\D/g, '') || tenant.phone?.replace(/\D/g, '')
   const filtered = active === 'الكل' ? projects : projects.filter(p => p.category === active)
 
   return (
@@ -102,6 +104,13 @@ export default function LuxuryProjectsPage({
         )}
       </div>
       <div className="h-px bg-gradient-to-l from-transparent via-[#c9a84c]/30 to-transparent mt-16" />
+
+      <SocialFloat
+        whatsapp={waPhone}
+        snapchat_url={tenant.snapchat_url}
+        tiktok_url={tenant.tiktok_url}
+        whatsapp_note={tenant.whatsapp_note}
+      />
     </div>
   )
 }
