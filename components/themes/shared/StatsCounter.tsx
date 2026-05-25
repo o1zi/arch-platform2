@@ -41,13 +41,11 @@ function useCountUp(target: number, duration = 2000, start = false) {
 function SingleStat({
   stat,
   accentColor,
-  textColor,
   labelColor,
   shouldStart,
 }: {
   stat: StatItem
   accentColor: string
-  textColor: string
   labelColor: string
   shouldStart: boolean
 }) {
@@ -66,7 +64,6 @@ function SingleStat({
 export function StatsCounter({
   stats,
   accentColor = '#3b82f6',
-  textColor = '#111111',
   labelColor = '#666666',
   className = '',
 }: StatsCounterProps) {
@@ -99,7 +96,6 @@ export function StatsCounter({
           key={i}
           stat={stat}
           accentColor={accentColor}
-          textColor={textColor}
           labelColor={labelColor}
           shouldStart={started}
         />

@@ -22,7 +22,6 @@ function getVimeoId(url: string): string | null {
 export function VideoHero({ videoUrl, overlayOpacity = 0.5, className = '' }: VideoHeroProps) {
   const ytId = getYouTubeId(videoUrl)
   const vmId = getVimeoId(videoUrl)
-  const isEmbed = !!(ytId || vmId)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(true)
   const [muted, setMuted] = useState(true)

@@ -153,7 +153,7 @@ export function Lightbox({ images, initialIndex = 0, onClose }: LightboxProps) {
 }
 
 // Hook لتسهيل الاستخدام
-export function useLightbox(images: LightboxImage[]) {
+export function useLightbox() {
   const [open, setOpen] = useState(false)
   const [index, setIndex] = useState(0)
 

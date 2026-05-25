@@ -4,7 +4,7 @@ import { ThemeProps } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { MapPin, Phone, Mail, ArrowUp, Instagram, Twitter, Linkedin } from 'lucide-react'
+import { MapPin, Phone, Mail, ArrowUp } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
 import { getSectorConfig } from '@/lib/sectors'
 import MobileMenu from '@/components/themes/shared/MobileMenu'
@@ -55,9 +55,10 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
   const faqs = SECTOR_FAQ[tenant.sector ?? 'engineering'] ?? SECTOR_FAQ.engineering
 
   const socials = [
-    { url: tenant.instagram_url, Icon: Instagram, label: 'إنستقرام' },
-    { url: tenant.twitter_url, Icon: Twitter, label: 'تويتر' },
-    { url: tenant.linkedin_url, Icon: Linkedin, label: 'لينكدإن' },
+    { url: tenant.instagram_url, label: 'إنستقرام' },
+    { url: tenant.twitter_url, label: 'تويتر' },
+    { url: tenant.linkedin_url, label: 'لينكدإن' },
+    { url: tenant.snapchat_url, label: 'سناب' },
   ].filter(s => s.url)
 
   const displayedProjects = featuredProjects.length > 0 ? featuredProjects.slice(0, 6) : projects.slice(0, 6)
@@ -84,8 +85,8 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
             <div className="flex items-center gap-3">
               {socials.map(s => (
                 <a key={s.label} href={s.url!} target="_blank" rel="noopener noreferrer"
-                  className="text-white/25 hover:text-white/70 transition-colors">
-                  <s.Icon className="w-3.5 h-3.5" />
+                  className="text-white/25 hover:text-white/70 transition-colors text-[10px] tracking-widest">
+                  {s.label}
                 </a>
               ))}
             </div>
@@ -463,8 +464,8 @@ export default function ModernLayout({ tenant, projects, featuredProjects, servi
                 <div className="flex gap-3 mt-4">
                   {socials.map(s => (
                     <a key={s.label} href={s.url!} target="_blank" rel="noopener noreferrer"
-                      className="text-white/25 hover:text-white/60 transition-colors">
-                      <s.Icon className="w-4 h-4" />
+                      className="text-white/25 hover:text-white/60 transition-colors text-[10px] tracking-widest">
+                      {s.label}
                     </a>
                   ))}
                 </div>
