@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getTenantByIdentifier } from '@/lib/tenant'
 import { createClient } from '@/lib/supabase/server'
-import { Project, ContentBlock, CustomTheme } from '@/types'
+import { Project, ContentBlock, CustomTheme, TenantStat, TenantTestimonial, TenantFAQ } from '@/types'
 import { ThemeRenderer } from '@/components/themes/ThemeRenderer'
 import { getSectorConfig } from '@/lib/sectors'
 
@@ -14,7 +14,7 @@ export default async function TenantHomePage({ params }: { params: { domain: str
   // جلب المشاريع + الكتل + القالب المخصص (إن وجد) بالتوازي
   const tenantWithCustomTheme = tenant as typeof tenant & { custom_theme_id?: string | null }
 
-  const [projectsResult, blocksResult, customThemeResult] = await Promise.all([
+  const [projectsResult, blocksResult, customThemeResult, statsResult, testimonialsResult, faqsResult] = await Promise.all([
     supabase
       .from('projects')
       .select('*, images:project_images(*)')
@@ -35,6 +35,23 @@ export default async function TenantHomePage({ params }: { params: { domain: str
           .eq('is_active', true)
           .single()
       : Promise.resolve({ data: null }),
+    supabase
+      .from('tenant_stats')
+      .select('*')
+      .eq('tenant_id', tenant.id)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('tenant_testimonials')
+      .select('*')
+      .eq('tenant_id', tenant.id)
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('tenant_faqs')
+      .select('*')
+      .eq('tenant_id', tenant.id)
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true }),
   ])
 
   const allProjects = (projectsResult.data ?? []) as Project[]
@@ -46,6 +63,9 @@ export default async function TenantHomePage({ params }: { params: { domain: str
 
   const customTheme = (customThemeResult.data ?? null) as CustomTheme | null
   const sectorConfig = getSectorConfig(tenant.sector)
+  const stats = (statsResult.data ?? []) as TenantStat[]
+  const testimonials = (testimonialsResult.data ?? []) as TenantTestimonial[]
+  const faqs = (faqsResult.data ?? []) as TenantFAQ[]
 
   return (
     <ThemeRenderer
@@ -56,6 +76,9 @@ export default async function TenantHomePage({ params }: { params: { domain: str
       features={features}
       customTheme={customTheme}
       sectorConfig={sectorConfig}
+      stats={stats}
+      testimonials={testimonials}
+      faqs={faqs}
     />
   )
 }

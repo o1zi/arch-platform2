@@ -33,6 +33,10 @@ export default function ProfileForm({ tenant }: { tenant: Tenant }) {
     twitter_url: tenant.twitter_url ?? '',
     linkedin_url: tenant.linkedin_url ?? '',
     snapchat_url: tenant.snapchat_url ?? '',
+    tiktok_url: tenant.tiktok_url ?? '',
+    whatsapp: tenant.whatsapp ?? '',
+    video_url: tenant.video_url ?? '',
+    whatsapp_note: tenant.whatsapp_note ?? '',
   })
 
   function handleChange(field: string, value: string) {
@@ -199,6 +203,7 @@ export default function ProfileForm({ tenant }: { tenant: Tenant }) {
             { field: 'twitter_url', label: 'تويتر / X' },
             { field: 'linkedin_url', label: 'لينكدإن' },
             { field: 'snapchat_url', label: 'سناب شات' },
+            { field: 'tiktok_url', label: 'تيك توك' },
           ].map(({ field, label }) => (
             <div key={field} className="space-y-2">
               <Label>{label}</Label>
@@ -210,6 +215,43 @@ export default function ProfileForm({ tenant }: { tenant: Tenant }) {
               />
             </div>
           ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* WhatsApp & Video */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold">واتساب والفيديو</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>رقم واتساب (مع رمز الدولة)</Label>
+            <Input
+              value={form.whatsapp}
+              onChange={e => handleChange('whatsapp', e.target.value)}
+              dir="ltr"
+              placeholder="966501234567"
+            />
+            <p className="text-xs text-gray-400">للزر الجانبي (مختلف عن رقم الهاتف)</p>
+          </div>
+          <div className="space-y-2">
+            <Label>رسالة واتساب الافتراضية</Label>
+            <Input
+              value={form.whatsapp_note}
+              onChange={e => handleChange('whatsapp_note', e.target.value)}
+              placeholder="مرحباً، أود الاستفسار عن..."
+            />
+          </div>
+          <div className="space-y-2 sm:col-span-2">
+            <Label>رابط الفيديو (YouTube / Vimeo / MP4)</Label>
+            <Input
+              value={form.video_url}
+              onChange={e => handleChange('video_url', e.target.value)}
+              dir="ltr"
+              placeholder="https://youtube.com/watch?v=..."
+            />
+            <p className="text-xs text-gray-400">يظهر في قسم مخصص داخل موقعك — يدعم يوتيوب وفيميو وروابط MP4 مباشرة</p>
+          </div>
         </div>
       </div>
 

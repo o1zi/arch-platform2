@@ -19,6 +19,9 @@ import {
   LayoutList,
   Menu,
   X,
+  BarChart2,
+  MessageSquareQuote,
+  HelpCircle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -34,6 +37,9 @@ export default function DashboardSidebar({ tenant }: { tenant: Tenant }) {
     { href: '/dashboard/profile', label: sectorCfg.profileLabel, icon: User },
     { href: '/dashboard/projects', label: sectorCfg.portfolioLabel, icon: FolderOpen },
     { href: '/dashboard/services', label: sectorCfg.servicesLabel, icon: LayoutList },
+    { href: '/dashboard/stats', label: 'الإحصائيات', icon: BarChart2 },
+    { href: '/dashboard/testimonials', label: 'آراء العملاء', icon: MessageSquareQuote },
+    { href: '/dashboard/faq', label: 'الأسئلة الشائعة', icon: HelpCircle },
     { href: '/dashboard/theme', label: 'القالب', icon: Palette },
     { href: '/dashboard/domain', label: 'الدومين', icon: Globe },
     { href: '/dashboard/subscription', label: 'الاشتراك', icon: CreditCard },

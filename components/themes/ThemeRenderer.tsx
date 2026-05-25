@@ -15,7 +15,7 @@ const builtInThemes = {
   luxury: LuxuryLayout,
 }
 
-export function ThemeRenderer({ tenant, projects, featuredProjects, services, features, customTheme, sectorConfig }: ThemeProps) {
+export function ThemeRenderer({ tenant, projects, featuredProjects, services, features, customTheme, sectorConfig, stats, testimonials, faqs }: ThemeProps) {
   const resolvedSectorConfig = sectorConfig ?? getSectorConfig(tenant.sector)
 
   // إذا كان للمكتب قالب مخصص مرفوع من الأدمن → استخدمه
@@ -29,6 +29,9 @@ export function ThemeRenderer({ tenant, projects, featuredProjects, services, fe
         services={services}
         features={features}
         sectorConfig={resolvedSectorConfig}
+        stats={stats}
+        testimonials={testimonials}
+        faqs={faqs}
       />
     )
   }
@@ -43,6 +46,9 @@ export function ThemeRenderer({ tenant, projects, featuredProjects, services, fe
       services={services}
       features={features}
       sectorConfig={resolvedSectorConfig}
+      stats={stats}
+      testimonials={testimonials}
+      faqs={faqs}
     />
   )
 }

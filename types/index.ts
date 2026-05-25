@@ -28,6 +28,8 @@ export interface Tenant {
   sector: Sector
   whatsapp: string | null
   video_url: string | null
+  tiktok_url: string | null
+  whatsapp_note: string | null
   subscription_start: string | null
   subscription_end: string | null
   created_at: string
@@ -100,6 +102,39 @@ export interface ContentBlock {
   title: string
   description: string | null
   icon: string | null
+  sort_order: number
+  is_active: boolean
+  created_at: string
+}
+
+export interface TenantStat {
+  id: string
+  tenant_id: string
+  value: number
+  suffix: string | null
+  prefix: string | null
+  label: string
+  sort_order: number
+  created_at: string
+}
+
+export interface TenantTestimonial {
+  id: string
+  tenant_id: string
+  name: string
+  role: string | null
+  content: string
+  rating: number
+  sort_order: number
+  is_active: boolean
+  created_at: string
+}
+
+export interface TenantFAQ {
+  id: string
+  tenant_id: string
+  question: string
+  answer: string
   sort_order: number
   is_active: boolean
   created_at: string
@@ -284,6 +319,9 @@ export interface ThemeProps {
   features: ContentBlock[]
   customTheme?: CustomTheme | null
   sectorConfig?: import('@/lib/sectors').SectorConfig
+  stats?: TenantStat[]
+  testimonials?: TenantTestimonial[]
+  faqs?: TenantFAQ[]
 }
 
 export const PLAN_LIMITS = {
