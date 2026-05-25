@@ -4,15 +4,29 @@ import { ThemeProps } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { MapPin, Phone, Mail, ArrowUp } from 'lucide-react'
+import { MapPin, Phone, Mail, ArrowUp, ArrowLeft } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
 import { getSectorConfig } from '@/lib/sectors'
+import MobileMenu from '@/components/themes/shared/MobileMenu'
+import { ScrollReveal, StaggerReveal } from '@/components/themes/shared/ScrollReveal'
+import { StatsCounter, SECTOR_STATS } from '@/components/themes/shared/StatsCounter'
+import { VideoHero } from '@/components/themes/shared/VideoHero'
+import { Testimonials, SECTOR_TESTIMONIALS } from '@/components/themes/shared/Testimonials'
+import { FAQ, SECTOR_FAQ } from '@/components/themes/shared/FAQ'
 
-function WhatsAppIcon() {
+// Bold: أسود + برتقالي/أحمر صارخ — قوة وجرأة
+const BOLD_BG = '#0a0a0a'
+const BOLD_ACCENT = '#ff4500'
+
+function WhatsAppFloat({ url }: { url: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-    </svg>
+    <a href={url} target="_blank" rel="noopener noreferrer"
+      className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-transform hover:scale-110"
+      style={{ backgroundColor: '#25d366' }}>
+      <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+      </svg>
+    </a>
   )
 }
 
@@ -33,290 +47,363 @@ export default function BoldLayout({ tenant, projects, featuredProjects, service
   const bio = tenant.bio_ar || sc.heroTagline
   const waPhone = tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
-
-  const socials = [
-    { url: tenant.instagram_url, label: 'Instagram' },
-    { url: tenant.twitter_url, label: 'Twitter' },
-    { url: tenant.linkedin_url, label: 'LinkedIn' },
-  ].filter(s => s.url)
+  const stats = SECTOR_STATS[tenant.sector ?? 'engineering'] ?? SECTOR_STATS.engineering
+  const testimonials = SECTOR_TESTIMONIALS[tenant.sector ?? 'engineering'] ?? SECTOR_TESTIMONIALS.engineering
+  const faqs = SECTOR_FAQ[tenant.sector ?? 'engineering'] ?? SECTOR_FAQ.engineering
+  const displayedProjects = featuredProjects.length > 0 ? featuredProjects.slice(0, 6) : projects.slice(0, 6)
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden" dir="rtl">
+    <div className="min-h-screen" style={{ backgroundColor: BOLD_BG, color: '#ffffff' }} dir="rtl">
 
-      {/* TOP BAR */}
-      <div className="bg-red-600 px-6 py-2 flex items-center justify-between text-xs font-bold tracking-widest uppercase">
-        <div className="flex items-center gap-4">
-          {tenant.phone && <a href={`tel:${tenant.phone}`} dir="ltr" className="hover:text-black transition-colors">{tenant.phone}</a>}
-          {tenant.email && <span className="hidden md:inline opacity-70">{tenant.email}</span>}
-        </div>
-        <div className="flex items-center gap-2">
-          {socials.map(s => (
-            <a key={s.label} href={s.url!} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">
-{s.label}
-            </a>
-          ))}
-        </div>
-      </div>
+      {/* ACCENT BAR */}
+      <div className="h-1.5" style={{ backgroundColor: BOLD_ACCENT }} />
 
       {/* NAV */}
-      <nav className={`sticky top-0 z-50 border-b-4 border-red-600 px-6 py-4 flex items-center justify-between bg-black transition-shadow ${scrolled ? 'shadow-2xl shadow-red-600/10' : ''}`}>
-        <span className="text-white font-black text-xl uppercase tracking-tighter">{tenant.name_ar}</span>
-        <div className="flex gap-0">
-          {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل']].map(([href, label]) => (
-            <Link key={href} href={`/${tenant.slug}${href}`} className="px-5 py-2 text-sm font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-red-600 transition-all">{label}</Link>
-          ))}
+      <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'border-b border-white/10' : ''}`}
+        style={{ backgroundColor: scrolled ? `${BOLD_BG}f0` : 'transparent', backdropFilter: scrolled ? 'blur(12px)' : 'none' }}>
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {tenant.logo_url ? (
+              <Image src={tenant.logo_url} alt="" width={36} height={36} className="object-contain" />
+            ) : (
+              <div className="text-xl font-black" style={{ color: BOLD_ACCENT }}>{tenant.name_ar.charAt(0)}</div>
+            )}
+            <span className="font-black text-white uppercase tracking-wider text-sm">{tenant.name_ar}</span>
+          </div>
+
+          <div className="hidden md:flex items-center gap-8 text-xs font-black uppercase tracking-widest text-white/50">
+            <Link href={`/${tenant.slug}`} className="hover:text-white transition-colors">الرئيسية</Link>
+            <Link href={`/${tenant.slug}/projects`} className="hover:text-white transition-colors">{sc.portfolioLabel}</Link>
+            <Link href={`/${tenant.slug}/contact`} className="hover:text-white transition-colors">تواصل</Link>
+            <Link href={`/${tenant.slug}/contact`}
+              className="px-5 py-2 font-black transition-colors hover:opacity-90"
+              style={{ backgroundColor: BOLD_ACCENT, color: '#ffffff' }}>
+              ابدأ الآن
+            </Link>
+          </div>
+
+          <MobileMenu
+            tenantName={tenant.name_ar}
+            tenantSlug={tenant.slug}
+            logoUrl={tenant.logo_url}
+            phone={tenant.phone}
+            email={tenant.email}
+            portfolioLabel={sc.portfolioLabel}
+            accentColor={BOLD_ACCENT}
+            bgColor="#ffffff"
+            textColor="#111111"
+            variant="dark"
+          />
         </div>
       </nav>
 
       {/* HERO */}
-      <section className="relative min-h-[92vh] flex flex-col justify-center px-6 overflow-hidden">
-        {tenant.cover_url && (
-          <Image src={tenant.cover_url} alt="" fill className="object-cover opacity-10" />
+      <section className="relative overflow-hidden flex flex-col justify-center" style={{ minHeight: '100vh' }}>
+        {tenant.video_url ? (
+          <VideoHero videoUrl={tenant.video_url} overlayOpacity={0.75} />
+        ) : tenant.cover_url ? (
+          <>
+            <Image src={tenant.cover_url} alt="" fill className="object-cover" />
+            <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }} />
+          </>
+        ) : (
+          <div className="absolute inset-0"
+            style={{ background: `radial-gradient(ellipse at center, #1a0a00 0%, ${BOLD_BG} 70%)` }} />
         )}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-          <span className="text-[25vw] font-black text-white/[0.02] leading-none select-none whitespace-nowrap">{tenant.name_ar}</span>
+
+        <div className="absolute top-0 right-20 bottom-0 w-0.5 hidden lg:block" style={{ backgroundColor: `${BOLD_ACCENT}20` }} />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 w-full">
+          <ScrollReveal animation="fade-right">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="h-px w-16" style={{ backgroundColor: BOLD_ACCENT }} />
+              <span className="text-xs font-black uppercase tracking-[0.4em]" style={{ color: BOLD_ACCENT }}>{sc.label}</span>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-up" delay={100}>
+            <h1 className="text-6xl md:text-9xl font-black leading-none tracking-tight mb-4 uppercase"
+              style={{ WebkitTextStroke: '2px white', color: 'transparent' }}>
+              {tenant.name_ar}
+            </h1>
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-up" delay={150}>
+            <h2 className="text-4xl md:text-6xl font-black leading-none mb-8" style={{ color: BOLD_ACCENT }}>
+              {sc.heroTagline}
+            </h2>
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-up" delay={250}>
+            <p className="max-w-xl text-base leading-relaxed mb-10" style={{ color: 'rgba(255,255,255,0.5)' }}>{bio}</p>
+            <div className="flex flex-wrap gap-4">
+              <Link href={`/${tenant.slug}/projects`}
+                className="group flex items-center gap-3 px-8 py-4 font-black uppercase tracking-wider transition-colors hover:opacity-90"
+                style={{ backgroundColor: BOLD_ACCENT, color: '#ffffff' }}>
+                {sc.portfolioLabel}
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              </Link>
+              <Link href={`/${tenant.slug}/contact`}
+                className="px-8 py-4 font-black uppercase tracking-wider border-2 transition-colors hover:bg-white hover:text-black"
+                style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#ffffff' }}>
+                تواصل معنا
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto w-full">
-          <div className="inline-flex items-center gap-2 mb-6">
-            <div className="w-3 h-3 bg-red-600" />
-            <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">{sc.label}</span>
+        {projects.length > 0 && (
+          <div className="absolute bottom-8 left-8 hidden lg:block" style={{ color: 'rgba(255,255,255,0.03)' }}>
+            <span className="text-[200px] font-black leading-none tabular-nums">{projects.length}+</span>
           </div>
-          <h1 className="text-[15vw] md:text-[12vw] font-black leading-none mb-6 tracking-tighter"
-            style={{ WebkitTextStroke: '2px white', color: 'transparent' }}>
-            {tenant.name_ar}
-          </h1>
-          <div className="w-full h-1 bg-red-600 mb-6" />
-          {!tenant.cover_url && (
-            <p className="text-white/50 text-lg max-w-lg leading-relaxed">{bio}</p>
-          )}
-          <div className="mt-10 flex gap-4 flex-wrap">
-            <Link href={`/${tenant.slug}/projects`} className="bg-red-600 hover:bg-red-700 text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
-              {sc.portfolioLabel}
-            </Link>
-            <Link href={`/${tenant.slug}/contact`} className="border-2 border-white/20 hover:border-white text-white font-black text-lg px-10 py-4 uppercase tracking-widest transition-colors">
-              تواصل
-            </Link>
-          </div>
-          {projects.length > 0 && (
-            <div className="mt-12 pt-8 border-t border-white/10">
-              <span className="text-5xl font-black text-red-600">{projects.length}</span>
-              <span className="text-white/30 text-sm font-black uppercase tracking-widest mr-3">{sc.portfolioItemLabel} منجز</span>
-            </div>
-          )}
+        )}
+      </section>
+
+      {/* STATS */}
+      <section className="py-16 px-6" style={{ backgroundColor: BOLD_ACCENT }}>
+        <div className="max-w-7xl mx-auto">
+          <ScrollReveal animation="fade-up">
+            <StatsCounter stats={stats} accentColor="#000000" textColor="#000000" labelColor="rgba(0,0,0,0.6)" />
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ABOUT */}
-      <section className="bg-white text-black py-20 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 mb-6">
-              <div className="w-3 h-3 bg-red-600" />
-              <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">من نحن</span>
+      <section className="py-24 px-6" style={{ backgroundColor: '#111111' }}>
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+          <ScrollReveal animation="fade-right">
+            <div>
+              <div className="text-xs font-black uppercase tracking-[0.4em] mb-6" style={{ color: BOLD_ACCENT }}>من نحن</div>
+              <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">{sc.aboutTitle}</h2>
+              <p className="text-base leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.5)' }}>{bio}</p>
+              {tenant.address_ar && (
+                <p className="text-sm flex items-start gap-2 mb-8" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: BOLD_ACCENT }} />{tenant.address_ar}
+                </p>
+              )}
+              <Link href={`/${tenant.slug}/contact`}
+                className="inline-flex items-center gap-3 font-black uppercase tracking-wider text-sm border-b-2 pb-1 transition-colors hover:opacity-70"
+                style={{ borderColor: BOLD_ACCENT, color: BOLD_ACCENT }}>
+                تواصل معنا <ArrowLeft className="w-4 h-4" />
+              </Link>
             </div>
-            <h2 className="text-5xl md:text-6xl font-black leading-none mb-8">نبني<br />الأحلام</h2>
-            <p className="text-black/60 leading-loose">{bio}</p>
-            {tenant.address_ar && (
-              <p className="mt-4 text-black/40 text-sm flex items-center gap-2">
-                <MapPin className="w-4 h-4" />{tenant.address_ar}
-              </p>
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-left" delay={100}>
+            {tenant.cover_url ? (
+              <div className="relative aspect-square overflow-hidden">
+                <Image src={tenant.cover_url} alt={tenant.name_ar} fill className="object-cover" />
+                <div className="absolute -bottom-4 -left-4 w-full h-full border-4 -z-10" style={{ borderColor: BOLD_ACCENT }} />
+              </div>
+            ) : (
+              <div className="aspect-square flex items-center justify-center relative"
+                style={{ backgroundColor: `${BOLD_ACCENT}10`, border: `4px solid ${BOLD_ACCENT}30` }}>
+                <span className="text-[120px] font-black" style={{ color: BOLD_ACCENT, opacity: 0.2 }}>{tenant.name_ar.charAt(0)}</span>
+              </div>
             )}
-          </div>
-          {tenant.cover_url ? (
-            <div className="relative aspect-video overflow-hidden">
-              <Image src={tenant.cover_url} alt={tenant.name_ar} fill className="object-cover" />
-              <div className="absolute inset-0 border-4 border-red-600 translate-x-2 translate-y-2 -z-10" />
-            </div>
-          ) : (
-            <div className="aspect-video bg-black flex items-center justify-center">
-              <span className="text-red-600 text-[8rem] font-black leading-none">{tenant.name_ar.charAt(0)}</span>
-            </div>
-          )}
+          </ScrollReveal>
         </div>
       </section>
 
       {/* SERVICES */}
-      <section className="border-t-4 border-red-600 bg-black py-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <div className="inline-flex items-center gap-2 mb-3">
-                <div className="w-3 h-3 bg-red-600" />
-                <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">{sc.servicesLabel}</span>
-              </div>
-              <h2 className="text-4xl font-black uppercase">ما نقدمه</h2>
+      <section className="py-24 px-6" style={{ backgroundColor: BOLD_BG }}>
+        <div className="max-w-7xl mx-auto">
+          <ScrollReveal animation="fade-up">
+            <div className="mb-16">
+              <div className="text-xs font-black uppercase tracking-[0.4em] mb-4" style={{ color: BOLD_ACCENT }}>{sc.servicesLabel}</div>
+              <h2 className="text-4xl md:text-6xl font-black">ما نقدمه</h2>
             </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/5">
+          </ScrollReveal>
+
+          <div className="space-y-px">
             {(customServices && customServices.length > 0
               ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
               : sc.services.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.desc }))
-            ).map(({ Icon, title, desc }) => (
-              <div key={title} className="bg-black p-8 group hover:bg-red-600 transition-colors">
-                <Icon className="w-8 h-8 text-red-600 group-hover:text-white mb-4" />
-                <h3 className="font-black text-white text-lg uppercase mb-1">{title}</h3>
-                <p className="text-white/40 group-hover:text-white/70 text-sm leading-relaxed">{desc}</p>
-              </div>
+            ).map(({ Icon, title, desc }, i) => (
+              <ScrollReveal key={title} animation="fade-right" delay={i * 60}>
+                <div className="group flex items-center gap-6 p-6 border-b transition-colors hover:bg-white/5 cursor-default"
+                  style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+                  <span className="text-3xl font-black tabular-nums flex-shrink-0" style={{ color: BOLD_ACCENT, minWidth: '48px' }}>
+                    {i + 1 < 10 ? `0${i + 1}` : i + 1}
+                  </span>
+                  <Icon className="w-6 h-6 flex-shrink-0 opacity-40 group-hover:opacity-100 transition-opacity" style={{ color: BOLD_ACCENT }} />
+                  <div className="flex-1">
+                    <h3 className="font-black text-lg mb-1">{title}</h3>
+                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>{desc}</p>
+                  </div>
+                  <ArrowLeft className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all group-hover:-translate-x-2" style={{ color: BOLD_ACCENT }} />
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
       {/* FEATURED PROJECTS */}
-      {projects.length > 0 ? (
-        <section className="border-t-4 border-red-600">
-          <div className="px-6 py-8 flex items-center justify-between bg-red-600">
-            <h2 className="text-3xl font-black uppercase tracking-tighter">أعمالنا</h2>
-            <Link href={`/${tenant.slug}/projects`} className="text-white/70 hover:text-white font-black text-sm uppercase tracking-widest transition-colors">
-              الكل ←
-            </Link>
-          </div>
-          {(featuredProjects.length > 0 ? featuredProjects : projects).slice(0, 4).map((p, i) => (
-            <Link key={p.id} href={`/${tenant.slug}/projects/${p.id}`} className="group flex items-stretch border-b border-white/10 hover:border-red-600 transition-colors">
-              <div className="w-16 md:w-24 flex-shrink-0 flex items-center justify-center border-l border-white/10 group-hover:border-red-600 transition-colors">
-                <span className="text-white/20 font-black text-4xl group-hover:text-red-600 transition-colors">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+      {displayedProjects.length > 0 && (
+        <section className="py-24 px-6" style={{ backgroundColor: '#111111' }}>
+          <div className="max-w-7xl mx-auto">
+            <ScrollReveal animation="fade-up">
+              <div className="flex items-end justify-between mb-16">
+                <div>
+                  <div className="text-xs font-black uppercase tracking-[0.4em] mb-4" style={{ color: BOLD_ACCENT }}>الأعمال</div>
+                  <h2 className="text-4xl md:text-6xl font-black">{sc.featuredLabel}</h2>
+                </div>
+                <Link href={`/${tenant.slug}/projects`}
+                  className="hidden md:flex items-center gap-2 text-sm font-black uppercase tracking-wider transition-colors hover:opacity-70"
+                  style={{ color: BOLD_ACCENT }}>
+                  كل الأعمال <ArrowLeft className="w-4 h-4" />
+                </Link>
               </div>
-              <div className="relative w-40 md:w-64 h-32 md:h-40 flex-shrink-0 overflow-hidden">
-                {p.cover_image_url
-                  ? <Image src={p.cover_image_url} alt={p.title_ar} fill className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
-                  : <div className="w-full h-full bg-white/5 flex items-center justify-center">
-                      <span className="text-red-600/50 text-3xl font-black">{p.title_ar.charAt(0)}</span>
-                    </div>
-                }
-              </div>
-              <div className="flex-1 p-6 flex flex-col justify-center">
-                {p.category && <span className="text-red-600 text-xs font-black uppercase tracking-widest mb-1">{p.category}</span>}
-                <h3 className="text-2xl md:text-3xl font-black leading-tight group-hover:text-red-500 transition-colors">{p.title_ar}</h3>
-                {p.year && <span className="text-white/30 text-sm mt-2">{p.year}</span>}
-              </div>
-              <div className="flex items-center px-6 text-white/20 group-hover:text-red-600 transition-colors">
-                <span className="text-3xl font-black">←</span>
-              </div>
-            </Link>
-          ))}
-          {projects.length > 4 && (
-            <div className="px-6 py-6 border-t border-white/10">
-              <Link href={`/${tenant.slug}/projects`} className="font-black text-sm uppercase tracking-widest text-white/40 hover:text-red-600 transition-colors">
-                عرض جميع {sc.portfolioLabel} ({projects.length}) ←
-              </Link>
+            </ScrollReveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+              {displayedProjects.map((p, i) => {
+                const isLarge = i === 0
+                const colSpan = isLarge ? 'md:col-span-8' : 'md:col-span-4'
+                return (
+                  <ScrollReveal key={p.id} animation="fade-up" delay={i * 80} className={colSpan}>
+                    <Link href={`/${tenant.slug}/projects/${p.id}`} className="group block overflow-hidden relative"
+                      style={{ aspectRatio: isLarge ? '16/9' : '4/3' }}>
+                      {p.cover_image_url ? (
+                        <Image src={p.cover_image_url} alt={p.title_ar} fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center"
+                          style={{ backgroundColor: `${BOLD_ACCENT}15` }}>
+                          <span className="text-6xl font-black" style={{ color: BOLD_ACCENT, opacity: 0.3 }}>{p.title_ar.charAt(0)}</span>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{ backgroundColor: `${BOLD_ACCENT}80` }} />
+                      <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 className="font-black text-white text-sm">{p.title_ar}</h3>
+                        {p.category && <p className="text-xs text-white/70 mt-1">{p.category}</p>}
+                      </div>
+                      <div className="absolute top-4 right-4 text-xs font-black" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                        {i + 1 < 10 ? `0${i + 1}` : i + 1}
+                      </div>
+                    </Link>
+                  </ScrollReveal>
+                )
+              })}
             </div>
-          )}
-        </section>
-      ) : (
-        <section className="border-t-4 border-red-600 py-20 px-6 text-center">
-          <span className="text-red-600/30 text-xs font-black tracking-[0.3em] uppercase">{sc.portfolioLabel}</span>
-          <h2 className="text-6xl font-black text-white/10 mt-2 mb-3">COMING<br />SOON</h2>
-          <p className="text-white/30 text-sm">سيتم إضافة {sc.portfolioItemLabelPlural} قريباً</p>
+          </div>
         </section>
       )}
 
-      {/* WHY US */}
-      <section className="py-16 px-6 border-t border-white/5">
-        <div className="max-w-6xl mx-auto">
-          <div className="inline-flex items-center gap-2 mb-8">
-            <div className="w-3 h-3 bg-red-600" />
-            <span className="text-red-600 text-xs font-black tracking-[0.3em] uppercase">لماذا نحن</span>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {/* FEATURES */}
+      <section className="py-24 px-6" style={{ backgroundColor: BOLD_BG }}>
+        <div className="max-w-7xl mx-auto">
+          <ScrollReveal animation="fade-up">
+            <div className="text-xs font-black uppercase tracking-[0.4em] mb-4" style={{ color: BOLD_ACCENT }}>لماذا نحن</div>
+            <h2 className="text-4xl md:text-6xl font-black mb-16">ما يميزنا</h2>
+          </ScrollReveal>
+
+          <StaggerReveal
+            animation="fade-up"
+            stagger={80}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
             {(customFeatures && customFeatures.length > 0
               ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
               : sc.features.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.desc }))
-            ).map(({ Icon, title }, i) => (
-              <div key={title} className="border border-white/10 p-6 flex items-center gap-4 hover:border-red-600 transition-colors group">
-                <span className="text-white/10 font-black text-3xl group-hover:text-red-600 transition-colors">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <Icon className="w-5 h-5 text-red-600 mb-1" />
-                  <h3 className="font-black text-white text-sm uppercase">{title}</h3>
+            ).map(({ Icon, title, desc }) => (
+              <div key={title} className="p-6 border-2 transition-colors hover:border-white/20 cursor-default"
+                style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+                <div className="w-12 h-12 flex items-center justify-center mb-4" style={{ backgroundColor: `${BOLD_ACCENT}15` }}>
+                  <Icon className="w-5 h-5" style={{ color: BOLD_ACCENT }} />
                 </div>
+                <h3 className="font-black text-lg mb-2">{title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)' }}>{desc}</p>
               </div>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
+      <div style={{ backgroundColor: '#111111' }}>
+        <Testimonials
+          testimonials={testimonials}
+          title="ماذا يقول عملاؤنا"
+          accentColor={BOLD_ACCENT}
+          bgColor="#111111"
+          textColor="#ffffff"
+          textLight="rgba(255,255,255,0.5)"
+          variant="cards"
+        />
+      </div>
+
+      {/* FAQ */}
+      <FAQ
+        items={faqs}
+        title="الأسئلة الشائعة"
+        accentColor={BOLD_ACCENT}
+        bgColor={BOLD_BG}
+        textColor="#ffffff"
+        textLight="rgba(255,255,255,0.5)"
+        variant="minimal"
+      />
+
       {/* CTA */}
-      <section className="px-6 py-20 text-center border-t-4 border-white/5">
-        <h3 className="text-5xl md:text-7xl font-black mb-8">ابدأ مشروعك</h3>
-        <div className="flex gap-4 justify-center flex-wrap">
-          {waUrl && (
-            <a href={waUrl} target="_blank" rel="noopener noreferrer"
-              className="bg-[#25D366] hover:bg-[#20BA5A] text-white font-black text-xl px-12 py-5 uppercase tracking-widest transition-colors flex items-center gap-3">
-              <WhatsAppIcon />
-              واتساب
-            </a>
-          )}
-          <Link href={`/${tenant.slug}/contact`} className="inline-block bg-red-600 hover:bg-red-700 text-white font-black text-xl px-16 py-5 uppercase tracking-widest transition-colors">
-            تواصل الآن
-          </Link>
+      <section className="relative overflow-hidden py-32 px-6" style={{ backgroundColor: BOLD_ACCENT }}>
+        <div className="absolute inset-0 opacity-5"
+          style={{ backgroundImage: 'repeating-linear-gradient(45deg,#000 0,#000 1px,transparent 0,transparent 50%)', backgroundSize: '20px 20px' }} />
+        <div className="relative z-10 max-w-5xl mx-auto text-center">
+          <ScrollReveal animation="zoom-in">
+            <h2 className="text-5xl md:text-8xl font-black text-black leading-none mb-4 uppercase">{sc.cta}</h2>
+            <p className="text-black/70 text-lg mb-12">{sc.ctaDesc}</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href={`/${tenant.slug}/contact`}
+                className="px-12 py-5 font-black bg-black text-white uppercase tracking-wider text-sm transition-colors hover:bg-black/80">
+                تواصل معنا الآن
+              </Link>
+              {waUrl && (
+                <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                  className="px-12 py-5 font-black border-2 border-black text-black uppercase tracking-wider text-sm transition-colors hover:bg-black hover:text-white">
+                  واتساب
+                </a>
+              )}
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-black border-t-4 border-red-600 py-12 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 mb-8">
-          <div>
-            <h4 className="font-black text-xl uppercase tracking-tighter text-white mb-3">{tenant.name_ar}</h4>
-            <p className="text-white/30 text-sm leading-relaxed line-clamp-3">{bio}</p>
+      <footer className="py-12 px-6" style={{ backgroundColor: '#050505', borderTop: `2px solid ${BOLD_ACCENT}` }}>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            {tenant.logo_url && <Image src={tenant.logo_url} alt="" width={32} height={32} className="object-contain" />}
+            <span className="font-black uppercase tracking-wider">{tenant.name_ar}</span>
           </div>
-          <div>
-            <h4 className="text-red-600 text-xs font-black tracking-[0.3em] uppercase mb-4">روابط سريعة</h4>
-            <div className="space-y-2">
-              {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل']].map(([href, label]) => (
-                <Link key={href} href={`/${tenant.slug}${href}`} className="block text-white/40 hover:text-red-600 transition-colors text-sm font-black uppercase tracking-widest">{label}</Link>
-              ))}
-            </div>
+          <div className="flex items-center gap-8 text-xs font-black uppercase tracking-widest text-white/30">
+            <Link href={`/${tenant.slug}`} className="hover:text-white/70 transition-colors">الرئيسية</Link>
+            <Link href={`/${tenant.slug}/projects`} className="hover:text-white/70 transition-colors">{sc.portfolioLabel}</Link>
+            <Link href={`/${tenant.slug}/contact`} className="hover:text-white/70 transition-colors">تواصل</Link>
           </div>
-          <div>
-            <h4 className="text-red-600 text-xs font-black tracking-[0.3em] uppercase mb-4">اتصل بنا</h4>
-            <div className="space-y-2">
-              {tenant.phone && (
-                <a href={`tel:${tenant.phone}`} className="flex items-center gap-2 text-white/40 hover:text-red-600 transition-colors text-sm" dir="ltr">
-                  <Phone className="w-4 h-4" />{tenant.phone}
-                </a>
-              )}
-              {tenant.email && (
-                <a href={`mailto:${tenant.email}`} className="flex items-center gap-2 text-white/40 hover:text-red-600 transition-colors text-sm">
-                  <Mail className="w-4 h-4" />{tenant.email}
-                </a>
-              )}
-            </div>
-            {socials.length > 0 && (
-              <div className="flex gap-3 mt-4">
-                {socials.map(s => (
-                  <a key={s.label} href={s.url!} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-red-600 transition-colors">
-{s.label}
-                  </a>
-                ))}
-              </div>
-            )}
+          <div className="text-xs text-white/20">
+            {tenant.phone && <a href={`tel:${tenant.phone}`} className="hover:text-white/40 transition-colors" dir="ltr"><Phone className="w-3 h-3 inline ml-1" />{tenant.phone}</a>}
+            {tenant.email && <a href={`mailto:${tenant.email}`} className="hover:text-white/40 transition-colors mr-4"><Mail className="w-3 h-3 inline ml-1" />{tenant.email}</a>}
           </div>
         </div>
-        <div className="border-t border-white/5 pt-6 flex items-center justify-between">
-          <p className="text-white/20 text-xs font-black uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} {tenant.name_ar}
-          </p>
+        <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-white/5 text-center text-xs text-white/10">
+          © {new Date().getFullYear()} {tenant.name_ar} — جميع الحقوق محفوظة
         </div>
       </footer>
 
-      {/* FLOATING WHATSAPP */}
-      {waUrl && (
-        <a href={waUrl} target="_blank" rel="noopener noreferrer"
-          className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#20BA5A] rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110">
-          <WhatsAppIcon />
-        </a>
-      )}
+      {waUrl && <WhatsAppFloat url={waUrl} />}
 
-      {/* BACK TO TOP */}
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 z-50 w-12 h-12 bg-red-600 text-white flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 ${showTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-        <ArrowUp className="w-5 h-5" />
-      </button>
+      {showTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 z-50 w-10 h-10 flex items-center justify-center shadow-lg transition-all hover:scale-110"
+          style={{ backgroundColor: BOLD_ACCENT }}
+          aria-label="للأعلى"
+        >
+          <ArrowUp className="w-4 h-4 text-white" />
+        </button>
+      )}
     </div>
   )
 }

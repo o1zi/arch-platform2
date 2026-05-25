@@ -7,17 +7,40 @@ import { useState, useEffect } from 'react'
 import { MapPin, Phone, Mail, ArrowUp } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
 import { getSectorConfig } from '@/lib/sectors'
+import MobileMenu from '@/components/themes/shared/MobileMenu'
+import { ScrollReveal, StaggerReveal } from '@/components/themes/shared/ScrollReveal'
+import { StatsCounter, SECTOR_STATS } from '@/components/themes/shared/StatsCounter'
+import { VideoHero } from '@/components/themes/shared/VideoHero'
+import { Testimonials, SECTOR_TESTIMONIALS } from '@/components/themes/shared/Testimonials'
+import { FAQ, SECTOR_FAQ } from '@/components/themes/shared/FAQ'
 
-function WhatsAppIcon() {
+// Luxury: أسود عميق + ذهبي راقٍ — حصرية وفخامة
+const LUX_BG = '#080808'
+const LUX_BG2 = '#0f0f0f'
+const LUX_GOLD = '#c9a84c'
+const LUX_GOLD_LIGHT = '#e8c97a'
+const LUX_CREAM = '#f5f0e8'
+
+function GoldLine() {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-    </svg>
+    <div className="flex items-center gap-4 my-8" aria-hidden>
+      <div className="h-px flex-1" style={{ background: `linear-gradient(to right, transparent, ${LUX_GOLD}60)` }} />
+      <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: LUX_GOLD }} />
+      <div className="h-px flex-1" style={{ background: `linear-gradient(to left, transparent, ${LUX_GOLD}60)` }} />
+    </div>
   )
 }
 
-function GoldLine() {
-  return <div className="h-px bg-gradient-to-l from-transparent via-[#c9a84c]/40 to-transparent my-8" />
+function WhatsAppFloat({ url }: { url: string }) {
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer"
+      className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-transform hover:scale-110"
+      style={{ backgroundColor: '#25d366' }}>
+      <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+      </svg>
+    </a>
+  )
 }
 
 export default function LuxuryLayout({ tenant, projects, featuredProjects, services: customServices, features: customFeatures, sectorConfig }: ThemeProps) {
@@ -37,365 +60,475 @@ export default function LuxuryLayout({ tenant, projects, featuredProjects, servi
   const bio = tenant.bio_ar || sc.heroTagline
   const waPhone = tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
-
-  const socials = [
-    { url: tenant.instagram_url, label: 'Instagram' },
-    { url: tenant.twitter_url, label: 'Twitter' },
-    { url: tenant.linkedin_url, label: 'LinkedIn' },
-  ].filter(s => s.url)
+  const stats = SECTOR_STATS[tenant.sector ?? 'engineering'] ?? SECTOR_STATS.engineering
+  const testimonials = SECTOR_TESTIMONIALS[tenant.sector ?? 'engineering'] ?? SECTOR_TESTIMONIALS.engineering
+  const faqs = SECTOR_FAQ[tenant.sector ?? 'engineering'] ?? SECTOR_FAQ.engineering
+  const displayedProjects = featuredProjects.length > 0 ? featuredProjects.slice(0, 6) : projects.slice(0, 6)
 
   return (
-    <div className="min-h-screen bg-[#080808]" dir="rtl">
+    <div className="min-h-screen" style={{ backgroundColor: LUX_BG, color: LUX_CREAM }} dir="rtl">
 
-      {/* GOLD TOP LINE */}
-      <div className="h-px bg-gradient-to-l from-transparent via-[#c9a84c] to-transparent" />
+      {/* شريط ذهبي علوي */}
+      <div className="h-px" style={{ background: `linear-gradient(to left, transparent, ${LUX_GOLD}, transparent)` }} />
 
-      {/* TOP BAR */}
-      <div className="border-b border-[#c9a84c]/10 px-8 py-2 flex items-center justify-between max-w-7xl mx-auto">
-        <div className="flex items-center gap-6 text-[10px] tracking-[0.25em] text-white/20 uppercase">
-          {tenant.phone && (
-            <a href={`tel:${tenant.phone}`} className="hover:text-[#c9a84c] transition-colors" dir="ltr">{tenant.phone}</a>
-          )}
-          {tenant.email && (
-            <a href={`mailto:${tenant.email}`} className="hover:text-[#c9a84c] transition-colors hidden md:block">{tenant.email}</a>
-          )}
+      {/* معلومات علوية */}
+      {(tenant.phone || tenant.email) && (
+        <div className="hidden md:block py-2 px-8" style={{ backgroundColor: `${LUX_GOLD}08`, borderBottom: `1px solid ${LUX_GOLD}15` }}>
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-6 text-xs" style={{ color: `${LUX_CREAM}30` }}>
+              {tenant.phone && (
+                <a href={`tel:${tenant.phone}`} className="flex items-center gap-1.5 hover:opacity-70 transition-opacity" dir="ltr">
+                  <Phone className="w-3 h-3" style={{ color: LUX_GOLD }} />{tenant.phone}
+                </a>
+              )}
+              {tenant.email && (
+                <a href={`mailto:${tenant.email}`} className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
+                  <Mail className="w-3 h-3" style={{ color: LUX_GOLD }} />{tenant.email}
+                </a>
+              )}
+            </div>
+            {tenant.address_ar && (
+              <div className="flex items-center gap-2 text-xs" style={{ color: `${LUX_CREAM}25` }}>
+                <MapPin className="w-3 h-3" style={{ color: LUX_GOLD }} />
+                {tenant.address_ar}
+              </div>
+            )}
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          {socials.map(s => (
-            <a key={s.label} href={s.url!} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-[#c9a84c] transition-colors">
-{s.label}
-            </a>
-          ))}
-        </div>
-      </div>
+      )}
 
       {/* NAV */}
-      <nav className={`sticky top-0 z-50 px-8 py-5 flex items-center justify-between max-w-7xl mx-auto transition-all duration-500 ${scrolled ? 'bg-[#080808]/95 backdrop-blur' : ''}`}>
-        <div className="flex items-center gap-3">
-          {tenant.logo_url && (
-            <Image src={tenant.logo_url} alt="" width={36} height={36} className="rounded-full border border-[#c9a84c]/40 object-cover" />
-          )}
-          <span className="text-[#c9a84c] text-xs tracking-[0.3em] uppercase">{tenant.name_ar}</span>
-        </div>
-        <nav className="hidden md:flex gap-8 text-[11px] text-white/30 tracking-[0.25em] uppercase">
-          {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل']].map(([href, label]) => (
-            <Link key={href} href={`/${tenant.slug}${href}`} className="hover:text-[#c9a84c] transition-colors relative group">
-              {label}
-              <span className="absolute -bottom-1 right-0 w-0 h-px bg-[#c9a84c] group-hover:w-full transition-all duration-300" />
+      <nav className={`sticky top-0 z-50 transition-all duration-700`}
+        style={{
+          backgroundColor: scrolled ? `${LUX_BG}f5` : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          borderBottom: scrolled ? `1px solid ${LUX_GOLD}15` : '1px solid transparent',
+        }}>
+        <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center gap-4">
+            {tenant.logo_url ? (
+              <Image src={tenant.logo_url} alt="" width={48} height={48} className="object-contain" />
+            ) : (
+              <div className="w-12 h-12 border flex items-center justify-center text-lg font-black"
+                style={{ borderColor: `${LUX_GOLD}40`, color: LUX_GOLD }}>
+                {tenant.name_ar.charAt(0)}
+              </div>
+            )}
+            <div>
+              <div className="font-black text-sm tracking-widest uppercase" style={{ color: LUX_GOLD_LIGHT }}>{tenant.name_ar}</div>
+              {tenant.name_en && <div className="text-[9px] tracking-[0.3em] opacity-30 mt-0.5" dir="ltr" style={{ color: LUX_CREAM }}>{tenant.name_en}</div>}
+            </div>
+          </div>
+
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-10 text-xs tracking-[0.25em] uppercase font-medium"
+            style={{ color: `${LUX_CREAM}50` }}>
+            <Link href={`/${tenant.slug}`} className="transition-colors hover:opacity-100 hover:text-white"
+              style={{ color: `${LUX_CREAM}50` }}>الرئيسية</Link>
+            <Link href={`/${tenant.slug}/projects`} className="transition-colors hover:text-white"
+              style={{ color: `${LUX_CREAM}50` }}>{sc.portfolioLabel}</Link>
+            <Link href={`/${tenant.slug}/contact`} className="transition-colors hover:text-white"
+              style={{ color: `${LUX_CREAM}50` }}>تواصل</Link>
+            <Link href={`/${tenant.slug}/contact`}
+              className="border px-6 py-2.5 text-xs tracking-widest transition-all hover:bg-amber-500/10"
+              style={{ borderColor: `${LUX_GOLD}50`, color: LUX_GOLD }}>
+              استشارة حصرية
             </Link>
-          ))}
-        </nav>
+          </div>
+
+          <MobileMenu
+            tenantName={tenant.name_ar}
+            tenantSlug={tenant.slug}
+            logoUrl={tenant.logo_url}
+            phone={tenant.phone}
+            email={tenant.email}
+            portfolioLabel={sc.portfolioLabel}
+            accentColor={LUX_GOLD}
+            bgColor={LUX_BG}
+            textColor={LUX_CREAM}
+            variant="dark"
+          />
+        </div>
       </nav>
 
-      {/* HERO */}
-      <section className="relative min-h-[95vh] flex flex-col justify-end">
-        {tenant.cover_url ? (
+      {/* HERO — Full-screen فاخر */}
+      <section className="relative overflow-hidden flex flex-col items-center justify-center text-center"
+        style={{ minHeight: '100vh' }}>
+        {tenant.video_url ? (
+          <VideoHero videoUrl={tenant.video_url} overlayOpacity={0.80} />
+        ) : tenant.cover_url ? (
           <>
-            <Image src={tenant.cover_url} alt="" fill className="object-cover opacity-40" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/40 to-transparent" />
+            <Image src={tenant.cover_url} alt="" fill className="object-cover" />
+            <div className="absolute inset-0"
+              style={{ background: `linear-gradient(to bottom, ${LUX_BG}60, ${LUX_BG}90)` }} />
           </>
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] to-[#080808]" />
+          <>
+            <div className="absolute inset-0" style={{ backgroundColor: LUX_BG }} />
+            {/* نقاط ذهبية خلفية */}
+            <div className="absolute inset-0 opacity-[0.06]"
+              style={{
+                backgroundImage: `radial-gradient(${LUX_GOLD} 1px, transparent 1px)`,
+                backgroundSize: '40px 40px'
+              }} />
+            {/* دائرة مضيئة */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-5"
+              style={{ background: `radial-gradient(circle, ${LUX_GOLD} 0%, transparent 70%)` }} />
+          </>
         )}
 
-        <div className="relative z-10 max-w-7xl mx-auto px-8 pb-20 w-full">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="h-px w-12 bg-[#c9a84c]" />
-            <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">{sc.label}</span>
-          </div>
-
-          <h1 className="text-6xl md:text-8xl font-light text-white leading-tight mb-6">{tenant.name_ar}</h1>
-          {tenant.name_en && <p className="text-[#c9a84c]/50 text-sm tracking-[0.2em] uppercase mb-4" dir="ltr">{tenant.name_en}</p>}
-
-          {!tenant.cover_url && (
-            <p className="text-white/40 font-light text-base max-w-md leading-loose">{bio}</p>
-          )}
-
-          <div className="mt-12 flex gap-4">
-            <Link href={`/${tenant.slug}/projects`}
-              className="border border-[#c9a84c] text-[#c9a84c] px-10 py-3 text-xs tracking-[0.25em] uppercase hover:bg-[#c9a84c] hover:text-black transition-all duration-300">
-              استعرض الأعمال
-            </Link>
-            <Link href={`/${tenant.slug}/contact`}
-              className="border border-white/15 text-white/50 px-10 py-3 text-xs tracking-[0.25em] uppercase hover:border-white/40 hover:text-white transition-all">
-              تواصل معنا
-            </Link>
-          </div>
-
-          {projects.length > 0 && (
-            <div className="mt-16 pt-8 border-t border-[#c9a84c]/10">
-              <span className="text-5xl font-light text-[#c9a84c]">{projects.length}</span>
-              <span className="text-white/20 text-[10px] tracking-[0.4em] uppercase mr-3">{sc.portfolioItemLabel} منجز</span>
+        <div className="relative z-10 max-w-4xl mx-auto px-8 py-32">
+          <ScrollReveal animation="fade-up">
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="h-px w-12" style={{ backgroundColor: LUX_GOLD }} />
+              <span className="text-[10px] tracking-[0.5em] uppercase" style={{ color: LUX_GOLD }}>{sc.label}</span>
+              <div className="h-px w-12" style={{ backgroundColor: LUX_GOLD }} />
             </div>
-          )}
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-up" delay={100}>
+            <h1 className="font-black leading-none mb-6 tracking-wide"
+              style={{ fontSize: 'clamp(3rem, 8vw, 8rem)', color: LUX_CREAM }}>
+              {tenant.name_ar}
+            </h1>
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-up" delay={150}>
+            <GoldLine />
+            <p className="text-base leading-relaxed max-w-xl mx-auto" style={{ color: `${LUX_CREAM}60` }}>{bio}</p>
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-up" delay={250}>
+            <div className="flex flex-wrap justify-center gap-4 mt-10">
+              <Link href={`/${tenant.slug}/projects`}
+                className="px-10 py-4 text-sm tracking-widest uppercase font-medium transition-all hover:opacity-90"
+                style={{ backgroundColor: LUX_GOLD, color: LUX_BG }}>
+                استعرض {sc.portfolioLabel}
+              </Link>
+              <Link href={`/${tenant.slug}/contact`}
+                className="px-10 py-4 text-sm tracking-widest uppercase font-medium border transition-all hover:bg-white/5"
+                style={{ borderColor: `${LUX_CREAM}25`, color: LUX_CREAM }}>
+                تواصل معنا
+              </Link>
+            </div>
+          </ScrollReveal>
+        </div>
+
+        {/* scroll indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+          style={{ color: `${LUX_CREAM}20` }}>
+          <span className="text-[9px] tracking-[0.4em] uppercase">scroll</span>
+          <div className="w-px h-14" style={{ background: `linear-gradient(to bottom, ${LUX_GOLD}40, transparent)` }} />
+        </div>
+      </section>
+
+      {/* STATS — ذهبية */}
+      <section className="py-16 px-8" style={{ backgroundColor: LUX_BG2, borderTop: `1px solid ${LUX_GOLD}15`, borderBottom: `1px solid ${LUX_GOLD}15` }}>
+        <div className="max-w-6xl mx-auto">
+          <ScrollReveal animation="fade-up">
+            <StatsCounter stats={stats} accentColor={LUX_GOLD} textColor={LUX_CREAM} labelColor={`${LUX_CREAM}40`} />
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ABOUT */}
-      <section className="py-24 px-8 max-w-7xl mx-auto">
-        <GoldLine />
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <div className="flex items-center gap-4 mb-8">
-              <div className="h-px w-8 bg-[#c9a84c]" />
-              <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">من نحن</span>
+      <section className="py-28 px-8" style={{ backgroundColor: LUX_BG }}>
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+          <ScrollReveal animation="fade-right">
+            {tenant.cover_url ? (
+              <div className="relative aspect-[3/4] overflow-hidden">
+                <Image src={tenant.cover_url} alt={tenant.name_ar} fill className="object-cover" />
+                {/* إطار ذهبي */}
+                <div className="absolute inset-0 border"
+                  style={{ borderColor: `${LUX_GOLD}20`, margin: '12px' }} />
+                <div className="absolute bottom-6 right-6 w-12 h-12 border-b-2 border-r-2"
+                  style={{ borderColor: LUX_GOLD }} />
+                <div className="absolute top-6 left-6 w-12 h-12 border-t-2 border-l-2"
+                  style={{ borderColor: LUX_GOLD }} />
+              </div>
+            ) : (
+              <div className="aspect-[3/4] flex items-center justify-center border"
+                style={{ borderColor: `${LUX_GOLD}15`, backgroundColor: `${LUX_GOLD}05` }}>
+                <span className="text-[120px] font-black" style={{ color: LUX_GOLD, opacity: 0.08 }}>{tenant.name_ar.charAt(0)}</span>
+              </div>
+            )}
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-left" delay={100}>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
+              <span className="text-xs tracking-[0.4em] uppercase" style={{ color: LUX_GOLD }}>من نحن</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-light text-white mb-8 leading-tight">
-              نصنع الجمال<br />بلمسة الاتقان
+            <h2 className="font-black mb-8 leading-tight"
+              style={{ fontSize: 'clamp(1.8rem, 4vw, 3.5rem)', color: LUX_CREAM }}>
+              {sc.aboutTitle}
             </h2>
-            <p className="text-white/40 font-light leading-loose">{bio}</p>
+            <GoldLine />
+            <p className="leading-loose text-sm mb-8" style={{ color: `${LUX_CREAM}55` }}>{bio}</p>
             {tenant.address_ar && (
-              <p className="mt-6 text-white/20 text-[11px] tracking-widest uppercase flex items-center gap-2">
-                <MapPin className="w-3 h-3 text-[#c9a84c]" />{tenant.address_ar}
+              <p className="text-sm flex items-start gap-2 mb-8" style={{ color: `${LUX_CREAM}35` }}>
+                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: LUX_GOLD }} />{tenant.address_ar}
               </p>
             )}
             <Link href={`/${tenant.slug}/contact`}
-              className="inline-block mt-8 border border-[#c9a84c]/50 text-[#c9a84c]/70 px-8 py-2.5 text-[11px] tracking-[0.25em] uppercase hover:bg-[#c9a84c] hover:text-black transition-all duration-500">
+              className="inline-block border px-8 py-3 text-xs tracking-widest uppercase font-medium transition-all hover:bg-amber-500/10"
+              style={{ borderColor: `${LUX_GOLD}50`, color: LUX_GOLD }}>
               تواصل معنا
             </Link>
-          </div>
-          {tenant.cover_url ? (
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <Image src={tenant.cover_url} alt={tenant.name_ar} fill className="object-cover opacity-70 hover:opacity-90 transition-opacity duration-700" />
-              <div className="absolute inset-0 border border-[#c9a84c]/20 m-4" />
-            </div>
-          ) : (
-            <div className="aspect-[4/3] bg-gradient-to-br from-[#1a1a1a] to-[#080808] flex items-center justify-center border border-[#c9a84c]/10">
-              <span className="text-[#c9a84c]/20 text-[8rem] font-light">{tenant.name_ar.charAt(0)}</span>
-            </div>
-          )}
+          </ScrollReveal>
         </div>
-        <GoldLine />
       </section>
 
       {/* SERVICES */}
-      <section className="bg-[#0a0a0a] py-24 px-8">
+      <section className="py-28 px-8" style={{ backgroundColor: LUX_BG2 }}>
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="flex items-center gap-6 mb-6 justify-center">
-              <div className="h-px w-12 bg-gradient-to-l from-[#c9a84c]/30 to-transparent" />
-              <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">{sc.servicesLabel}</span>
-              <div className="h-px w-12 bg-gradient-to-r from-[#c9a84c]/30 to-transparent" />
+          <ScrollReveal animation="fade-up">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
+                <span className="text-xs tracking-[0.4em] uppercase" style={{ color: LUX_GOLD }}>{sc.servicesLabel}</span>
+                <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
+              </div>
+              <h2 className="font-black text-3xl md:text-5xl" style={{ color: LUX_CREAM }}>خدماتنا الحصرية</h2>
+              <GoldLine />
             </div>
-            <h2 className="text-3xl font-light text-white">ما نقدمه لك</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-[#c9a84c]/5">
+          </ScrollReveal>
+
+          <StaggerReveal
+            animation="fade-up"
+            stagger={100}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          >
             {(customServices && customServices.length > 0
               ? customServices.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.description ?? '' }))
               : sc.services.map(s => ({ Icon: resolveIcon(s.icon), title: s.title, desc: s.desc }))
             ).map(({ Icon, title, desc }) => (
-              <div key={title} className="bg-[#0a0a0a] p-8 group hover:bg-[#111] transition-colors text-center">
-                <div className="w-12 h-12 border border-[#c9a84c]/20 flex items-center justify-center mx-auto mb-5 group-hover:border-[#c9a84c]/50 transition-colors">
-                  <Icon className="w-5 h-5 text-[#c9a84c]/40 group-hover:text-[#c9a84c] transition-colors" />
+              <div key={title}
+                className="p-8 border transition-all hover:border-amber-500/30 hover:bg-amber-500/5 cursor-default group"
+                style={{ borderColor: `${LUX_GOLD}10`, backgroundColor: `${LUX_GOLD}03` }}>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 border flex items-center justify-center transition-colors group-hover:border-amber-500/40"
+                    style={{ borderColor: `${LUX_GOLD}20` }}>
+                    <Icon className="w-4 h-4" style={{ color: LUX_GOLD }} />
+                  </div>
+                  <div className="h-px flex-1" style={{ backgroundColor: `${LUX_GOLD}10` }} />
                 </div>
-                <h3 className="text-white/70 group-hover:text-white text-sm mb-2 transition-colors">{title}</h3>
-                <p className="text-white/20 text-xs leading-relaxed">{desc}</p>
+                <h3 className="font-black text-sm mb-2 tracking-wide" style={{ color: LUX_GOLD_LIGHT }}>{title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: `${LUX_CREAM}45` }}>{desc}</p>
               </div>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </section>
 
-      {/* FEATURED PROJECTS */}
-      {projects.length > 0 ? (
-        <section className="py-24 px-8 max-w-7xl mx-auto">
-          <div className="flex items-center gap-6 mb-16">
-            <div className="h-px flex-1 bg-gradient-to-l from-[#c9a84c]/20 to-transparent" />
-            <div className="text-center">
-              <p className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase mb-1">معرض الأعمال</p>
-              <h2 className="text-3xl font-light text-white">
-                {featuredProjects.length > 0 ? sc.featuredLabel : sc.portfolioLabel}
-              </h2>
-            </div>
-            <div className="h-px flex-1 bg-gradient-to-r from-[#c9a84c]/20 to-transparent" />
-          </div>
+      {/* FEATURED PROJECTS — فاخر */}
+      {displayedProjects.length > 0 && (
+        <section className="py-28 px-8" style={{ backgroundColor: LUX_BG }}>
+          <div className="max-w-7xl mx-auto">
+            <ScrollReveal animation="fade-up">
+              <div className="text-center mb-16">
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
+                  <span className="text-xs tracking-[0.4em] uppercase" style={{ color: LUX_GOLD }}>الأعمال</span>
+                  <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
+                </div>
+                <h2 className="font-black text-3xl md:text-5xl" style={{ color: LUX_CREAM }}>{sc.featuredLabel}</h2>
+              </div>
+            </ScrollReveal>
 
-          <div className="grid grid-cols-12 gap-3">
-            {(featuredProjects.length > 0 ? featuredProjects : projects).slice(0, 6).map((p, i) => {
-              const config = [
-                'col-span-12 md:col-span-8 aspect-video',
-                'col-span-12 md:col-span-4 aspect-[3/4]',
-                'col-span-12 md:col-span-4 aspect-square',
-                'col-span-12 md:col-span-8 aspect-[16/7]',
-                'col-span-12 md:col-span-6 aspect-[4/3]',
-                'col-span-12 md:col-span-6 aspect-[4/3]',
-              ]
-              return (
-                <Link key={p.id} href={`/${tenant.slug}/projects/${p.id}`}
-                  className={`group relative overflow-hidden bg-[#1a1a1a] ${config[i] ?? 'col-span-6 aspect-square'}`}>
-                  {p.cover_image_url ? (
-                    <Image src={p.cover_image_url} alt={p.title_ar} fill
-                      className="object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-1000" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-[#c9a84c]/20 text-4xl font-light">{p.title_ar.charAt(0)}</span>
+            <StaggerReveal
+              animation="zoom-in"
+              stagger={100}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              {displayedProjects.map(p => (
+                <Link key={p.id} href={`/${tenant.slug}/projects/${p.id}`} className="group block relative overflow-hidden">
+                  <div className="aspect-[3/4] relative overflow-hidden">
+                    {p.cover_image_url ? (
+                      <Image src={p.cover_image_url} alt={p.title_ar} fill
+                        className="object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    ) : (
+                      <div className="w-full h-full" style={{ backgroundColor: `${LUX_GOLD}08` }}>
+                        <span className="absolute inset-0 flex items-center justify-center text-6xl font-black"
+                          style={{ color: LUX_GOLD, opacity: 0.1 }}>{p.title_ar.charAt(0)}</span>
+                      </div>
+                    )}
+                    {/* Overlay */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{ background: `linear-gradient(to top, ${LUX_BG}f0 0%, ${LUX_BG}60 50%, transparent 100%)` }} />
+                    {/* محتوى عند الـ hover */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                      <div className="h-px mb-3" style={{ backgroundColor: `${LUX_GOLD}60` }} />
+                      <h3 className="font-black text-sm mb-1 tracking-wide" style={{ color: LUX_GOLD_LIGHT }}>{p.title_ar}</h3>
+                      {p.category && <p className="text-xs" style={{ color: `${LUX_CREAM}50` }}>{p.category}</p>}
                     </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/90 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute bottom-0 inset-x-0 p-5 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                    <p className="text-[#c9a84c] text-[10px] tracking-[0.3em] uppercase mb-1">{p.category}</p>
-                    <h3 className="text-white font-light text-lg">{p.title_ar}</h3>
-                    {p.year && <p className="text-white/40 text-xs mt-1">{p.year}</p>}
                   </div>
-                  {p.is_featured && (
-                    <div className="absolute top-3 right-3 border border-[#c9a84c]/50 text-[#c9a84c] text-[9px] tracking-[0.25em] uppercase px-2 py-0.5">مميز</div>
-                  )}
+                  {/* border ذهبي */}
+                  <div className="absolute inset-0 border opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ borderColor: `${LUX_GOLD}30`, margin: '6px', pointerEvents: 'none' }} />
                 </Link>
-              )
-            })}
-          </div>
+              ))}
+            </StaggerReveal>
 
-          <div className="text-center mt-12">
-            <Link href={`/${tenant.slug}/projects`} className="inline-block border border-[#c9a84c]/30 text-[#c9a84c]/60 hover:text-[#c9a84c] hover:border-[#c9a84c] px-12 py-3 text-[11px] tracking-[0.3em] uppercase transition-all">
-              {projects.length > 6 ? `جميع ${sc.portfolioLabel} — ${projects.length}` : `جميع ${sc.portfolioLabel}`}
-            </Link>
+            <ScrollReveal animation="fade-up" delay={200}>
+              <div className="text-center mt-12">
+                <Link href={`/${tenant.slug}/projects`}
+                  className="inline-block border px-10 py-4 text-xs tracking-widest uppercase transition-all hover:bg-amber-500/10"
+                  style={{ borderColor: `${LUX_GOLD}40`, color: LUX_GOLD }}>
+                  جميع {sc.portfolioLabel}
+                </Link>
+              </div>
+            </ScrollReveal>
           </div>
-        </section>
-      ) : (
-        <section className="py-24 px-8 max-w-7xl mx-auto text-center">
-          <p className="text-[#c9a84c]/30 text-[10px] tracking-[0.4em] uppercase mb-4">{sc.portfolioLabel}</p>
-          <h2 className="text-4xl font-light text-white/10 mb-3">قريباً</h2>
-          <p className="text-white/20 text-sm">سيتم إضافة {sc.portfolioItemLabelPlural} قريباً</p>
         </section>
       )}
 
-      {/* WHY US */}
-      <section className="bg-[#0a0a0a] py-24 px-8">
+      {/* FEATURES */}
+      <section className="py-28 px-8" style={{ backgroundColor: LUX_BG2 }}>
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="flex items-center gap-6 mb-6 justify-center">
-              <div className="h-px w-12 bg-gradient-to-l from-[#c9a84c]/30 to-transparent" />
-              <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">لماذا نحن</span>
-              <div className="h-px w-12 bg-gradient-to-r from-[#c9a84c]/30 to-transparent" />
+          <ScrollReveal animation="fade-up">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
+                <span className="text-xs tracking-[0.4em] uppercase" style={{ color: LUX_GOLD }}>لماذا نحن</span>
+                <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
+              </div>
+              <h2 className="font-black text-3xl md:text-5xl" style={{ color: LUX_CREAM }}>تميّزنا الحصري</h2>
             </div>
-            <h2 className="text-3xl font-light text-white">ما يميزنا</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          </ScrollReveal>
+
+          <StaggerReveal
+            animation="fade-up"
+            stagger={80}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
             {(customFeatures && customFeatures.length > 0
               ? customFeatures.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.description ?? '' }))
               : sc.features.map(f => ({ Icon: resolveIcon(f.icon), title: f.title, desc: f.desc }))
             ).map(({ Icon, title, desc }) => (
-              <div key={title} className="flex gap-4 p-6 border border-[#c9a84c]/10 hover:border-[#c9a84c]/30 transition-colors">
-                <div className="w-8 h-8 border border-[#c9a84c]/20 flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-3.5 h-3.5 text-[#c9a84c]/60" />
-                </div>
+              <div key={title}
+                className="flex gap-4 p-6 border-r-2"
+                style={{ borderColor: LUX_GOLD, borderRightWidth: '1px', borderRightColor: `${LUX_GOLD}40`,
+                  borderBottomColor: `${LUX_GOLD}10`, borderBottomWidth: '1px' }}>
+                <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: LUX_GOLD }} />
                 <div>
-                  <h3 className="text-white/70 text-sm mb-1">{title}</h3>
-                  <p className="text-white/25 text-xs leading-relaxed">{desc}</p>
+                  <h3 className="font-bold text-sm mb-1 tracking-wide" style={{ color: LUX_GOLD_LIGHT }}>{title}</h3>
+                  <p className="text-xs leading-relaxed" style={{ color: `${LUX_CREAM}45` }}>{desc}</p>
                 </div>
               </div>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
+      <div style={{ backgroundColor: LUX_BG }}>
+        <Testimonials
+          testimonials={testimonials}
+          title="شهادات عملائنا"
+          accentColor={LUX_GOLD}
+          bgColor={LUX_BG}
+          textColor={LUX_CREAM}
+          textLight={`${LUX_CREAM}55`}
+          variant="carousel"
+        />
+      </div>
+
+      {/* FAQ */}
+      <FAQ
+        items={faqs}
+        title="الأسئلة الشائعة"
+        accentColor={LUX_GOLD}
+        bgColor={LUX_BG2}
+        textColor={LUX_CREAM}
+        textLight={`${LUX_CREAM}55`}
+        variant="filled"
+      />
+
       {/* CTA */}
-      <section className="py-20 px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="border border-[#c9a84c]/20 p-12 text-center">
-            <div className="flex items-center gap-4 mb-6 justify-center">
-              <div className="h-px w-8 bg-[#c9a84c]/40" />
-              <span className="text-[#c9a84c] text-[10px] tracking-[0.4em] uppercase">ابدأ مشروعك</span>
-              <div className="h-px w-8 bg-[#c9a84c]/40" />
+      <section className="relative py-32 px-8 overflow-hidden text-center" style={{ backgroundColor: LUX_BG }}>
+        <div className="absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: `radial-gradient(${LUX_GOLD} 1px, transparent 1px)`, backgroundSize: '30px 30px' }} />
+        <div className="absolute inset-0 opacity-[0.15]"
+          style={{ background: `radial-gradient(ellipse at center, ${LUX_GOLD} 0%, transparent 65%)` }} />
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <ScrollReveal animation="fade-up">
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
+              <span className="text-xs tracking-[0.4em] uppercase" style={{ color: LUX_GOLD }}>ابدأ معنا</span>
+              <div className="h-px w-10" style={{ backgroundColor: LUX_GOLD }} />
             </div>
-            <h3 className="text-4xl font-light text-white mb-4">{sc.cta}</h3>
-            <p className="text-white/30 mb-10 max-w-md mx-auto text-sm leading-loose">دعنا نجعل مشروعك تحفة فنية تجمع بين الجمال والوظيفة</p>
-            <div className="flex gap-4 justify-center flex-wrap">
+            <h2 className="font-black mb-6 leading-tight"
+              style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)', color: LUX_CREAM }}>
+              {sc.cta}
+            </h2>
+            <GoldLine />
+            <p className="text-sm mb-12" style={{ color: `${LUX_CREAM}50` }}>{sc.ctaDesc}</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href={`/${tenant.slug}/contact`}
+                className="px-12 py-5 text-xs tracking-widest uppercase font-medium transition-all hover:opacity-90"
+                style={{ backgroundColor: LUX_GOLD, color: LUX_BG }}>
+                تواصل معنا
+              </Link>
               {waUrl && (
                 <a href={waUrl} target="_blank" rel="noopener noreferrer"
-                  className="bg-[#25D366] text-white px-8 py-3 text-xs tracking-[0.25em] uppercase hover:bg-[#20BA5A] transition-colors flex items-center gap-2">
-                  <WhatsAppIcon />
+                  className="px-12 py-5 text-xs tracking-widest uppercase font-medium border transition-all hover:bg-amber-500/10"
+                  style={{ borderColor: `${LUX_GOLD}40`, color: LUX_GOLD }}>
                   واتساب
                 </a>
               )}
-              <Link href={`/${tenant.slug}/contact`}
-                className="bg-[#c9a84c] text-black px-12 py-3 text-xs tracking-[0.25em] uppercase hover:bg-[#b8973b] transition-all duration-300">
-                تواصل معنا
-              </Link>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* FOOTER */}
-      <div className="h-px bg-gradient-to-l from-transparent via-[#c9a84c]/30 to-transparent" />
-      <footer className="bg-[#080808] py-16 px-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-          <div>
-            <div className="flex items-center gap-3 mb-5">
-              {tenant.logo_url && (
-                <Image src={tenant.logo_url} alt="" width={32} height={32} className="rounded-full border border-[#c9a84c]/30 object-cover" />
-              )}
-              <span className="text-[#c9a84c] text-xs tracking-[0.3em] uppercase">{tenant.name_ar}</span>
-            </div>
-            <p className="text-white/20 text-xs leading-relaxed line-clamp-3">{bio}</p>
-          </div>
-          <div>
-            <h4 className="text-[#c9a84c]/50 text-[10px] tracking-[0.3em] uppercase mb-5">روابط سريعة</h4>
-            <div className="space-y-3">
-              {[['/', 'الرئيسية'], ['/projects', sc.portfolioLabel], ['/contact', 'تواصل معنا']].map(([href, label]) => (
-                <Link key={href} href={`/${tenant.slug}${href}`} className="block text-white/20 hover:text-[#c9a84c] transition-colors text-[11px] tracking-widest uppercase">{label}</Link>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 className="text-[#c9a84c]/50 text-[10px] tracking-[0.3em] uppercase mb-5">تواصل معنا</h4>
-            <div className="space-y-3">
-              {tenant.phone && (
-                <a href={`tel:${tenant.phone}`} className="flex items-center gap-2 text-white/20 hover:text-[#c9a84c] transition-colors text-[11px]" dir="ltr">
-                  <Phone className="w-3 h-3" />{tenant.phone}
-                </a>
-              )}
-              {tenant.email && (
-                <a href={`mailto:${tenant.email}`} className="flex items-center gap-2 text-white/20 hover:text-[#c9a84c] transition-colors text-[11px]">
-                  <Mail className="w-3 h-3" />{tenant.email}
-                </a>
-              )}
-              {tenant.address_ar && (
-                <p className="flex items-start gap-2 text-white/15 text-[11px]">
-                  <MapPin className="w-3 h-3 mt-0.5 flex-shrink-0 text-[#c9a84c]/30" />{tenant.address_ar}
-                </p>
-              )}
-            </div>
-            {socials.length > 0 && (
-              <div className="flex gap-4 mt-5">
-                {socials.map(s => (
-                  <a key={s.label} href={s.url!} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-[#c9a84c] transition-colors">
-{s.label}
-                  </a>
-                ))}
+      <footer className="py-12 px-8" style={{ backgroundColor: '#040404', borderTop: `1px solid ${LUX_GOLD}15` }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-10 pb-10" style={{ borderBottom: `1px solid ${LUX_GOLD}10` }}>
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                {tenant.logo_url && <Image src={tenant.logo_url} alt="" width={36} height={36} className="object-contain" />}
+                <span className="font-black tracking-widest uppercase text-xs" style={{ color: LUX_GOLD }}>{tenant.name_ar}</span>
               </div>
-            )}
+              <p className="text-xs leading-relaxed" style={{ color: `${LUX_CREAM}25` }}>{sc.label}</p>
+            </div>
+            <div>
+              <p className="text-xs tracking-widest uppercase mb-4" style={{ color: `${LUX_CREAM}30` }}>روابط</p>
+              <ul className="space-y-2 text-xs" style={{ color: `${LUX_CREAM}25` }}>
+                <li><Link href={`/${tenant.slug}`} className="hover:opacity-70 transition-opacity">الرئيسية</Link></li>
+                <li><Link href={`/${tenant.slug}/projects`} className="hover:opacity-70 transition-opacity">{sc.portfolioLabel}</Link></li>
+                <li><Link href={`/${tenant.slug}/contact`} className="hover:opacity-70 transition-opacity">تواصل</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs tracking-widest uppercase mb-4" style={{ color: `${LUX_CREAM}30` }}>تواصل</p>
+              <ul className="space-y-2 text-xs" style={{ color: `${LUX_CREAM}25` }}>
+                {tenant.phone && <li dir="ltr"><a href={`tel:${tenant.phone}`} className="hover:opacity-70 transition-opacity flex items-center gap-2"><Phone className="w-3 h-3" style={{ color: LUX_GOLD }} />{tenant.phone}</a></li>}
+                {tenant.email && <li><a href={`mailto:${tenant.email}`} className="hover:opacity-70 transition-opacity flex items-center gap-2"><Mail className="w-3 h-3" style={{ color: LUX_GOLD }} />{tenant.email}</a></li>}
+              </ul>
+            </div>
           </div>
-        </div>
-        <div className="h-px bg-[#c9a84c]/10 mb-8" />
-        <div className="flex items-center justify-between">
-          <span className="text-[#c9a84c]/20 text-[10px] tracking-[0.3em] uppercase">{tenant.name_ar}</span>
-          <span className="text-white/10 text-xs">{new Date().getFullYear()}</span>
-          {waUrl && (
-            <a href={waUrl} target="_blank" rel="noopener noreferrer"
-              className="text-white/15 hover:text-[#c9a84c] text-[10px] tracking-widest uppercase transition-colors flex items-center gap-1.5">
-              <WhatsAppIcon />
-              واتساب
-            </a>
-          )}
+          <div className="pt-6 flex items-center justify-between">
+            <p className="text-xs" style={{ color: `${LUX_CREAM}15` }}>© {new Date().getFullYear()} {tenant.name_ar}</p>
+            <div className="h-px w-20" style={{ background: `linear-gradient(to left, transparent, ${LUX_GOLD}30)` }} />
+          </div>
         </div>
       </footer>
 
-      {/* FLOATING WHATSAPP */}
-      {waUrl && (
-        <a href={waUrl} target="_blank" rel="noopener noreferrer"
-          className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#20BA5A] rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110">
-          <WhatsAppIcon />
-        </a>
-      )}
+      {waUrl && <WhatsAppFloat url={waUrl} />}
 
-      {/* BACK TO TOP */}
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 z-50 w-12 h-12 border border-[#c9a84c]/30 bg-[#080808] text-[#c9a84c] flex items-center justify-center shadow-lg transition-all duration-300 hover:bg-[#c9a84c] hover:text-black ${showTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-        <ArrowUp className="w-4 h-4" />
-      </button>
+      {showTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 z-50 w-10 h-10 border flex items-center justify-center transition-all hover:bg-amber-500/10"
+          style={{ borderColor: `${LUX_GOLD}40`, color: LUX_GOLD }}
+          aria-label="للأعلى"
+        >
+          <ArrowUp className="w-4 h-4" />
+        </button>
+      )}
     </div>
   )
 }

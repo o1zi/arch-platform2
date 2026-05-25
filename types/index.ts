@@ -27,6 +27,7 @@ export interface Tenant {
   plan: Plan
   sector: Sector
   whatsapp: string | null
+  video_url: string | null
   subscription_start: string | null
   subscription_end: string | null
   created_at: string
