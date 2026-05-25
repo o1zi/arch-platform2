@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { CustomTheme } from '@/types'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Plus, Palette } from 'lucide-react'
 import AdminThemeActions from './AdminThemeActions'
 
@@ -45,8 +46,7 @@ export default async function AdminThemesPage() {
               {/* Preview */}
               <div className="aspect-video bg-gray-100 relative overflow-hidden">
                 {theme.preview_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={theme.preview_url} alt={theme.name_ar} className="w-full h-full object-cover" />
+                  <Image src={theme.preview_url} alt={theme.name_ar} fill className="object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <Palette className="h-10 w-10 text-gray-300" />

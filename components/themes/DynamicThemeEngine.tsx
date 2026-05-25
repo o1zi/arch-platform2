@@ -232,6 +232,7 @@ export default function DynamicThemeEngine({
     { url: tenant.twitter_url,   label: 'تويتر',    icon: '𝕏'  },
     { url: tenant.linkedin_url,  label: 'لينكدإن',  icon: 'in' },
     { url: tenant.snapchat_url,  label: 'سناب',     icon: '👻' },
+    { url: tenant.tiktok_url,    label: 'تيك توك',  icon: '♪'  },
   ].filter(s => s.url)
 
   // ── Global CSS injection ───────────────────────────────────────────────────

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
+import { Resend } from 'resend'
 
 export async function POST(req: NextRequest) {
   const supabase = await createServiceClient()
@@ -64,7 +65,44 @@ export async function POST(req: NextRequest) {
     performed_by: user.id,
   })
 
-  // TODO: Send welcome email via Resend
+  // إرسال إيميل الترحيب عبر Resend
+  if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 'your_resend_api_key') {
+    try {
+      const resend = new Resend(process.env.RESEND_API_KEY)
+      const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? 'localhost:3000'
+      const protocol = rootDomain.startsWith('localhost') ? 'http' : 'https'
+      const dashboardUrl = `${protocol}://${rootDomain}/dashboard`
+
+      await resend.emails.send({
+        from: process.env.RESEND_FROM_EMAIL ?? 'noreply@yourplatform.com',
+        to: email,
+        subject: `مرحباً بك في المنصة — ${name_ar}`,
+        html: `
+          <div dir="rtl" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #f9f9f9;">
+            <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 8px;">مرحباً بك في المنصة! 🎉</h1>
+            <p style="color: #444; font-size: 16px; line-height: 1.6;">
+              تم إنشاء حساب مكتبك <strong>${name_ar}</strong> بنجاح. يمكنك الآن الدخول وإدارة موقعك.
+            </p>
+            <div style="background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px; margin: 24px 0;">
+              <p style="margin: 0 0 8px; color: #888; font-size: 13px;">بيانات الدخول:</p>
+              <p style="margin: 0 0 4px; color: #1a1a1a;"><strong>البريد الإلكتروني:</strong> ${email}</p>
+              <p style="margin: 0; color: #1a1a1a;"><strong>رابط الداشبورد:</strong> <a href="${dashboardUrl}" style="color: #2563eb;">${dashboardUrl}</a></p>
+            </div>
+            <a href="${dashboardUrl}"
+              style="display: inline-block; background: #1a1a1a; color: #fff; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 15px;">
+              ادخل إلى الداشبورد
+            </a>
+            <p style="margin-top: 32px; color: #888; font-size: 13px;">
+              إذا واجهت أي مشكلة، تواصل معنا على واتساب.
+            </p>
+          </div>
+        `,
+      })
+    } catch (emailErr) {
+      // الإيميل اختياري — لا نوقف العملية لو فشل
+      console.error('Welcome email failed:', emailErr)
+    }
+  }
 
   return NextResponse.json({ tenantId: tenant.id })
 }

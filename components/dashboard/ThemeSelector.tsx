@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { CheckCircle2, Lock, Palette } from 'lucide-react'
+import Image from 'next/image'
 
 const BUILT_IN_THEMES: { id: Theme; name: string; description: string; colors: string[] }[] = [
   {
@@ -179,12 +180,12 @@ export default function ThemeSelector({ tenant, availableThemes, customThemes }:
                 >
                   {/* صورة المعاينة أو شريط الألوان */}
                   {ct.preview_url ? (
-                    <div className="h-32 overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                    <div className="h-32 overflow-hidden relative">
+                      <Image
                         src={ct.preview_url}
                         alt={ct.name_ar}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                       />
                     </div>
                   ) : (

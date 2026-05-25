@@ -4,6 +4,7 @@ import { Tenant, CustomThemeConfig } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Phone, Mail, MapPin } from 'lucide-react'
+import { SocialFloat } from '@/components/themes/shared/SocialFloat'
 
 interface Props {
   tenant: Tenant
@@ -37,7 +38,7 @@ function WhatsAppIcon() {
 
 export default function DynamicContactPage({ tenant, config }: Props) {
   const br = borderRadiusClass(config.layout.borderRadius)
-  const waPhone = tenant.phone?.replace(/\D/g, '')
+  const waPhone = tenant.whatsapp?.replace(/\D/g, '') || tenant.phone?.replace(/\D/g, '')
   const waUrl = waPhone ? `https://wa.me/${waPhone}` : null
 
   const socials = [
@@ -45,6 +46,7 @@ export default function DynamicContactPage({ tenant, config }: Props) {
     { url: tenant.twitter_url, label: 'تويتر' },
     { url: tenant.linkedin_url, label: 'لينكدإن' },
     { url: tenant.snapchat_url, label: 'سناب شات' },
+    { url: tenant.tiktok_url, label: 'تيك توك' },
   ].filter(s => s.url)
 
   return (
@@ -176,7 +178,7 @@ export default function DynamicContactPage({ tenant, config }: Props) {
           {tenant.google_maps_url ? (
             <div className={`overflow-hidden aspect-video ${br}`}>
               <iframe
-                src={tenant.google_maps_url.replace('/maps/', '/maps/embed?')}
+                src={tenant.google_maps_url}
                 className="w-full h-full border-0"
                 allowFullScreen
                 loading="lazy"
@@ -217,6 +219,13 @@ export default function DynamicContactPage({ tenant, config }: Props) {
           </p>
         </div>
       </div>
+
+      <SocialFloat
+        whatsapp={waPhone}
+        snapchat_url={tenant.snapchat_url}
+        tiktok_url={tenant.tiktok_url}
+        whatsapp_note={tenant.whatsapp_note}
+      />
     </div>
   )
 }
