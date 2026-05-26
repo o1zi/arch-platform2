@@ -306,25 +306,25 @@ function PresetMiniPreview({ preset }: { preset: Preset }) {
   const acc = c.accent
   const fontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(f.heading)}:wght@400;700&family=${encodeURIComponent(f.body)}:wght@400&display=swap`
 
-  const btnBg = preset.config.buttons.style === 'gradient'
+  const btnStyle = preset.config.buttons?.style
+  const btnBg = btnStyle === 'gradient'
     ? `linear-gradient(135deg, ${acc}, ${c.accentSecondary ?? acc})`
     : acc
-  const btnR = preset.config.layout.borderRadius === 'none' ? '0' : preset.config.buttons.style === 'pill' ? '9999px' : '6px'
-  const cardBg = preset.config.cards.style === 'glass'
+  const btnR = preset.config.layout.borderRadius === 'none' ? '0' : btnStyle === 'pill' ? '9999px' : '6px'
+  const cardStyleVal = preset.config.cards?.style
+  const cardBg = cardStyleVal === 'glass'
     ? `${c.cardBg ?? '#fff'}cc`
-    : preset.config.cards.style === 'filled'
+    : cardStyleVal === 'filled'
     ? c.secondary
-    : preset.config.cards.style === 'flat'
-    ? (c.cardBg ?? c.background)
     : (c.cardBg ?? c.background)
-  const cardBorder = preset.config.cards.style === 'bordered'
+  const cardBorder = cardStyleVal === 'bordered'
     ? `1.5px solid ${c.border ?? '#e2e8f0'}`
-    : preset.config.cards.style === 'flat'
+    : cardStyleVal === 'flat'
     ? 'none'
-    : preset.config.cards.style === 'glass'
+    : cardStyleVal === 'glass'
     ? `1px solid ${c.border ?? '#e2e8f0'}60`
     : `1px solid ${c.border ?? '#e2e8f0'}`
-  const cardShadow = preset.config.cards.style === 'elevated' ? '0 4px 18px rgba(0,0,0,0.1)' : 'none'
+  const cardShadow = cardStyleVal === 'elevated' ? '0 4px 18px rgba(0,0,0,0.1)' : 'none'
   const heroIsSplit = h.style === 'split' || h.style === 'split-reverse'
   const heroBg = h.style === 'minimal' ? c.background : c.primary
 
