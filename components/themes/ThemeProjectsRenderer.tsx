@@ -5,6 +5,7 @@ import ClassicProjects from './classic/ProjectsPage'
 import BoldProjects from './bold/ProjectsPage'
 import MinimalProjects from './minimal/ProjectsPage'
 import LuxuryProjects from './luxury/ProjectsPage'
+import NebulaProjects from './nebula/ProjectsPage'
 import DynamicProjectsPage from './DynamicProjectsPage'
 
 interface ThemeProjectsProps {
@@ -20,6 +21,7 @@ const renderers = {
   bold: BoldProjects,
   minimal: MinimalProjects,
   luxury: LuxuryProjects,
+  nebula: NebulaProjects,
 }
 
 export function ThemeProjectsRenderer({ tenant, projects, customTheme, sectorConfig }: ThemeProjectsProps) {

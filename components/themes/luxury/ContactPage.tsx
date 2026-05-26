@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { SocialFloat } from '@/components/themes/shared/SocialFloat'
+import { ContactPageTracker } from '@/components/themes/shared/ContactPageTracker'
 
 const LUX_BG = '#080808'
 const LUX_GOLD = '#c9a84c'
@@ -139,11 +140,13 @@ export default function LuxuryContactPage({ tenant }: { tenant: Tenant }) {
 
       <div className="h-px" style={{ background: `linear-gradient(to left, transparent, ${LUX_GOLD}30, transparent)` }} />
 
+      <ContactPageTracker tenantSlug={tenant.slug} />
       <SocialFloat
         whatsapp={waPhone}
         snapchat_url={tenant.snapchat_url}
         tiktok_url={tenant.tiktok_url}
         whatsapp_note={tenant.whatsapp_note}
+        tenantSlug={tenant.slug}
       />
     </div>
   )

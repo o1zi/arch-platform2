@@ -4,6 +4,7 @@ import ClassicContact from './classic/ContactPage'
 import BoldContact from './bold/ContactPage'
 import MinimalContact from './minimal/ContactPage'
 import LuxuryContact from './luxury/ContactPage'
+import NebulaContact from './nebula/ContactPage'
 import DynamicContactPage from './DynamicContactPage'
 
 interface Props {
@@ -17,6 +18,7 @@ const renderers = {
   bold: BoldContact,
   minimal: MinimalContact,
   luxury: LuxuryContact,
+  nebula: NebulaContact,
 }
 
 export function ThemeContactRenderer({ tenant, customTheme }: Props) {

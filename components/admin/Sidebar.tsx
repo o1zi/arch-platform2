@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
-import { LayoutDashboard, Building2, CreditCard, LogOut, ShieldCheck, Palette } from 'lucide-react'
+import { LayoutDashboard, Building2, CreditCard, LogOut, ShieldCheck, Palette, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
   { href: '/admin/tenants', label: 'المكاتب', icon: Building2 },
   { href: '/admin/subscriptions', label: 'الاشتراكات', icon: CreditCard },
   { href: '/admin/themes', label: 'القوالب', icon: Palette },
+  { href: '/admin/analytics', label: 'التحليلات', icon: TrendingUp },
 ]
 
 export default function AdminSidebar() {

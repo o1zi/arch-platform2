@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { SocialFloat } from '@/components/themes/shared/SocialFloat'
+import { ContactPageTracker } from '@/components/themes/shared/ContactPageTracker'
 
 const ACCENT = '#ff4500'
 
@@ -123,11 +124,13 @@ export default function BoldContactPage({ tenant }: { tenant: Tenant }) {
         </div>
       )}
 
+      <ContactPageTracker tenantSlug={tenant.slug} />
       <SocialFloat
         whatsapp={waPhone}
         snapchat_url={tenant.snapchat_url}
         tiktok_url={tenant.tiktok_url}
         whatsapp_note={tenant.whatsapp_note}
+        tenantSlug={tenant.slug}
       />
     </div>
   )

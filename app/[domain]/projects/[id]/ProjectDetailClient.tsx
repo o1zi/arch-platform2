@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin, Phone, Mail, ChevronLeft } from 'lucide-react'
@@ -8,6 +8,7 @@ import { Tenant, Project, ProjectImage, CustomTheme } from '@/types'
 import { SectorConfig } from '@/lib/sectors'
 import { Lightbox } from '@/components/themes/shared/Lightbox'
 import MobileMenu from '@/components/themes/shared/MobileMenu'
+import { trackEvent } from '@/lib/analytics-client'
 
 interface Props {
   tenant: Tenant
@@ -46,6 +47,11 @@ export default function ProjectDetailClient({
 }: Props) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
+
+  // تتبع مشاهدة المشروع
+  useEffect(() => {
+    trackEvent(tenant.slug, 'project_view', { project_title: p.title_ar }, p.id)
+  }, [tenant.slug, p.id, p.title_ar])
 
   const lightboxImages = [
     ...(p.cover_image_url ? [{ url: p.cover_image_url, alt: p.title_ar }] : []),

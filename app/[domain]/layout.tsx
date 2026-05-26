@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getTenantByIdentifier } from '@/lib/tenant'
+import { AnalyticsTracker } from '@/components/themes/shared/AnalyticsTracker'
 
 export default async function TenantLayout({
   children,
@@ -36,5 +37,10 @@ export default async function TenantLayout({
     notFound()
   }
 
-  return <>{children}</>
+  return (
+    <>
+      <AnalyticsTracker tenantSlug={tenant.slug} />
+      {children}
+    </>
+  )
 }

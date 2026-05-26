@@ -5,6 +5,7 @@ import ClassicLayout from './classic/Layout'
 import BoldLayout from './bold/Layout'
 import MinimalLayout from './minimal/Layout'
 import LuxuryLayout from './luxury/Layout'
+import NebulaLayout from './nebula/Layout'
 import DynamicThemeEngine from './DynamicThemeEngine'
 
 const builtInThemes = {
@@ -13,6 +14,7 @@ const builtInThemes = {
   bold: BoldLayout,
   minimal: MinimalLayout,
   luxury: LuxuryLayout,
+  nebula: NebulaLayout,
 }
 
 export function ThemeRenderer({ tenant, projects, featuredProjects, services, features, customTheme, sectorConfig, stats, testimonials, faqs }: ThemeProps) {

@@ -1,4 +1,4 @@
-export type Theme = 'modern' | 'classic' | 'bold' | 'minimal' | 'luxury'
+export type Theme = 'modern' | 'classic' | 'bold' | 'minimal' | 'luxury' | 'nebula'
 export type Plan = 'basic' | 'pro' | 'premium'
 export type TenantUserRole = 'owner' | 'editor'
 export type Sector = 'engineering' | 'contractor' | 'real_estate' | 'interior_design' | 'photography' | 'legal' | 'medical' | 'general'
@@ -335,14 +335,14 @@ export const PLAN_LIMITS = {
   pro: {
     projects: 30,
     storage_mb: 2048,
-    themes: ['modern', 'classic', 'bold', 'minimal', 'luxury'] as Theme[],
+    themes: ['modern', 'classic', 'bold', 'minimal', 'luxury', 'nebula'] as Theme[],
     custom_domain: false,
     price_sar: 2000,
   },
   premium: {
     projects: Infinity,
     storage_mb: 10240,
-    themes: ['modern', 'classic', 'bold', 'minimal', 'luxury'] as Theme[],
+    themes: ['modern', 'classic', 'bold', 'minimal', 'luxury', 'nebula'] as Theme[],
     custom_domain: true,
     price_sar: 3500,
   },

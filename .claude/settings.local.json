@@ -24,7 +24,9 @@
       "Bash(npm run *)",
       "Bash(mkdir -p \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro - Copy\\\\app\\\\api\\\\admin\\\\themes\\\\[id]\\\\tenants\" && echo done)",
       "Bash(dir \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro - Copy\\\\app\" /b /s)",
-      "Bash(findstr \"projects\")"
+      "Bash(findstr \"projects\")",
+      "Bash(npx eslint *)",
+      "Bash(git checkout *)"
     ]
   }
 }
