@@ -1370,8 +1370,8 @@ function LayoutTab({ config, onChange }: { config: CustomThemeConfig; onChange: 
   }
   const l = config.layout
   const s = config.sections ?? {}
-  const allSections = ['hero', 'about', 'services', 'projects', 'features', 'cta', 'footer'] as const
-  const secLabels: Record<string, string> = { hero: '🖼️ الهيرو', about: '👤 عن المكتب', services: '🔧 الخدمات', projects: '🏗️ المشاريع', features: '⭐ المميزات', cta: '📣 دعوة للتواصل', footer: '🔽 التذييل' }
+  const allSections = ['hero', 'about', 'services', 'projects', 'features', 'testimonials', 'faq', 'cta', 'footer'] as const
+  const secLabels: Record<string, string> = { hero: '🖼️ الهيرو', about: '👤 عن المكتب', services: '🔧 الخدمات', projects: '🏗️ المشاريع', features: '⭐ المميزات', testimonials: '💬 آراء العملاء', faq: '❓ الأسئلة الشائعة', cta: '📣 دعوة للتواصل', footer: '🔽 التذييل' }
 
   return (
     <div className="space-y-1">
