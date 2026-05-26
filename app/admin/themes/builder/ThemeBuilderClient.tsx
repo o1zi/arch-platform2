@@ -223,7 +223,7 @@ const PRESETS: Preset[] = [
       hero: { style: 'centered', height: 'screen', overlayOpacity: 0.6, overlayStyle: 'diagonal', textAlign: 'center', showLogo: true, ctaPrimaryText: 'اكتشف أعمالنا', ctaSecondaryText: 'ابدأ معنا', ctaStyle: 'solid', showScrollIndicator: false, tagOverride: '● نصمم المستقبل ●' },
       layout: { borderRadius: 'none', spacing: 'compact', maxWidth: 'wide', sections: ['hero', 'services', 'projects', 'cta', 'footer'] },
       navigation: { style: 'solid', height: 'compact', position: 'sticky', showBorder: true, logoSize: 'sm', ctaInNav: true },
-      projectsGrid: { columns: 2, style: 'masonry', imageRatio: '1/1', hoverEffect: 'zoom', captionStyle: 'overlay' },
+      projectsGrid: { columns: 2, style: 'masonry', imageRatio: 'square', hoverEffect: 'zoom', captionStyle: 'overlay' },
       cards: { style: 'bordered', padding: 'normal', iconShape: 'none', hoverEffect: 'glow', accentBar: 'left' },
       buttons: { style: 'pill', size: 'lg', glow: true, uppercase: true, hoverScale: true },
       sections: { aboutLayout: 'stacked', aboutShowStats: true, servicesStyle: 'numbered', ctaLayout: 'centered', ctaBg: 'accent', footerColumns: 2, footerStyle: 'dark', footerShowSocial: true },
