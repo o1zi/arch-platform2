@@ -217,7 +217,8 @@ export default function DynamicThemeEngine({
   const pattern    = dec.backgroundPattern ?? 'none'
   const patOp      = dec.patternOpacity ?? 0.04
 
-  const bio    = tenant.bio_ar ?? sc.heroTagline
+  const bio       = tenant.bio_ar  // النص الكامل — يظهر فقط في قسم "من نحن"
+  const heroTagline = sc.heroTagline // شعار قصير للهيرو
   const waNum  = (tenant.whatsapp ?? tenant.phone)?.replace(/\D/g, '')
   const waUrl  = waNum ? `https://wa.me/${waNum}` : null
   const btnS   = btns.style ?? 'solid'
@@ -321,7 +322,7 @@ export default function DynamicThemeEngine({
               style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-hw)' as never, color: 'var(--c-nav-text)' }}>
               {tenant.name_ar}
             </h1>
-            {bio && <p className="text-sm leading-loose mb-10 max-w-md opacity-70" style={{ color: 'var(--c-nav-text)', lineHeight: 'var(--line-h)' }}>{bio}</p>}
+            {heroTagline && <p className="text-sm leading-loose mb-10 max-w-md opacity-70" style={{ color: 'var(--c-nav-text)', lineHeight: 'var(--line-h)' }}>{heroTagline}</p>}
             <div className="flex gap-3 flex-wrap">
               <PrimaryBtn href={`/${tenant.slug}/projects`}>{ctaP}</PrimaryBtn>
               <OutlineBtn href={`/${tenant.slug}/contact`}>{ctaS}</OutlineBtn>
@@ -356,7 +357,7 @@ export default function DynamicThemeEngine({
               style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-hw)' as never, color: 'var(--c-nav-text)' }}>
               {tenant.name_ar}
             </h1>
-            {bio && <p className="text-sm mb-10 max-w-lg mx-auto opacity-70" style={{ color: 'var(--c-nav-text)', lineHeight: 'var(--line-h)' }}>{bio}</p>}
+            {heroTagline && <p className="text-sm mb-10 max-w-lg mx-auto opacity-70" style={{ color: 'var(--c-nav-text)', lineHeight: 'var(--line-h)' }}>{heroTagline}</p>}
             <div className="flex gap-3 justify-center flex-wrap">
               <PrimaryBtn href={`/${tenant.slug}/projects`}>{ctaP}</PrimaryBtn>
               <OutlineBtn href={`/${tenant.slug}/contact`}>{ctaS}</OutlineBtn>
@@ -382,7 +383,7 @@ export default function DynamicThemeEngine({
               style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-hw)' as never, color: 'var(--c-text)' }}>
               {tenant.name_ar}
             </h1>
-            {bio && <p className="text-base max-w-xl mb-10" style={{ color: 'var(--c-text-light)', lineHeight: 'var(--line-h)' }}>{bio}</p>}
+            {heroTagline && <p className="text-base max-w-xl mb-10" style={{ color: 'var(--c-text-light)', lineHeight: 'var(--line-h)' }}>{heroTagline}</p>}
             <div className="flex gap-3 flex-wrap">
               <PrimaryBtn href={`/${tenant.slug}/projects`}>{ctaP}</PrimaryBtn>
               <Link href={`/${tenant.slug}/contact`} className={`px-8 py-3 font-medium border transition-colors ${br} hover:opacity-70`}
@@ -410,7 +411,7 @@ export default function DynamicThemeEngine({
             <h1 className="text-7xl md:text-[9rem] leading-none mb-6 heading-text" style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-hw)' as never, color: 'var(--c-nav-text)' }}>
               {tenant.name_ar}
             </h1>
-            {bio && <p className="text-base mb-10 max-w-lg opacity-60" style={{ color: 'var(--c-nav-text)', lineHeight: 'var(--line-h)' }}>{bio}</p>}
+            {heroTagline && <p className="text-base mb-10 max-w-lg opacity-60" style={{ color: 'var(--c-nav-text)', lineHeight: 'var(--line-h)' }}>{heroTagline}</p>}
             <div className="flex gap-4 flex-wrap">
               <PrimaryBtn href={`/${tenant.slug}/projects`}>{ctaP}</PrimaryBtn>
               <OutlineBtn href={`/${tenant.slug}/contact`}>{ctaS}</OutlineBtn>
@@ -440,7 +441,7 @@ export default function DynamicThemeEngine({
             style={{ fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-hw)' as never, color: 'var(--c-nav-text)' }}>
             {tenant.name_ar}
           </h1>
-          {bio && <p className="text-sm mb-10 max-w-md opacity-70" style={{ color: 'var(--c-nav-text)', lineHeight: 'var(--line-h)' }}>{bio}</p>}
+          {heroTagline && <p className="text-sm mb-10 max-w-md opacity-70" style={{ color: 'var(--c-nav-text)', lineHeight: 'var(--line-h)' }}>{heroTagline}</p>}
           <div className="flex gap-4 flex-wrap">
             <PrimaryBtn href={`/${tenant.slug}/projects`}>{ctaP}</PrimaryBtn>
             <OutlineBtn href={`/${tenant.slug}/contact`}>{ctaS}</OutlineBtn>
