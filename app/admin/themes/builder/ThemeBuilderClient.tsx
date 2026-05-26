@@ -130,6 +130,352 @@ const PALETTES = [
 ]
 
 // ══════════════════════════════════════════════════════════════════════════════
+// PRESETS — 5 نماذج جاهزة مختلفة كلياً
+// ══════════════════════════════════════════════════════════════════════════════
+
+interface Preset {
+  id: string
+  name: string
+  tag: string
+  description: string
+  mood: string
+  badges: string[]
+  config: CustomThemeConfig
+}
+
+const PRESETS: Preset[] = [
+  // ─── 1. الفاخر الداكن ────────────────────────────────────────────────────
+  {
+    id: 'luxury-dark',
+    name: 'الفاخر الداكن',
+    tag: 'LUXURY DARK',
+    description: 'أسود عميق مع ذهب ملكي — للمكاتب الراقية التي تبيع تميّزاً',
+    mood: 'حصري · فاخر · احترافي',
+    badges: ['Playfair Display', 'ذهبي', 'هيرو سينمائي', 'بطاقات زجاجية'],
+    config: {
+      colors: {
+        primary: '#050505', secondary: '#0f0f0f', accent: '#c9a84c',
+        accentSecondary: '#e2c97e', background: '#0a0a0a', text: '#f5f0e8',
+        textLight: '#888070', cardBg: '#111111', border: '#252520',
+        navBg: '#000000', navText: '#f5f0e8',
+      },
+      fonts: { heading: 'Playfair Display', body: 'Cairo', headingWeight: 700, bodyWeight: 300, bodySize: 'md', letterSpacing: 'wide', lineHeight: 'relaxed' },
+      hero: { style: 'fullscreen', height: 'screen', overlayOpacity: 0.5, overlayStyle: 'radial', textAlign: 'center', showLogo: true, ctaPrimaryText: 'استعرض الأعمال', ctaSecondaryText: 'تواصل معنا', ctaStyle: 'gradient', showScrollIndicator: true, tagOverride: 'مكتب هندسي متميز' },
+      layout: { borderRadius: 'none', spacing: 'spacious', maxWidth: 'wide', sections: ['hero', 'about', 'services', 'projects', 'cta', 'footer'] },
+      navigation: { style: 'glass', height: 'normal', position: 'sticky', showBorder: true, logoSize: 'md', ctaInNav: true },
+      projectsGrid: { columns: 3, style: 'masonry', imageRatio: '3/4', hoverEffect: 'zoom', captionStyle: 'overlay' },
+      cards: { style: 'glass', padding: 'large', iconShape: 'none', hoverEffect: 'glow', accentBar: 'top' },
+      buttons: { style: 'gradient', size: 'lg', glow: true, uppercase: true, hoverScale: true },
+      sections: { aboutLayout: 'full-width', aboutShowStats: true, servicesStyle: 'card-grid', ctaLayout: 'centered', ctaBg: 'accent', footerColumns: 3, footerStyle: 'dark', footerShowSocial: true },
+      effects: { sectionFade: true, hoverLift: true, smoothScroll: true, projectZoom: true, buttonScale: true },
+      decorations: { sectionDivider: 'wave', backgroundPattern: 'none', patternOpacity: 0.03, accentLine: true, sectionBgAlt: false, cardCornerDot: true },
+      contactStyle: { layout: 'centered', cardStyle: 'glass', socialStyle: 'icons', showWhatsappFloat: true, mapStyle: 'embedded' },
+      visualPreset: { themeMood: 'فاخر داكن', density: 'normal', contrast: 'high' },
+    },
+  },
+
+  // ─── 2. العصري النظيف ────────────────────────────────────────────────────
+  {
+    id: 'modern-clean',
+    name: 'العصري النظيف',
+    tag: 'MODERN CLEAN',
+    description: 'أبيض ناصع وأزرق جريء — بساطة احترافية تناسب كل العملاء',
+    mood: 'نظيف · واضح · عصري',
+    badges: ['Raleway', 'أزرق', 'هيرو مقسم', 'بطاقات مرفوعة'],
+    config: {
+      colors: {
+        primary: '#1e293b', secondary: '#334155', accent: '#2563eb',
+        accentSecondary: '#60a5fa', background: '#ffffff', text: '#0f172a',
+        textLight: '#64748b', cardBg: '#f8fafc', border: '#e2e8f0',
+        navBg: '#1e293b', navText: '#ffffff',
+      },
+      fonts: { heading: 'Raleway', body: 'Tajawal', headingWeight: 700, bodyWeight: 400, bodySize: 'md', letterSpacing: 'normal', lineHeight: 'relaxed' },
+      hero: { style: 'split', height: 'tall', overlayOpacity: 0.3, overlayStyle: 'gradient', textAlign: 'right', showLogo: true, ctaPrimaryText: 'مشاريعنا', ctaSecondaryText: 'تواصل', ctaStyle: 'solid', showScrollIndicator: true },
+      layout: { borderRadius: 'lg', spacing: 'normal', maxWidth: 'normal', sections: ['hero', 'services', 'projects', 'cta', 'footer'] },
+      navigation: { style: 'solid', height: 'normal', position: 'sticky', showBorder: false, logoSize: 'md', ctaInNav: true },
+      projectsGrid: { columns: 3, style: 'grid', imageRatio: '4/3', hoverEffect: 'zoom', captionStyle: 'below' },
+      cards: { style: 'elevated', padding: 'normal', iconShape: 'rounded', hoverEffect: 'lift', accentBar: 'none' },
+      buttons: { style: 'solid', size: 'md', glow: false, uppercase: false, hoverScale: true },
+      sections: { aboutLayout: 'side-by-side', aboutShowStats: true, servicesStyle: 'card-grid', ctaLayout: 'split', ctaBg: 'primary', footerColumns: 2, footerStyle: 'dark', footerShowSocial: true },
+      effects: { sectionFade: true, hoverLift: true, smoothScroll: true, projectZoom: true, buttonScale: true },
+      decorations: { sectionDivider: 'none', backgroundPattern: 'none', patternOpacity: 0.04, accentLine: true, sectionBgAlt: true },
+      contactStyle: { layout: 'side-by-side', cardStyle: 'bordered', socialStyle: 'pills', showWhatsappFloat: true, mapStyle: 'embedded' },
+      visualPreset: { themeMood: 'عصري نظيف', density: 'normal', contrast: 'normal' },
+    },
+  },
+
+  // ─── 3. الجريء والقوي ────────────────────────────────────────────────────
+  {
+    id: 'bold-power',
+    name: 'الجريء والقوي',
+    tag: 'BOLD POWER',
+    description: 'أسود مع أحمر صارخ — لمن يريد أن يُرى ولا يُنسى أبداً',
+    mood: 'جريء · صارخ · مبدع',
+    badges: ['Bebas Neue', 'أحمر', 'هيرو مركزي', 'بطاقات محددة'],
+    config: {
+      colors: {
+        primary: '#0c0c0c', secondary: '#1a1a1a', accent: '#ef4444',
+        accentSecondary: '#f97316', background: '#050505', text: '#f5f5f5',
+        textLight: '#a1a1aa', cardBg: '#111111', border: '#27272a',
+        navBg: '#000000', navText: '#ffffff',
+      },
+      fonts: { heading: 'Bebas Neue', body: 'Almarai', headingWeight: 400, bodyWeight: 400, bodySize: 'md', letterSpacing: 'wider', lineHeight: 'normal' },
+      hero: { style: 'centered', height: 'screen', overlayOpacity: 0.6, overlayStyle: 'diagonal', textAlign: 'center', showLogo: true, ctaPrimaryText: 'اكتشف أعمالنا', ctaSecondaryText: 'ابدأ معنا', ctaStyle: 'solid', showScrollIndicator: false, tagOverride: '● نصمم المستقبل ●' },
+      layout: { borderRadius: 'none', spacing: 'compact', maxWidth: 'wide', sections: ['hero', 'services', 'projects', 'cta', 'footer'] },
+      navigation: { style: 'solid', height: 'compact', position: 'sticky', showBorder: true, logoSize: 'sm', ctaInNav: true },
+      projectsGrid: { columns: 2, style: 'masonry', imageRatio: '1/1', hoverEffect: 'zoom', captionStyle: 'overlay' },
+      cards: { style: 'bordered', padding: 'normal', iconShape: 'none', hoverEffect: 'glow', accentBar: 'left' },
+      buttons: { style: 'pill', size: 'lg', glow: true, uppercase: true, hoverScale: true },
+      sections: { aboutLayout: 'full-width', aboutShowStats: true, servicesStyle: 'numbered', ctaLayout: 'centered', ctaBg: 'accent', footerColumns: 2, footerStyle: 'dark', footerShowSocial: true },
+      effects: { sectionFade: false, hoverLift: false, smoothScroll: true, projectZoom: true, buttonScale: true, pulseAccent: true },
+      decorations: { sectionDivider: 'slash', backgroundPattern: 'grid', patternOpacity: 0.03, accentLine: false, sectionBgAlt: false, sectionLabel: true },
+      contactStyle: { layout: 'grid', cardStyle: 'filled', socialStyle: 'icons', showWhatsappFloat: true, mapStyle: 'button' },
+      visualPreset: { themeMood: 'جريء وقوي', density: 'rich', contrast: 'high' },
+    },
+  },
+
+  // ─── 4. الكلاسيكي الرصين ─────────────────────────────────────────────────
+  {
+    id: 'classic-dignity',
+    name: 'الكلاسيكي الرصين',
+    tag: 'CLASSIC',
+    description: 'كريمي دافئ وبني أنيق — للمكاتب ذات التاريخ والمكانة العريقة',
+    mood: 'راسخ · موثوق · تقليدي راقٍ',
+    badges: ['Cormorant Garamond', 'ذهبي دافئ', 'هيرو بسيط', 'بطاقات مسطحة'],
+    config: {
+      colors: {
+        primary: '#2c1a0e', secondary: '#3d2b1a', accent: '#8b5e3c',
+        accentSecondary: '#c9a484', background: '#fdf8f0', text: '#2c1a0e',
+        textLight: '#7c6655', cardBg: '#f5efe3', border: '#e8d5c0',
+        navBg: '#2c1a0e', navText: '#fdf8f0',
+      },
+      fonts: { heading: 'Cormorant Garamond', body: 'Cairo', headingWeight: 700, bodyWeight: 400, bodySize: 'md', letterSpacing: 'normal', lineHeight: 'loose' },
+      hero: { style: 'minimal', height: 'tall', overlayOpacity: 0.1, overlayStyle: 'flat', textAlign: 'right', showLogo: true, ctaPrimaryText: 'معرض المشاريع', ctaSecondaryText: 'تواصل معنا', ctaStyle: 'outline', showScrollIndicator: false },
+      layout: { borderRadius: 'sm', spacing: 'spacious', maxWidth: 'narrow', sections: ['hero', 'about', 'services', 'projects', 'cta', 'footer'] },
+      navigation: { style: 'bordered', height: 'tall', position: 'sticky', showBorder: true, logoSize: 'lg', ctaInNav: false },
+      projectsGrid: { columns: 2, style: 'grid', imageRatio: '4/3', hoverEffect: 'none', captionStyle: 'below' },
+      cards: { style: 'flat', padding: 'large', iconShape: 'rounded', hoverEffect: 'none', accentBar: 'right' },
+      buttons: { style: 'outline', size: 'md', glow: false, uppercase: false, hoverScale: false },
+      sections: { aboutLayout: 'side-by-side', aboutShowStats: false, servicesStyle: 'icon-list', ctaLayout: 'centered', ctaBg: 'primary', footerColumns: 2, footerStyle: 'dark', footerShowSocial: false },
+      effects: { sectionFade: false, hoverLift: false, smoothScroll: true, projectZoom: false, buttonScale: false },
+      decorations: { sectionDivider: 'dots-row', backgroundPattern: 'none', patternOpacity: 0.04, accentLine: true, sectionBgAlt: true },
+      contactStyle: { layout: 'list', cardStyle: 'flat', socialStyle: 'text', showWhatsappFloat: false, mapStyle: 'embedded' },
+      visualPreset: { themeMood: 'كلاسيكي رصين', density: 'minimal', contrast: 'low' },
+    },
+  },
+
+  // ─── 5. البحري الفاخر ────────────────────────────────────────────────────
+  {
+    id: 'navy-gold',
+    name: 'البحري الفاخر',
+    tag: 'NAVY GOLD',
+    description: 'كحلي داكن مع ذهب ملكي — هيبة الشركات الكبرى وثقة المؤسسات',
+    mood: 'مهيب · مؤسسي · ثقة عالية',
+    badges: ['Montserrat', 'ذهبي كحلي', 'هيرو معكوس', 'بطاقات زجاجية'],
+    config: {
+      colors: {
+        primary: '#0f2044', secondary: '#1a3466', accent: '#c9a84c',
+        accentSecondary: '#e2c97e', background: '#ffffff', text: '#0f2044',
+        textLight: '#4a6080', cardBg: '#f0f4fa', border: '#c5d5e8',
+        navBg: '#0f2044', navText: '#ffffff',
+      },
+      fonts: { heading: 'Montserrat', body: 'Readex Pro', headingWeight: 700, bodyWeight: 400, bodySize: 'md', letterSpacing: 'wide', lineHeight: 'relaxed' },
+      hero: { style: 'split-reverse', height: 'tall', overlayOpacity: 0.4, overlayStyle: 'gradient', textAlign: 'right', showLogo: true, ctaPrimaryText: 'أعمالنا المميزة', ctaSecondaryText: 'اتصل بنا', ctaStyle: 'gradient', showScrollIndicator: true, tagOverride: 'خبرة تمتد لعقود' },
+      layout: { borderRadius: 'md', spacing: 'normal', maxWidth: 'normal', sections: ['hero', 'about', 'services', 'projects', 'cta', 'footer'] },
+      navigation: { style: 'solid', height: 'normal', position: 'sticky', showBorder: false, logoSize: 'md', ctaInNav: true },
+      projectsGrid: { columns: 3, style: 'grid', imageRatio: '4/3', hoverEffect: 'zoom', captionStyle: 'overlay' },
+      cards: { style: 'glass', padding: 'normal', iconShape: 'circle', hoverEffect: 'lift', accentBar: 'bottom' },
+      buttons: { style: 'gradient', size: 'md', glow: false, uppercase: false, hoverScale: true },
+      sections: { aboutLayout: 'side-by-side', aboutShowStats: true, servicesStyle: 'card-grid', ctaLayout: 'split', ctaBg: 'gradient', footerColumns: 3, footerStyle: 'dark', footerShowSocial: true },
+      effects: { sectionFade: true, hoverLift: true, smoothScroll: true, projectZoom: true, buttonScale: false },
+      decorations: { sectionDivider: 'none', backgroundPattern: 'dots', patternOpacity: 0.03, accentLine: true, sectionBgAlt: true },
+      contactStyle: { layout: 'side-by-side', cardStyle: 'glass', socialStyle: 'pills', showWhatsappFloat: true, mapStyle: 'embedded' },
+      visualPreset: { themeMood: 'بحري فاخر', density: 'normal', contrast: 'normal' },
+    },
+  },
+]
+
+// ── Mini Preview for each preset ────────────────────────────────────────────
+
+function PresetMiniPreview({ preset }: { preset: Preset }) {
+  const c = preset.config.colors
+  const f = preset.config.fonts
+  const h = preset.config.hero
+  const hFont = `'${f.heading}', serif`
+  const bFont = `'${f.body}', sans-serif`
+  const acc = c.accent
+  const fontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(f.heading)}:wght@400;700&family=${encodeURIComponent(f.body)}:wght@400&display=swap`
+
+  const btnBg = preset.config.buttons.style === 'gradient'
+    ? `linear-gradient(135deg, ${acc}, ${c.accentSecondary ?? acc})`
+    : acc
+  const btnR = preset.config.layout.borderRadius === 'none' ? '0' : preset.config.buttons.style === 'pill' ? '9999px' : '6px'
+  const cardBg = preset.config.cards.style === 'glass'
+    ? `${c.cardBg ?? '#fff'}cc`
+    : preset.config.cards.style === 'filled'
+    ? c.secondary
+    : preset.config.cards.style === 'flat'
+    ? (c.cardBg ?? c.background)
+    : (c.cardBg ?? c.background)
+  const cardBorder = preset.config.cards.style === 'bordered'
+    ? `1.5px solid ${c.border ?? '#e2e8f0'}`
+    : preset.config.cards.style === 'flat'
+    ? 'none'
+    : preset.config.cards.style === 'glass'
+    ? `1px solid ${c.border ?? '#e2e8f0'}60`
+    : `1px solid ${c.border ?? '#e2e8f0'}`
+  const cardShadow = preset.config.cards.style === 'elevated' ? '0 4px 18px rgba(0,0,0,0.1)' : 'none'
+  const heroIsSplit = h.style === 'split' || h.style === 'split-reverse'
+  const heroBg = h.style === 'minimal' ? c.background : c.primary
+
+  return (
+    <div style={{ width: '100%', aspectRatio: '16/10', overflow: 'hidden', borderRadius: 6, position: 'relative', fontFamily: bFont, userSelect: 'none' }}>
+      <style>{`@import url('${fontUrl}');`}</style>
+      {/* Nav */}
+      <div style={{ height: 14, backgroundColor: c.navBg, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 8px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: acc }} />
+          <div style={{ width: 22, height: 3, borderRadius: 2, backgroundColor: `${c.navText ?? '#fff'}90` }} />
+        </div>
+        <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+          <div style={{ width: 12, height: 2, borderRadius: 2, backgroundColor: `${c.navText ?? '#fff'}50` }} />
+          <div style={{ width: 12, height: 2, borderRadius: 2, backgroundColor: `${c.navText ?? '#fff'}50` }} />
+          <div style={{ padding: '1px 5px', borderRadius: btnR, background: btnBg, fontSize: 5, color: '#fff', fontFamily: bFont }}>●</div>
+        </div>
+      </div>
+      {/* Hero */}
+      {heroIsSplit ? (
+        <div style={{ display: 'flex', flexDirection: h.style === 'split-reverse' ? 'row-reverse' : 'row' }}>
+          <div style={{ flex: 3, backgroundColor: heroBg, padding: '10px 10px', position: 'relative' }}>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle at 30% 50%, ${acc}18, transparent 70%)` }} />
+            <div style={{ position: 'relative', textAlign: h.textAlign === 'center' ? 'center' : 'right' }}>
+              {h.tagOverride && <div style={{ fontSize: 5, color: acc, marginBottom: 2, letterSpacing: 1, fontFamily: bFont }}>{h.tagOverride}</div>}
+              <div style={{ width: 16, height: 1.5, backgroundColor: acc, marginBottom: 4, marginLeft: h.textAlign === 'center' ? 'auto' : 0, marginRight: h.textAlign !== 'left' ? 0 : 'auto' }} />
+              <div style={{ fontSize: 9, fontWeight: f.headingWeight ?? 700, color: c.navText ?? '#fff', fontFamily: hFont, lineHeight: 1.2, marginBottom: 4 }}>مكتب هندسي</div>
+              <div style={{ fontSize: 5, color: `${c.navText ?? '#fff'}70`, marginBottom: 6, fontFamily: bFont }}>نصمم مستقبلك</div>
+              <div style={{ display: 'inline-block', padding: '2px 7px', borderRadius: btnR, background: btnBg, fontSize: 5, color: '#fff', fontFamily: bFont }}>استعرض</div>
+            </div>
+          </div>
+          <div style={{ flex: 2, backgroundColor: c.secondary, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle at center, ${acc}22, transparent 70%)` }} />
+            <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: `${acc}30` }} />
+          </div>
+        </div>
+      ) : h.style === 'minimal' ? (
+        <div style={{ backgroundColor: c.background, padding: '14px 10px', textAlign: h.textAlign === 'center' ? 'center' : 'right' }}>
+          <div style={{ width: 16, height: 1.5, backgroundColor: acc, marginBottom: 5, marginLeft: h.textAlign === 'center' ? 'auto' : 0, marginRight: h.textAlign !== 'left' ? 0 : 'auto' }} />
+          <div style={{ fontSize: 10, fontWeight: f.headingWeight ?? 700, color: c.text, fontFamily: hFont, lineHeight: 1.2, marginBottom: 4 }}>مكتب هندسي</div>
+          <div style={{ fontSize: 5, color: c.textLight, marginBottom: 7, fontFamily: bFont }}>نصمم مستقبلك بأفضل المعايير</div>
+          <div style={{ display: 'inline-block', padding: '2px 8px', borderRadius: btnR, border: `1.5px solid ${acc}`, color: acc, fontSize: 5, fontFamily: bFont }}>استعرض المشاريع</div>
+        </div>
+      ) : (
+        <div style={{ backgroundColor: c.primary, padding: '14px 10px', position: 'relative', textAlign: h.textAlign === 'center' ? 'center' : 'right' }}>
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: h.overlayStyle === 'radial' ? `radial-gradient(circle at 40% 40%, ${acc}22, transparent 70%)` : `linear-gradient(135deg, ${c.primary}, ${c.secondary ?? c.primary}80)` }} />
+          <div style={{ position: 'relative' }}>
+            {h.tagOverride && <div style={{ fontSize: 5, color: acc, marginBottom: 3, letterSpacing: 1 }}>{h.tagOverride}</div>}
+            <div style={{ width: 16, height: 1.5, backgroundColor: acc, marginBottom: 5, marginLeft: h.textAlign === 'center' ? 'auto' : 0, marginRight: h.textAlign !== 'left' ? 0 : 'auto' }} />
+            <div style={{ fontSize: 10, fontWeight: f.headingWeight ?? 700, color: c.navText ?? '#fff', fontFamily: hFont, lineHeight: 1.2, marginBottom: 4 }}>مكتب هندسي</div>
+            <div style={{ fontSize: 5, color: `${c.navText ?? '#fff'}70`, marginBottom: 7 }}>نصمم مستقبلك</div>
+            <div style={{ display: 'inline-block', padding: '2px 8px', borderRadius: btnR, background: btnBg, fontSize: 5, color: '#fff', fontFamily: bFont }}>استعرض</div>
+          </div>
+        </div>
+      )}
+      {/* Cards row */}
+      <div style={{ backgroundColor: c.background, padding: '6px 7px', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 4 }}>
+        {[0,1,2].map(i => (
+          <div key={i} style={{ borderRadius: 4, padding: 4, background: cardBg, border: cardBorder, boxShadow: cardShadow }}>
+            <div style={{ width: 12, height: 8, borderRadius: 2, backgroundColor: `${acc}30`, marginBottom: 3 }} />
+            <div style={{ width: '80%', height: 2.5, borderRadius: 1, backgroundColor: c.text, marginBottom: 2, opacity: 0.6 }} />
+            <div style={{ width: '55%', height: 2, borderRadius: 1, backgroundColor: c.textLight, opacity: 0.4 }} />
+          </div>
+        ))}
+      </div>
+      {/* Footer strip */}
+      <div style={{ backgroundColor: c.primary, height: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 40, height: 1.5, borderRadius: 1, backgroundColor: `${acc}60` }} />
+      </div>
+    </div>
+  )
+}
+
+// ── Preset Picker Page ───────────────────────────────────────────────────────
+
+function PresetPicker({ onSelect, onBlank }: { onSelect: (p: Preset) => void; onBlank: () => void }) {
+  return (
+    <div className="min-h-screen bg-gray-50" dir="rtl">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-8 py-5">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">اختر نموذجاً للبداية</h1>
+            <p className="text-sm text-gray-500 mt-0.5">كل نموذج يختلف كلياً عن الآخر — ستتمكن من تعديل كل شيء بعد الاختيار</p>
+          </div>
+          <button
+            onClick={onBlank}
+            className="text-sm text-gray-500 hover:text-gray-800 border border-gray-200 hover:border-gray-400 px-4 py-2 rounded-lg transition-colors"
+          >
+            ابدأ من صفحة بيضاء ←
+          </button>
+        </div>
+      </div>
+
+      {/* Grid */}
+      <div className="max-w-6xl mx-auto px-8 py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+          {PRESETS.map(preset => (
+            <button
+              key={preset.id}
+              onClick={() => onSelect(preset)}
+              className="group bg-white rounded-xl border border-gray-200 overflow-hidden text-right hover:border-gray-900 hover:shadow-xl transition-all duration-200 flex flex-col"
+            >
+              {/* Tag bar */}
+              <div
+                className="px-3 py-1.5 flex items-center justify-between"
+                style={{ backgroundColor: preset.config.colors.primary }}
+              >
+                <span className="text-[9px] font-bold tracking-widest opacity-60" style={{ color: preset.config.colors.navText ?? '#fff' }}>
+                  {preset.tag}
+                </span>
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: preset.config.colors.accent }} />
+              </div>
+
+              {/* Mini Preview */}
+              <div className="border-b border-gray-100">
+                <PresetMiniPreview preset={preset} />
+              </div>
+
+              {/* Info */}
+              <div className="p-3 flex-1 flex flex-col gap-2">
+                <div>
+                  <p className="font-bold text-gray-900 text-sm">{preset.name}</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5 leading-relaxed">{preset.description}</p>
+                </div>
+                <div className="text-[10px] text-gray-400 italic">{preset.mood}</div>
+                <div className="flex flex-wrap gap-1 mt-auto pt-1">
+                  {preset.badges.map(b => (
+                    <span key={b} className="bg-gray-100 text-gray-600 text-[9px] px-1.5 py-0.5 rounded-full">{b}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA */}
+              <div className="px-3 pb-3">
+                <div
+                  className="w-full text-center text-xs font-bold py-2 rounded-lg transition-all group-hover:opacity-90"
+                  style={{ backgroundColor: preset.config.colors.accent, color: '#fff' }}
+                >
+                  ابدأ بهذا النموذج ←
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
 // HELPER COMPONENTS
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -1536,6 +1882,9 @@ export default function ThemeBuilderClient({ existingTheme }: { existingTheme?: 
   const [activeTab, setActiveTab] = useState('colors')
   const [saving, setSaving] = useState(false)
 
+  // stage: 'pick' → show preset gallery | 'build' → show editor
+  const [stage, setStage] = useState<'pick' | 'build'>(existingTheme ? 'build' : 'pick')
+
   const [meta, setMeta] = useState({
     name_ar:      existingTheme?.name_ar ?? '',
     name_en:      existingTheme?.name_en ?? '',
@@ -1547,6 +1896,18 @@ export default function ThemeBuilderClient({ existingTheme }: { existingTheme?: 
   const [config, setConfig] = useState<CustomThemeConfig>(
     existingTheme?.config ?? DEFAULT_THEME_CONFIG
   )
+
+  // Called when user picks a preset
+  function applyPreset(preset: Preset) {
+    setConfig(preset.config)
+    setMeta(m => ({
+      ...m,
+      name_ar: m.name_ar || preset.name,
+      description_ar: m.description_ar || preset.description,
+    }))
+    setStage('build')
+    setActiveTab('colors')
+  }
 
   function updateMeta(key: string, val: string) {
     setMeta(m => ({ ...m, [key]: val }))
@@ -1570,6 +1931,18 @@ export default function ThemeBuilderClient({ existingTheme }: { existingTheme?: 
 
   const previewFontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(config.fonts.heading)}:wght@400;700;900&family=${encodeURIComponent(config.fonts.body)}:wght@300;400;700&display=swap`
 
+  // ── Preset picker stage ──────────────────────────────────────────────────
+  if (stage === 'pick') {
+    return (
+      <div className="-m-4 md:-m-6">
+        <PresetPicker
+          onSelect={applyPreset}
+          onBlank={() => setStage('build')}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col md:flex-row h-[calc(100vh-100px)] md:h-[calc(100vh-48px)] overflow-hidden -m-4 md:-m-6" dir="rtl">
       <style>{`@import url('${previewFontUrl}');`}</style>
@@ -1588,6 +1961,15 @@ export default function ThemeBuilderClient({ existingTheme }: { existingTheme?: 
             placeholder="اسم القالب..."
             className="flex-1 h-8 text-sm font-bold border-0 shadow-none focus-visible:ring-0 px-0"
           />
+          {!existingTheme && (
+            <button
+              onClick={() => setStage('pick')}
+              className="text-xs text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 px-2.5 py-1 rounded-lg transition-colors flex-shrink-0 whitespace-nowrap"
+              title="العودة لاختيار نموذج آخر"
+            >
+              🎨 تغيير النموذج
+            </button>
+          )}
           <Button onClick={handleSave} disabled={saving} size="sm" className="gap-1.5 flex-shrink-0">
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
             حفظ
