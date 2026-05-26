@@ -1,10 +1,10 @@
 import { CustomThemeConfig } from '@/types'
 
-const HERO_STYLES = ['fullscreen', 'split', 'centered', 'minimal'] as const
+const HERO_STYLES = ['fullscreen', 'split', 'split-reverse', 'centered', 'minimal', 'cinematic'] as const
 const BORDER_RADIUS = ['none', 'sm', 'md', 'lg', 'full'] as const
 const SPACING = ['compact', 'normal', 'spacious'] as const
-const SECTIONS = ['hero', 'about', 'services', 'projects', 'features', 'cta', 'footer'] as const
-const GRID_STYLES = ['grid', 'masonry', 'list'] as const
+const SECTIONS = ['hero', 'about', 'services', 'projects', 'features', 'testimonials', 'faq', 'cta', 'footer'] as const
+const GRID_STYLES = ['grid', 'masonry', 'list', 'magazine', 'filmstrip'] as const
 const TEXT_ALIGNS = ['right', 'center', 'left'] as const
 
 function isHexColor(val: unknown): val is string {
