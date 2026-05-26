@@ -15,21 +15,31 @@ import {
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
-// ── Google Fonts ───────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════════════════════════════════════
+
 const HEADING_FONTS = [
+  // Luxury Serif
   'Playfair Display', 'Cormorant Garamond', 'Cinzel', 'DM Serif Display',
+  'Libre Baskerville', 'Lora', 'Source Serif 4', 'Crimson Pro', 'Spectral',
+  // Modern Sans
   'Josefin Sans', 'Raleway', 'Montserrat', 'Bebas Neue', 'Poppins',
-  'Plus Jakarta Sans', 'Inter', 'Outfit', 'Cairo', 'Tajawal', 'Almarai',
-  'Readex Pro', 'Noto Kufi Arabic', 'IBM Plex Sans Arabic',
+  'Plus Jakarta Sans', 'Inter', 'Outfit', 'Jost', 'DM Sans',
+  'Space Grotesk', 'Syne', 'Barlow', 'Albert Sans', 'Tenor Sans',
+  // Arabic
+  'Cairo', 'Tajawal', 'Almarai', 'Readex Pro', 'Noto Kufi Arabic', 'IBM Plex Sans Arabic',
 ]
 
 const BODY_FONTS = [
+  // Arabic first
   'Cairo', 'Tajawal', 'Almarai', 'Readex Pro', 'IBM Plex Sans Arabic',
-  'Noto Kufi Arabic', 'Noto Naskh Arabic', 'Poppins', 'Inter',
-  'Plus Jakarta Sans', 'Outfit', 'Raleway',
+  'Noto Kufi Arabic', 'Noto Naskh Arabic', 'El Messiri',
+  // Latin
+  'Poppins', 'Inter', 'Plus Jakarta Sans', 'Outfit', 'Raleway',
+  'DM Sans', 'Jost', 'Barlow', 'Lora', 'Source Serif 4',
 ]
 
-// ── Tabs ───────────────────────────────────────────────────────────────────────
 const TABS = [
   { id: 'basics',   label: 'الأساسيات', emoji: '⚙️' },
   { id: 'colors',   label: 'الألوان',   emoji: '🎨' },
@@ -40,9 +50,89 @@ const TABS = [
   { id: 'projects', label: 'المشاريع',  emoji: '🏗️' },
   { id: 'cards',    label: 'البطاقات',  emoji: '🃏' },
   { id: 'effects',  label: 'التأثيرات', emoji: '✨' },
+  { id: 'contact',  label: 'التواصل',   emoji: '📞' },
+  { id: 'identity', label: 'الهوية',    emoji: '🎭' },
 ]
 
-// ── Helper UI ──────────────────────────────────────────────────────────────────
+const PALETTES = [
+  {
+    name: 'فاخر داكن', emoji: '⬛',
+    primary: '#0a0a0a', secondary: '#111111', accent: '#c9a84c', accentSecondary: '#e2c97e',
+    background: '#0a0a0a', text: '#f5f5f0', textLight: '#888880',
+    cardBg: '#111111', border: '#2a2a2a', navBg: '#000000', navText: '#ffffff',
+  },
+  {
+    name: 'أبيض عصري', emoji: '⬜',
+    primary: '#1e293b', secondary: '#334155', accent: '#2563eb', accentSecondary: '#60a5fa',
+    background: '#ffffff', text: '#0f172a', textLight: '#64748b',
+    cardBg: '#f8fafc', border: '#e2e8f0', navBg: '#1e293b', navText: '#ffffff',
+  },
+  {
+    name: 'جريء أحمر', emoji: '🔴',
+    primary: '#0c0c0c', secondary: '#1a1a1a', accent: '#ef4444', accentSecondary: '#f87171',
+    background: '#000000', text: '#ffffff', textLight: '#a1a1aa',
+    cardBg: '#111111', border: '#27272a', navBg: '#000000', navText: '#ffffff',
+  },
+  {
+    name: 'كريمي كلاسيك', emoji: '🟤',
+    primary: '#2c1a0e', secondary: '#3d2b1a', accent: '#8b5e3c', accentSecondary: '#c9a484',
+    background: '#fdf8f0', text: '#2c1a0e', textLight: '#7c6655',
+    cardBg: '#f5efe3', border: '#e8d5c0', navBg: '#2c1a0e', navText: '#fdf8f0',
+  },
+  {
+    name: 'بحري فاخر', emoji: '🔵',
+    primary: '#0f2044', secondary: '#1a3466', accent: '#c9a84c', accentSecondary: '#e2c97e',
+    background: '#ffffff', text: '#0f2044', textLight: '#4a6080',
+    cardBg: '#f0f4fa', border: '#c5d5e8', navBg: '#0f2044', navText: '#ffffff',
+  },
+  {
+    name: 'أخضر طبيعي', emoji: '🟢',
+    primary: '#1a3d2b', secondary: '#254d37', accent: '#7fb069', accentSecondary: '#a3c990',
+    background: '#fafaf8', text: '#1a2e1a', textLight: '#4a6e4a',
+    cardBg: '#f0f5ee', border: '#c8dfc0', navBg: '#1a3d2b', navText: '#ffffff',
+  },
+  {
+    name: 'بنفسجي ملكي', emoji: '🟣',
+    primary: '#1e0a3c', secondary: '#2d1259', accent: '#9b59b6', accentSecondary: '#c39bd3',
+    background: '#faf7ff', text: '#1e0a3c', textLight: '#6c4a8a',
+    cardBg: '#f3eeff', border: '#d8c5f0', navBg: '#1e0a3c', navText: '#ffffff',
+  },
+  {
+    name: 'رمادي تيتانيوم', emoji: '⚫',
+    primary: '#18181b', secondary: '#27272a', accent: '#71717a', accentSecondary: '#a1a1aa',
+    background: '#fafafa', text: '#09090b', textLight: '#71717a',
+    cardBg: '#f4f4f5', border: '#e4e4e7', navBg: '#18181b', navText: '#fafafa',
+  },
+  {
+    name: 'وردي راقٍ', emoji: '🌸',
+    primary: '#1a0a14', secondary: '#2d1428', accent: '#db2777', accentSecondary: '#f472b6',
+    background: '#fff1f7', text: '#1a0a14', textLight: '#9d174d',
+    cardBg: '#fce7f3', border: '#fbcfe8', navBg: '#1a0a14', navText: '#ffffff',
+  },
+  {
+    name: 'برتقالي جريء', emoji: '🟠',
+    primary: '#0f0800', secondary: '#1a1000', accent: '#ea580c', accentSecondary: '#f97316',
+    background: '#fff7ed', text: '#0f0800', textLight: '#92400e',
+    cardBg: '#fff3e0', border: '#fed7aa', navBg: '#0f0800', navText: '#ffffff',
+  },
+  {
+    name: 'فيروزي مائي', emoji: '🩵',
+    primary: '#0a2233', secondary: '#0f3347', accent: '#0891b2', accentSecondary: '#22d3ee',
+    background: '#f0fdfe', text: '#0a2233', textLight: '#0e7490',
+    cardBg: '#ecfeff', border: '#a5f3fc', navBg: '#0a2233', navText: '#ffffff',
+  },
+  {
+    name: 'بني أرضي', emoji: '🌿',
+    primary: '#2d1b0e', secondary: '#3d2a18', accent: '#b45309', accentSecondary: '#d97706',
+    background: '#fffbf5', text: '#2d1b0e', textLight: '#78350f',
+    cardBg: '#fef3c7', border: '#fde68a', navBg: '#2d1b0e', navText: '#fef3c7',
+  },
+]
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HELPER COMPONENTS
+// ══════════════════════════════════════════════════════════════════════════════
+
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pt-5 pb-2 border-b border-gray-100">
@@ -73,223 +163,594 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
         value ? 'bg-gray-900' : 'bg-gray-200'
       )}
     >
-      <span
-        className={cn(
-          'absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200',
-          value ? 'translate-x-5 left-0.5' : 'left-0.5'
-        )}
-      />
+      <span className={cn(
+        'absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200',
+        value ? 'translate-x-5 left-0.5' : 'left-0.5'
+      )} />
     </button>
   )
 }
 
-function ColorPicker({
-  value, onChange, label,
-}: { value: string; onChange: (v: string) => void; label: string }) {
+function ColorPicker({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) {
   return (
     <div className="flex items-center justify-between py-1.5">
       <p className="text-sm text-gray-700">{label}</p>
       <div className="flex items-center gap-2">
         <span className="text-xs text-gray-400 font-mono w-16 text-left" dir="ltr">{value}</span>
         <label className="cursor-pointer">
-          <div
-            className="w-8 h-8 rounded-lg border-2 border-gray-200 shadow-sm hover:scale-110 transition-transform"
-            style={{ backgroundColor: value }}
-          />
-          <input
-            type="color"
-            value={value}
-            onChange={e => onChange(e.target.value)}
-            className="sr-only"
-          />
+          <div className="w-8 h-8 rounded-lg border-2 border-gray-200 shadow-sm hover:scale-110 transition-transform"
+            style={{ backgroundColor: value }} />
+          <input type="color" value={value} onChange={e => onChange(e.target.value)} className="sr-only" />
         </label>
       </div>
     </div>
   )
 }
 
-function Sel({
-  value, onChange, options,
-}: { value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
+function Sel({ value, onChange, options }: {
+  value: string
+  onChange: (v: string) => void
+  options: { value: string; label: string }[]
+}) {
   return (
-    <Select value={value} onValueChange={(v) => v && onChange(v)}>
-      <SelectTrigger className="h-8 text-sm">
-        <SelectValue />
-      </SelectTrigger>
+    <Select value={value} onValueChange={v => v && onChange(v)}>
+      <SelectTrigger className="h-8 text-sm"><SelectValue /></SelectTrigger>
       <SelectContent>
-        {options.map(o => (
-          <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-        ))}
+        {options.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
       </SelectContent>
     </Select>
   )
 }
 
-// ── Live Preview ───────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// LIVE PREVIEW — 3 PAGES
+// ══════════════════════════════════════════════════════════════════════════════
+
 function LivePreview({ config, meta }: { config: CustomThemeConfig; meta: { name_ar: string } }) {
-  const c = config.colors
-  const f = config.fonts
-  const br = { none: '0px', sm: '4px', md: '8px', lg: '16px', full: '9999px' }[config.layout.borderRadius] ?? '8px'
+  const [page, setPage] = useState<'home' | 'projects' | 'contact'>('home')
 
-  return (
-    <div className="h-full overflow-y-auto p-4 bg-gray-100">
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=${encodeURIComponent(f.heading)}:wght@400;700;900&family=${encodeURIComponent(f.body)}:wght@300;400;700&display=swap');`}</style>
+  const c   = config.colors
+  const f   = config.fonts
+  const h   = config.hero
+  const n   = config.navigation ?? {}
+  const l   = config.layout
+  const pg  = config.projectsGrid
+  const crd = config.cards ?? {}
+  const btn = config.buttons ?? {}
+  const sec = config.sections ?? {}
+  const dec = config.decorations ?? {}
+  const cs  = config.contactStyle ?? {}
 
-      <p className="text-xs text-gray-400 mb-3 font-medium">معاينة حية — تتحدث فورياً</p>
+  // ── Derived values ────────────────────────────────────────────────────────
 
-      {/* Mini browser chrome */}
-      <div className="rounded-xl overflow-hidden shadow-2xl border border-gray-200" dir="rtl">
+  const brMap: Record<string, string> = { none: '0px', sm: '4px', md: '8px', lg: '16px', full: '9999px' }
+  const br    = brMap[l.borderRadius] ?? '8px'
+  const btnBr = btn.style === 'pill' ? '9999px' : br
+  const hFont = `'${f.heading}', serif`
+  const bFont = `'${f.body}', sans-serif`
+  const spGap = { compact: 4, normal: 8, spacious: 14 }[l.spacing] ?? 8
 
-        {/* Nav */}
-        <div className="h-10 flex items-center justify-between px-4" style={{ backgroundColor: c.navBg }}>
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full" style={{ backgroundColor: c.accent }} />
-            <span className="text-xs font-bold" style={{ color: c.navText, fontFamily: `'${f.heading}', serif` }}>
-              {meta.name_ar || 'اسم المكتب'}
-            </span>
+  // Nav
+  const navH: React.CSSProperties = { height: { compact: '36px', normal: '44px', tall: '56px' }[n.height ?? 'normal'] }
+  const navBg: React.CSSProperties =
+    n.style === 'glass'    ? { backgroundColor: `${c.navBg ?? c.primary}bb`, backdropFilter: 'blur(16px)' } :
+    n.style === 'blur'     ? { backgroundColor: `${c.navBg ?? c.primary}99`, backdropFilter: 'blur(10px)' } :
+    n.style === 'bordered' ? { backgroundColor: c.navBg ?? c.primary, borderBottom: `1.5px solid ${c.accent}` } :
+                             { backgroundColor: c.navBg ?? c.primary }
+
+  // Button
+  const btnStyle: React.CSSProperties = (() => {
+    const base: React.CSSProperties = { borderRadius: btnBr, display: 'inline-block', fontSize: 8, padding: '4px 10px', fontFamily: bFont, fontWeight: btn.uppercase ? 700 : 600, textTransform: btn.uppercase ? 'uppercase' : 'none', letterSpacing: btn.uppercase ? 1 : 0, cursor: 'pointer', boxShadow: btn.glow ? `0 0 12px ${c.accent}80` : 'none', transition: 'all 0.2s' }
+    switch (btn.style ?? 'solid') {
+      case 'outline':  return { ...base, background: 'transparent', color: c.accent, border: `1.5px solid ${c.accent}` }
+      case 'ghost':    return { ...base, background: 'transparent', color: c.navText ?? '#fff', border: `1px solid ${c.navText ?? '#fff'}40` }
+      case 'gradient': return { ...base, backgroundImage: `linear-gradient(135deg, ${c.accent}, ${c.accentSecondary ?? c.accent})`, color: '#fff', border: 'none' }
+      case 'pill':     return { ...base, backgroundColor: c.accent, color: '#fff', border: 'none', borderRadius: '9999px' }
+      default:         return { ...base, backgroundColor: c.accent, color: '#fff', border: 'none' }
+    }
+  })()
+
+  const btnSecondary: React.CSSProperties = { ...btnStyle, backgroundColor: 'transparent', backgroundImage: 'none', color: c.navText ?? '#fff', border: `1px solid ${c.navText ?? '#fff'}50`, boxShadow: 'none' }
+
+  // Card
+  const cardSt: React.CSSProperties = (() => {
+    switch (crd.style ?? 'elevated') {
+      case 'flat':     return { background: c.cardBg ?? c.background, border: 'none', boxShadow: 'none' }
+      case 'bordered': return { background: c.cardBg ?? c.background, border: `2px solid ${c.border ?? '#e2e8f0'}` }
+      case 'glass':    return { background: `${c.cardBg ?? '#fff'}cc`, border: `1px solid ${c.border ?? '#e2e8f0'}80`, backdropFilter: 'blur(10px)' }
+      case 'filled':   return { background: c.secondary, border: 'none', boxShadow: 'none' }
+      case 'ghost':    return { background: 'transparent', border: `1px dashed ${c.border ?? '#e2e8f0'}` }
+      default:         return { background: c.cardBg ?? c.background, border: `1px solid ${c.border ?? '#e2e8f0'}`, boxShadow: '0 4px 20px rgba(0,0,0,0.07)' }
+    }
+  })()
+
+  const cardTextCol  = crd.style === 'filled' ? (c.navText ?? '#fff') : c.text
+  const cardSubCol   = crd.style === 'filled' ? `${c.navText ?? '#fff'}80` : c.textLight
+
+  const accentBarSt: React.CSSProperties = crd.accentBar && crd.accentBar !== 'none' ? ({
+    right:  { borderRight:  `3px solid ${c.accent}` },
+    left:   { borderLeft:   `3px solid ${c.accent}` },
+    top:    { borderTop:    `3px solid ${c.accent}` },
+    bottom: { borderBottom: `3px solid ${c.accent}` },
+  }[crd.accentBar] ?? {}) : {}
+
+  const cardPad = { compact: '8px', normal: '12px', large: '18px' }[crd.padding ?? 'normal']
+
+  // Footer
+  const ftBg   = { dark: c.primary, light: c.background, accent: c.accent, minimal: c.background }[sec.footerStyle ?? 'dark'] ?? c.primary
+  const ftText = ['light', 'minimal'].includes(sec.footerStyle ?? 'dark') ? c.text : '#fff'
+
+  // CTA
+  const ctaBgSt: React.CSSProperties = sec.ctaBg === 'gradient'
+    ? { backgroundImage: `linear-gradient(135deg, ${c.primary}, ${c.secondary ?? c.primary})` }
+    : { backgroundColor: sec.ctaBg === 'accent' ? c.accent : sec.ctaBg === 'background' ? c.background : c.primary }
+  const ctaTextCol = sec.ctaBg === 'background' ? c.text : '#fff'
+
+  // Contact cards
+  const conCardSt: React.CSSProperties = (() => {
+    switch (cs.cardStyle ?? 'bordered') {
+      case 'flat':     return { background: c.cardBg ?? c.background, border: 'none' }
+      case 'glass':    return { background: `${c.cardBg ?? '#fff'}cc`, backdropFilter: 'blur(10px)', border: `1px solid ${c.border ?? '#e2e8f0'}60` }
+      case 'filled':   return { background: c.primary, color: '#fff' }
+      default:         return { background: c.cardBg ?? c.background, border: `2px solid ${c.border ?? '#e2e8f0'}` }
+    }
+  })()
+
+  const conCardTextCol = cs.cardStyle === 'filled' ? '#fff' : c.text
+  const conCardSubCol  = cs.cardStyle === 'filled' ? '#ffffff80' : c.textLight
+
+  const fontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(f.heading)}:wght@400;700;900&family=${encodeURIComponent(f.body)}:wght@300;400;700&display=swap`
+
+  // ── Nav Bar (shared) ──────────────────────────────────────────────────────
+
+  const NavBar = (
+    <div style={{ ...navH, ...navBg, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 14px', position: 'relative', zIndex: 10, flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+        <div style={{ width: n.logoSize === 'lg' ? 22 : n.logoSize === 'sm' ? 14 : 18, height: n.logoSize === 'lg' ? 22 : n.logoSize === 'sm' ? 14 : 18, borderRadius: '50%', backgroundColor: c.accent, flexShrink: 0 }} />
+        <span style={{ color: c.navText ?? '#fff', fontFamily: hFont, fontSize: n.logoSize === 'lg' ? 12 : 10, fontWeight: 700 }}>
+          {meta.name_ar || 'اسم المكتب'}
+        </span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        {['الرئيسية', 'المشاريع', 'التواصل'].map(lnk => (
+          <span key={lnk} style={{ color: c.navText ?? '#fff', fontSize: 8, opacity: 0.7, fontFamily: bFont }}>{lnk}</span>
+        ))}
+        {n.ctaInNav !== false && (
+          <span style={{ ...btnStyle, fontSize: 7, padding: '2px 7px' }}>{h.ctaSecondaryText ?? 'تواصل'}</span>
+        )}
+      </div>
+      {n.showBorder && (
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 1, backgroundColor: c.accent }} />
+      )}
+    </div>
+  )
+
+  // ── Section accent line ───────────────────────────────────────────────────
+
+  const SectionHead = ({ label, center = false }: { label: string; center?: boolean }) => (
+    <div style={{ marginBottom: spGap + 2, textAlign: center ? 'center' : 'right' }}>
+      {dec.accentLine !== false && (
+        <div style={{ width: 24, height: 2, backgroundColor: c.accent, marginBottom: 5, marginRight: center ? 'auto' : 0, marginLeft: center ? 'auto' : 0 }} />
+      )}
+      {dec.sectionLabel && (
+        <div style={{ fontSize: 28, fontWeight: 900, color: `${c.accent}08`, fontFamily: hFont, lineHeight: 1, marginBottom: -14 }}>●</div>
+      )}
+      <p style={{ fontSize: 11, fontWeight: f.headingWeight ?? 700, color: c.text, fontFamily: hFont, textTransform: f.uppercase ? 'uppercase' : 'none', letterSpacing: f.uppercase ? 1 : 0 }}>{label}</p>
+    </div>
+  )
+
+  // ── Hero ─────────────────────────────────────────────────────────────────
+
+  const heroTextAlign = h.textAlign === 'center' ? 'center' : h.textAlign === 'left' ? 'left' : 'right'
+
+  const HeroContent = ({ textCol }: { textCol: string }) => (
+    <div style={{ textAlign: heroTextAlign }}>
+      {dec.accentLine !== false && (
+        <div style={{ width: 32, height: 2, backgroundColor: c.accent, marginBottom: 6, marginRight: heroTextAlign !== 'right' ? 'auto' : 0, marginLeft: heroTextAlign !== 'left' ? 'auto' : 0 }} />
+      )}
+      {h.tagOverride && (
+        <p style={{ fontSize: 8, color: c.accent, fontWeight: 700, marginBottom: 4, fontFamily: bFont, letterSpacing: 2, textTransform: 'uppercase' }}>{h.tagOverride}</p>
+      )}
+      <h2 style={{ fontSize: 17, fontWeight: f.headingWeight ?? 700, color: textCol, fontFamily: hFont, lineHeight: 1.25, marginBottom: 6, textTransform: f.uppercase ? 'uppercase' : 'none' }}>
+        مكتب الهندسة المعمارية
+      </h2>
+      <p style={{ fontSize: 9, color: `${textCol}80`, marginBottom: 12, fontFamily: bFont, lineHeight: 1.5 }}>
+        نصمم مستقبلك بأفضل المعايير العالمية
+      </p>
+      <div style={{ display: 'flex', gap: 6, justifyContent: heroTextAlign === 'center' ? 'center' : heroTextAlign === 'left' ? 'flex-start' : 'flex-end' }}>
+        <span style={btnStyle}>{h.ctaPrimaryText ?? 'استعرض مشاريعنا'}</span>
+        <span style={btnSecondary}>{h.ctaSecondaryText ?? 'تواصل معنا'}</span>
+      </div>
+    </div>
+  )
+
+  const renderHero = () => {
+    if (h.style === 'split' || h.style === 'split-reverse') {
+      const rev = h.style === 'split-reverse'
+      return (
+        <div style={{ display: 'flex', flexDirection: rev ? 'row-reverse' : 'row' }}>
+          <div style={{ flex: 3, padding: '22px 16px', backgroundColor: c.primary, position: 'relative' }}>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle at ${rev ? '80%' : '20%'} 50%, ${c.accent}12, transparent 70%)` }} />
+            <div style={{ position: 'relative' }}><HeroContent textCol={c.navText ?? '#fff'} /></div>
           </div>
-          <div className="hidden sm:flex items-center gap-3">
-            <span className="text-[10px] opacity-60" style={{ color: c.navText }}>الرئيسية</span>
-            <span className="text-[10px] opacity-60" style={{ color: c.navText }}>المشاريع</span>
-            <span
-              className="text-[10px] px-2 py-0.5"
-              style={{ backgroundColor: c.accent, color: '#fff', borderRadius: br }}
-            >تواصل</span>
+          <div style={{ flex: 2, minHeight: 100, backgroundColor: c.secondary, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle at center, ${c.accent}25, transparent 70%)` }} />
+            <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: `${c.accent}30`, position: 'relative', zIndex: 1 }} />
           </div>
         </div>
+      )
+    }
 
-        {/* Hero */}
-        <div className="relative px-6 py-10" style={{ backgroundColor: c.primary }}>
-          <div className="absolute inset-0 opacity-10"
-            style={{ backgroundImage: `radial-gradient(circle at 20% 50%, ${c.accent} 0%, transparent 60%)` }} />
-          <div className="relative">
-            <div className="w-16 h-0.5 mb-3" style={{ backgroundColor: c.accent }} />
-            <h2
-              className="text-xl font-black mb-2 leading-tight"
-              style={{ color: c.navText, fontFamily: `'${f.heading}', serif` }}
-            >
-              مكتب الهندسة المعمارية
-            </h2>
-            <p className="text-xs opacity-60 mb-4" style={{ color: c.navText }}>
-              نصمم مستقبلك بأفضل المعايير العالمية
-            </p>
-            <div className="flex gap-2">
-              <span
-                className="text-[10px] px-3 py-1.5 font-bold"
-                style={{ backgroundColor: c.accent, color: '#fff', borderRadius: br }}
-              >استعرض مشاريعنا</span>
-              <span
-                className="text-[10px] px-3 py-1.5 font-bold"
-                style={{ border: `1px solid ${c.navText}40`, color: c.navText, borderRadius: br }}
-              >تواصل معنا</span>
+    if (h.style === 'minimal') {
+      return (
+        <div style={{ padding: '24px 16px', backgroundColor: c.background }}>
+          <HeroContent textCol={c.text} />
+        </div>
+      )
+    }
+
+    if (h.style === 'centered') {
+      return (
+        <div style={{ padding: '28px 16px', backgroundColor: c.primary, textAlign: 'center', position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(ellipse at 50% 60%, ${c.accent}18, transparent 70%)` }} />
+          <div style={{ position: 'relative' }}><HeroContent textCol={c.navText ?? '#fff'} /></div>
+        </div>
+      )
+    }
+
+    // fullscreen / cinematic
+    const overlayGrad =
+      h.overlayStyle === 'radial'    ? `radial-gradient(circle at 30% 50%, ${c.accent}18, transparent 60%), linear-gradient(to left, ${c.primary}ee, ${c.primary}88)` :
+      h.overlayStyle === 'vignette'  ? `radial-gradient(ellipse at center, transparent 30%, ${c.primary}cc 100%)` :
+      h.overlayStyle === 'diagonal'  ? `linear-gradient(135deg, ${c.primary}ee 0%, ${c.primary}55 100%)` :
+      h.overlayStyle === 'flat'      ? c.primary :
+                                       `linear-gradient(to left, ${c.primary}f0, ${c.primary}80)`
+    return (
+      <div style={{ padding: '30px 16px', backgroundColor: c.secondary, position: 'relative' }}>
+        <div style={{ position: 'absolute', inset: 0, background: overlayGrad, opacity: h.overlayOpacity + 0.3 }} />
+        <div style={{ position: 'relative' }}><HeroContent textCol={c.navText ?? '#fff'} /></div>
+      </div>
+    )
+  }
+
+  // ── Services Cards ────────────────────────────────────────────────────────
+
+  const renderServices = () => {
+    const altBg = dec.sectionBgAlt ? (c.cardBg ?? '#f8fafc') : c.background
+    return (
+      <div style={{ padding: `${spGap + 6}px 12px`, backgroundColor: altBg }}>
+        <SectionHead label="خدماتنا" />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 5 }}>
+          {['التصميم المعماري', 'الإشراف الهندسي', 'الاستشارات'].map((svc, i) => {
+            const iShape = crd.iconShape === 'circle' ? '50%' : crd.iconShape === 'square' ? '0' : crd.iconShape === 'none' ? 'none' : br
+            return (
+              <div key={i} style={{ ...cardSt, ...accentBarSt, padding: cardPad, borderRadius: br, position: 'relative', overflow: 'hidden' }}>
+                {crd.showNumber && (
+                  <div style={{ position: 'absolute', top: 2, left: 4, fontSize: 20, fontWeight: 900, fontFamily: hFont, color: `${c.accent}10`, lineHeight: 1 }}>0{i + 1}</div>
+                )}
+                {dec.cardCornerDot && (
+                  <div style={{ position: 'absolute', top: 5, left: 5, width: 4, height: 4, borderRadius: '50%', backgroundColor: c.accent }} />
+                )}
+                {crd.iconShape !== 'none' && (
+                  <div style={{ width: 22, height: 22, marginBottom: 6, backgroundColor: `${c.accent}18`, borderRadius: iShape, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: crd.iconShape === 'diamond' ? 'rotate(45deg)' : 'none' }}>
+                    <div style={{ width: 9, height: 9, borderRadius: '50%', backgroundColor: c.accent, transform: crd.iconShape === 'diamond' ? 'rotate(-45deg)' : 'none' }} />
+                  </div>
+                )}
+                <p style={{ fontSize: 9, fontWeight: 700, color: cardTextCol, fontFamily: hFont }}>{svc}</p>
+                <p style={{ fontSize: 7, color: cardSubCol, marginTop: 2, fontFamily: bFont }}>وصف مختصر للخدمة</p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  // ── Projects section (home) ───────────────────────────────────────────────
+
+  const renderProjectsSection = () => {
+    const gridCols = pg.columns === 4 ? 'repeat(4,1fr)' : pg.columns === 2 ? '1fr 1fr' : 'repeat(3,1fr)'
+    const ratio    = { square: '1/1', '4/3': '4/3', '16/9': '16/9', '3/4': '3/4', dynamic: '4/3' }[pg.imageRatio ?? '4/3']
+    const isList   = pg.style === 'list'
+    const colors   = [c.primary, c.secondary, c.accent, c.accentSecondary ?? c.accent]
+    const numCols  = pg.columns === 4 ? 4 : 3
+
+    return (
+      <div style={{ padding: `${spGap + 6}px 12px`, backgroundColor: c.background }}>
+        <SectionHead label="أبرز مشاريعنا" />
+        {isList ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {[0, 1, 2].map(i => (
+              <div key={i} style={{ display: 'flex', borderRadius: br, overflow: 'hidden', border: `1px solid ${c.border ?? '#e2e8f0'}`, backgroundColor: c.cardBg ?? c.background }}>
+                <div style={{ width: 50, height: 38, backgroundColor: colors[i % 4], flexShrink: 0 }} />
+                <div style={{ padding: '5px 8px', flex: 1 }}>
+                  <p style={{ fontSize: 9, fontWeight: 600, color: c.text, fontFamily: hFont }}>مشروع {i + 1}</p>
+                  <p style={{ fontSize: 7, color: c.textLight, fontFamily: bFont, marginTop: 1 }}>2024 • سكني</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 4 }}>
+            {Array.from({ length: numCols }).map((_, i) => (
+              <div key={i} style={{ borderRadius: br, overflow: 'hidden', position: 'relative', aspectRatio: ratio, backgroundColor: colors[i % 4] }}>
+                {pg.captionStyle === 'overlay' && (
+                  <div style={{ position: 'absolute', bottom: 0, insetInline: 0, padding: '4px 6px', background: 'linear-gradient(to top,rgba(0,0,0,.7),transparent)' }}>
+                    <p style={{ fontSize: 7, color: '#fff', fontWeight: 600 }}>مشروع {i + 1}</p>
+                  </div>
+                )}
+                {pg.captionStyle === 'floating' && (
+                  <div style={{ position: 'absolute', top: 4, right: 4, background: `${c.cardBg ?? '#fff'}ee`, borderRadius: 4, padding: '2px 5px' }}>
+                    <p style={{ fontSize: 7, color: c.text, fontWeight: 600 }}>مشروع {i + 1}</p>
+                  </div>
+                )}
+                {pg.captionStyle === 'slide' && (
+                  <div style={{ position: 'absolute', bottom: 0, insetInline: 0, height: '40%', background: `linear-gradient(to top,${c.primary}ee,transparent)`, display: 'flex', alignItems: 'flex-end', padding: '4px 6px' }}>
+                    <p style={{ fontSize: 7, color: '#fff', fontWeight: 600 }}>مشروع {i + 1}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {pg.captionStyle === 'below' && (
+          <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 4, marginTop: 4 }}>
+            {Array.from({ length: numCols }).map((_, i) => (
+              <div key={i} style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: 8, fontWeight: 600, color: c.text }}>مشروع {i + 1}</p>
+                <p style={{ fontSize: 7, color: c.textLight }}>2024</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // ── CTA ──────────────────────────────────────────────────────────────────
+
+  const renderCTA = () => {
+    if (sec.ctaLayout === 'banner') {
+      return (
+        <div style={{ ...ctaBgSt, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <p style={{ fontSize: 10, fontWeight: 700, color: ctaTextCol, fontFamily: hFont }}>هل تريد مشروعاً مميزاً؟</p>
+          <span style={btnStyle}>ابدأ الآن</span>
+        </div>
+      )
+    }
+    if (sec.ctaLayout === 'split') {
+      return (
+        <div style={{ ...ctaBgSt, display: 'flex' }}>
+          <div style={{ flex: 2, padding: '16px 12px' }}>
+            <p style={{ fontSize: 10, fontWeight: 700, color: ctaTextCol, fontFamily: hFont, marginBottom: 4 }}>هل تريد مشروعاً مميزاً؟</p>
+            <p style={{ fontSize: 8, color: `${ctaTextCol}70`, marginBottom: 8 }}>تواصل معنا اليوم</p>
+            <span style={btnStyle}>ابدأ الآن</span>
+          </div>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: `${c.accent}15` }}>
+            <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: `${c.accent}35` }} />
+          </div>
+        </div>
+      )
+    }
+    return (
+      <div style={{ ...ctaBgSt, padding: '18px 12px', textAlign: 'center' }}>
+        <p style={{ fontSize: 11, fontWeight: 700, color: ctaTextCol, fontFamily: hFont, marginBottom: 4 }}>هل تريد مشروعاً مميزاً؟</p>
+        <p style={{ fontSize: 8, color: `${ctaTextCol}70`, marginBottom: 10 }}>تواصل معنا اليوم</p>
+        <span style={btnStyle}>ابدأ الآن</span>
+      </div>
+    )
+  }
+
+  // ── Footer ────────────────────────────────────────────────────────────────
+
+  const renderFooter = () => (
+    <div style={{ backgroundColor: ftBg, padding: '10px 14px', borderTop: `1px solid ${c.accent}18` }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+        <span style={{ fontSize: 9, fontWeight: 700, color: ftText, fontFamily: hFont }}>{meta.name_ar || 'المكتب'}</span>
+        {sec.footerShowSocial !== false && (
+          <div style={{ display: 'flex', gap: 4 }}>
+            {['📸', '🐦', '💼'].map((ic, i) => (
+              <div key={i} style={{ width: 14, height: 14, borderRadius: '50%', backgroundColor: `${ftText}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 7 }}>{ic}</div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div style={{ height: 1, backgroundColor: `${ftText}12`, marginBottom: 5 }} />
+      <p style={{ fontSize: 7, color: `${ftText}45` }}>© 2025 جميع الحقوق محفوظة</p>
+    </div>
+  )
+
+  // ── Projects PAGE ─────────────────────────────────────────────────────────
+
+  const renderProjectsPage = () => {
+    const gridCols = pg.columns === 4 ? 'repeat(4,1fr)' : pg.columns === 2 ? '1fr 1fr' : 'repeat(3,1fr)'
+    const ratio    = { square: '1/1', '4/3': '4/3', '16/9': '16/9', '3/4': '3/4', dynamic: '4/3' }[pg.imageRatio ?? '4/3']
+    const colors   = [c.primary, c.secondary, c.accent, c.accentSecondary ?? c.accent, c.cardBg ?? '#eee', c.border ?? '#ddd']
+
+    return (
+      <>
+        <div style={{ padding: '12px 12px', backgroundColor: c.primary, position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle at 20% 60%, ${c.accent}15, transparent 60%)` }} />
+          <div style={{ position: 'relative' }}>
+            {dec.accentLine !== false && <div style={{ width: 24, height: 2, backgroundColor: c.accent, marginBottom: 5 }} />}
+            <p style={{ fontSize: 13, fontWeight: 700, color: c.navText ?? '#fff', fontFamily: hFont }}>معرض المشاريع</p>
+            <p style={{ fontSize: 8, color: `${c.navText ?? '#fff'}60`, marginTop: 2, fontFamily: bFont }}>استعرض أعمالنا</p>
+          </div>
+        </div>
+        <div style={{ padding: '10px 12px', backgroundColor: c.background }}>
+          {/* Filters */}
+          <div style={{ display: 'flex', gap: 4, marginBottom: 10, flexWrap: 'wrap' }}>
+            {['الكل', 'سكني', 'تجاري', 'صناعي'].map((cat, i) => (
+              <span key={cat} style={i === 0
+                ? { ...btnStyle, fontSize: 8, padding: '3px 9px' }
+                : { fontSize: 8, padding: '3px 9px', borderRadius: btnBr, background: c.cardBg ?? '#f5f5f5', color: c.textLight, border: `1px solid ${c.border ?? '#e2e8f0'}` }
+              }>{cat}</span>
+            ))}
+          </div>
+          {/* Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: gridCols, gap: 5 }}>
+            {Array.from({ length: Math.min(pg.columns * 2, 8) }).map((_, i) => (
+              <div key={i} style={{ borderRadius: br, overflow: 'hidden', border: `1px solid ${c.border ?? '#e2e8f0'}` }}>
+                <div style={{ aspectRatio: ratio, backgroundColor: colors[i % 6] }} />
+                {pg.captionStyle !== 'overlay' && pg.captionStyle !== 'slide' && (
+                  <div style={{ padding: '5px 6px', backgroundColor: c.cardBg ?? c.background }}>
+                    <p style={{ fontSize: 8, fontWeight: 600, color: c.text, fontFamily: bFont }}>مشروع {i + 1}</p>
+                    <p style={{ fontSize: 7, color: c.textLight }}>2024</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  // ── Contact PAGE ──────────────────────────────────────────────────────────
+
+  const renderContactPage = () => {
+    const isSBS = cs.layout === 'side-by-side'
+    const socialSt = (color: string): React.CSSProperties => ({
+      icons:    { backgroundColor: `${color}20`, color, borderRadius: '50%', width: 22, height: 22, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 9 },
+      pills:    { backgroundColor: color, color: '#fff', borderRadius: '9999px', padding: '3px 9px', fontSize: 8, display: 'inline-flex', alignItems: 'center', gap: 3 },
+      outlined: { border: `1.5px solid ${color}`, color, borderRadius: br, padding: '2px 7px', fontSize: 8, display: 'inline-flex', alignItems: 'center' },
+      text:     { color, fontSize: 9, textDecoration: 'underline' },
+    }[cs.socialStyle ?? 'pills'] ?? {})
+
+    return (
+      <>
+        <div style={{ padding: '12px 12px', backgroundColor: c.primary, position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(circle at 80% 50%, ${c.accent}12, transparent 60%)` }} />
+          <div style={{ position: 'relative' }}>
+            {dec.accentLine !== false && <div style={{ width: 24, height: 2, backgroundColor: c.accent, marginBottom: 5 }} />}
+            <p style={{ fontSize: 13, fontWeight: 700, color: c.navText ?? '#fff', fontFamily: hFont }}>تواصل معنا</p>
+            <p style={{ fontSize: 8, color: `${c.navText ?? '#fff'}60`, marginTop: 2, fontFamily: bFont }}>نحن هنا لمساعدتك</p>
+          </div>
+        </div>
+        <div style={{ padding: '10px 10px', backgroundColor: c.background, display: isSBS ? 'grid' : 'block', gridTemplateColumns: isSBS ? '1fr 1fr' : undefined, gap: 8 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            {[
+              { icon: '📞', label: 'الهاتف',   val: '+966 50 000 0000', col: '#22c55e' },
+              { icon: '✉️', label: 'البريد',   val: 'info@office.com',  col: '#3b82f6' },
+              { icon: '📍', label: 'العنوان', val: 'الرياض، المملكة',   col: '#f59e0b' },
+            ].map((item, i) => (
+              <div key={i} style={{ ...conCardSt, borderRadius: br, padding: '8px 10px', display: 'flex', gap: 8, alignItems: 'center' }}>
+                <span style={{ fontSize: 14, flexShrink: 0 }}>{item.icon}</span>
+                <div>
+                  <p style={{ fontSize: 8, fontWeight: 700, color: conCardTextCol, fontFamily: hFont }}>{item.label}</p>
+                  <p style={{ fontSize: 7, color: conCardSubCol, fontFamily: bFont }}>{item.val}</p>
+                </div>
+              </div>
+            ))}
+            <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 2 }}>
+              {[
+                { label: '📸', col: '#e1306c' },
+                { label: '🐦', col: '#1da1f2' },
+                { label: '💼', col: '#0077b5' },
+              ].map(s => (
+                <span key={s.label} style={socialSt(s.col)}>{s.label}</span>
+              ))}
             </div>
           </div>
-        </div>
-
-        {/* Cards */}
-        <div className="px-4 py-5" style={{ backgroundColor: c.background }}>
-          <p
-            className="text-xs font-black mb-3"
-            style={{ color: c.text, fontFamily: `'${f.heading}', serif` }}
-          >خدماتنا</p>
-          <div className="grid grid-cols-3 gap-2">
-            {['التصميم المعماري', 'الإشراف الهندسي', 'الاستشارات'].map((svc, i) => (
-              <div
-                key={i}
-                className="p-3 transition-all"
-                style={{
-                  backgroundColor: c.cardBg,
-                  border: `1px solid ${c.border}`,
-                  borderRadius: br,
-                }}
-              >
-                <div className="w-6 h-6 mb-2 flex items-center justify-center"
-                  style={{ backgroundColor: `${c.accent}20`, borderRadius: br }}>
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: c.accent }} />
-                </div>
-                <p className="text-[9px] font-bold" style={{ color: c.text }}>{svc}</p>
-                <p className="text-[8px] mt-0.5 opacity-60" style={{ color: c.textLight }}>وصف مختصر</p>
+          {cs.mapStyle !== 'none' && (
+            <div style={{ borderRadius: br, backgroundColor: `${c.secondary}30`, border: `1px solid ${c.border ?? '#e2e8f0'}`, height: isSBS ? '100%' : 55, minHeight: isSBS ? 110 : 55, marginTop: isSBS ? 0 : 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: 18 }}>🗺️</span>
+                <p style={{ fontSize: 7, color: c.textLight, marginTop: 2 }}>خريطة Google</p>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
+      </>
+    )
+  }
 
-        {/* Projects */}
-        <div className="px-4 pb-4" style={{ backgroundColor: c.background }}>
-          <p className="text-xs font-black mb-3" style={{ color: c.text, fontFamily: `'${f.heading}', serif` }}>
-            أبرز مشاريعنا
-          </p>
-          <div className="grid grid-cols-3 gap-2">
-            {[c.primary, c.secondary, c.accent].map((bg, i) => (
-              <div key={i} className="aspect-square overflow-hidden relative" style={{ borderRadius: br }}>
-                <div className="w-full h-full" style={{ backgroundColor: bg, opacity: 0.8 }} />
-                <div className="absolute bottom-0 inset-x-0 p-1.5"
-                  style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)' }}>
-                  <p className="text-[8px] text-white font-bold">مشروع {i + 1}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+  // ── Render ────────────────────────────────────────────────────────────────
 
-        {/* CTA */}
-        <div className="px-6 py-6 text-center" style={{ backgroundColor: c.primary }}>
-          <p className="text-xs font-black mb-1" style={{ color: c.navText, fontFamily: `'${f.heading}', serif` }}>
-            هل تريد مشروعاً مميزاً؟
-          </p>
-          <p className="text-[9px] opacity-60 mb-3" style={{ color: c.navText }}>تواصل معنا اليوم</p>
-          <span
-            className="text-[10px] px-4 py-1.5 font-bold"
-            style={{ backgroundColor: c.accent, color: '#fff', borderRadius: br }}
-          >ابدأ الآن</span>
-        </div>
+  return (
+    <div className="h-full overflow-y-auto p-3 bg-gray-100">
+      <style>{`@import url('${fontUrl}');`}</style>
 
-        {/* Footer */}
-        <div className="px-4 py-3 flex items-center justify-between"
-          style={{ backgroundColor: c.primary, borderTop: `1px solid ${c.accent}20` }}>
-          <span className="text-[9px] opacity-40" style={{ color: c.navText }}>
-            © 2025 {meta.name_ar || 'المكتب'}
-          </span>
-          <div className="flex gap-3">
-            {[c.accent, c.accentSecondary ?? c.accent, '#25d366'].map((clr, i) => (
-              <div key={i} className="w-4 h-4 rounded-full opacity-70" style={{ backgroundColor: clr }} />
-            ))}
-          </div>
-        </div>
+      {/* Page tabs */}
+      <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
+        {([['home', '🏠 الرئيسية'], ['projects', '🏗️ المشاريع'], ['contact', '📞 التواصل']] as const).map(([id, label]) => (
+          <button key={id} onClick={() => setPage(id)}
+            className={cn('px-2.5 py-1 text-[10px] rounded-full transition-colors font-medium', page === id ? 'bg-gray-900 text-white' : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-200')}
+          >{label}</button>
+        ))}
+      </div>
+
+      <p className="text-[9px] text-gray-400 mb-2">معاينة حية — تتحدث مع كل تغيير</p>
+
+      {/* Browser */}
+      <div className="rounded-xl overflow-hidden shadow-xl border border-gray-200" dir="rtl" style={{ fontSize: 0 }}>
+        {NavBar}
+        {page === 'home' && (
+          <>
+            {renderHero()}
+            {l.sections.includes('services') && renderServices()}
+            {l.sections.includes('projects') && renderProjectsSection()}
+            {l.sections.includes('cta') && renderCTA()}
+            {l.sections.includes('footer') && renderFooter()}
+          </>
+        )}
+        {page === 'projects' && <>{renderProjectsPage()}{renderFooter()}</>}
+        {page === 'contact'  && <>{renderContactPage()}{renderFooter()}</>}
       </div>
 
       {/* Color palette */}
-      <div className="mt-4 p-3 bg-white rounded-xl border border-gray-200">
-        <p className="text-[10px] font-bold text-gray-400 mb-2">لوحة الألوان</p>
-        <div className="flex gap-1.5 flex-wrap">
+      <div className="mt-3 p-2.5 bg-white rounded-xl border border-gray-200">
+        <p className="text-[9px] font-bold text-gray-400 mb-2">لوحة الألوان</p>
+        <div className="flex gap-1 flex-wrap">
           {Object.entries(c).map(([key, val]) => (
-            <div key={key} className="flex flex-col items-center gap-1">
-              <div className="w-7 h-7 rounded-lg border border-gray-200" style={{ backgroundColor: val }} />
-              <span className="text-[8px] text-gray-400 max-w-[28px] truncate">{key}</span>
+            <div key={key} className="flex flex-col items-center gap-0.5">
+              <div className="w-5 h-5 rounded border border-gray-200" style={{ backgroundColor: val as string }} />
+              <span className="text-[6px] text-gray-400 max-w-[20px] truncate">{key.replace('Secondary', '2').replace('Light', 'Lt')}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Font preview */}
-      <div className="mt-3 p-3 bg-white rounded-xl border border-gray-200">
-        <p className="text-[10px] font-bold text-gray-400 mb-2">معاينة الخطوط</p>
-        <p className="text-sm font-bold" style={{ fontFamily: `'${f.heading}', serif`, color: c.text }}>
-          العنوان الرئيسي — {f.heading}
+      {/* Font + button preview */}
+      <div className="mt-2 p-2.5 bg-white rounded-xl border border-gray-200">
+        <p className="text-[9px] font-bold text-gray-400 mb-2">الخطوط والأزرار</p>
+        <p style={{ fontFamily: hFont, fontSize: 13, fontWeight: f.headingWeight ?? 700, color: c.text, textTransform: f.uppercase ? 'uppercase' : 'none', letterSpacing: f.uppercase ? 1 : 0 }}>
+          العنوان — {f.heading}
         </p>
-        <p className="text-xs mt-1 opacity-70" style={{ fontFamily: `'${f.body}', sans-serif`, color: c.textLight }}>
-          هذا نص وصفي يوضح خط النص الأساسي — {f.body}
+        <p style={{ fontFamily: bFont, fontSize: 10, color: c.textLight, marginTop: 3, letterSpacing: { tight: -0.5, normal: 0, wide: 0.5, wider: 1 }[f.letterSpacing ?? 'normal'] }}>
+          النص الأساسي — {f.body}
         </p>
+        <div style={{ display: 'flex', gap: 6, marginTop: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <span style={{ ...btnStyle, fontSize: 9 }}>زر رئيسي</span>
+          <span style={{ fontSize: 9, padding: '4px 10px', border: `1.5px solid ${c.accent}`, color: c.accent, borderRadius: btnBr }}>محدد</span>
+          <span style={{ fontSize: 9, padding: '4px 10px', borderRadius: '9999px', backgroundColor: c.accent, color: '#fff' }}>بيضاوي</span>
+        </div>
+      </div>
+
+      {/* Card preview */}
+      <div className="mt-2 p-2.5 bg-white rounded-xl border border-gray-200">
+        <p className="text-[9px] font-bold text-gray-400 mb-2">معاينة البطاقة</p>
+        <div style={{ ...cardSt, ...accentBarSt, borderRadius: br, padding: cardPad, display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+          {crd.iconShape !== 'none' && (
+            <div style={{ width: 28, height: 28, flexShrink: 0, backgroundColor: `${c.accent}18`, borderRadius: crd.iconShape === 'circle' ? '50%' : crd.iconShape === 'square' ? '0' : br, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: c.accent }} />
+            </div>
+          )}
+          <div>
+            <p style={{ fontSize: 10, fontWeight: 700, color: cardTextCol, fontFamily: hFont }}>عنوان البطاقة</p>
+            <p style={{ fontSize: 8, color: cardSubCol, marginTop: 2, fontFamily: bFont }}>وصف مختصر للعنصر</p>
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
-// ── Tab Panels ─────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// TAB PANELS
+// ══════════════════════════════════════════════════════════════════════════════
 
-function BasicsTab({
-  meta, onChange,
-}: {
+function BasicsTab({ meta, onChange }: {
   meta: { name_ar: string; name_en: string; description_ar: string; plan_required: string; visibility: string }
   onChange: (k: string, v: string) => void
 }) {
@@ -299,36 +760,30 @@ function BasicsTab({
       <div className="space-y-3">
         <div>
           <Label className="text-sm text-gray-600 mb-1 block">اسم القالب (عربي) *</Label>
-          <Input value={meta.name_ar} onChange={e => onChange('name_ar', e.target.value)}
-            placeholder="مثال: قالب فاخر ذهبي" className="h-9" />
+          <Input value={meta.name_ar} onChange={e => onChange('name_ar', e.target.value)} placeholder="مثال: قالب فاخر ذهبي" className="h-9" />
         </div>
         <div>
           <Label className="text-sm text-gray-600 mb-1 block">اسم القالب (إنجليزي)</Label>
-          <Input value={meta.name_en} onChange={e => onChange('name_en', e.target.value)}
-            placeholder="Luxury Gold Theme" className="h-9" dir="ltr" />
+          <Input value={meta.name_en} onChange={e => onChange('name_en', e.target.value)} placeholder="Luxury Gold Theme" className="h-9" dir="ltr" />
         </div>
         <div>
           <Label className="text-sm text-gray-600 mb-1 block">وصف القالب</Label>
-          <textarea
-            value={meta.description_ar}
-            onChange={e => onChange('description_ar', e.target.value)}
+          <textarea value={meta.description_ar} onChange={e => onChange('description_ar', e.target.value)}
             placeholder="وصف مختصر يظهر في قائمة القوالب..."
-            className="w-full h-20 px-3 py-2 text-sm border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-900"
-          />
+            className="w-full h-20 px-3 py-2 text-sm border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-900" />
         </div>
       </div>
-
-      <SectionTitle>الإعدادات</SectionTitle>
-      <Row label="الباقة المطلوبة" hint="أقل باقة يمكنها استخدام هذا القالب">
+      <SectionTitle>إعدادات الوصول</SectionTitle>
+      <Row label="الباقة المطلوبة" hint="أقل باقة تستطيع استخدام هذا القالب">
         <Sel value={meta.plan_required} onChange={v => onChange('plan_required', v)} options={[
-          { value: 'basic', label: 'Basic — للجميع' },
-          { value: 'pro', label: 'Pro فأعلى' },
+          { value: 'basic',   label: 'Basic — للجميع' },
+          { value: 'pro',     label: 'Pro فأعلى' },
           { value: 'premium', label: 'Premium فقط' },
         ]} />
       </Row>
       <Row label="الظهور">
         <Sel value={meta.visibility} onChange={v => onChange('visibility', v)} options={[
-          { value: 'public', label: 'عام — لكل المكاتب' },
+          { value: 'public',  label: 'عام — لكل المكاتب' },
           { value: 'private', label: 'خاص — للمخصصين فقط' },
         ]} />
       </Row>
@@ -336,9 +791,7 @@ function BasicsTab({
   )
 }
 
-function ColorsTab({
-  config, onChange,
-}: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+function ColorsTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
   function upd(key: keyof typeof config.colors, val: string) {
     onChange({ ...config, colors: { ...config.colors, [key]: val } })
   }
@@ -346,52 +799,44 @@ function ColorsTab({
   return (
     <div className="space-y-1">
       <SectionTitle>الألوان الرئيسية</SectionTitle>
-      <ColorPicker value={c.primary}   onChange={v => upd('primary', v)}   label="اللون الرئيسي (Primary)" />
-      <ColorPicker value={c.secondary} onChange={v => upd('secondary', v)} label="اللون الثانوي (Secondary)" />
-      <ColorPicker value={c.accent}    onChange={v => upd('accent', v)}    label="لون التمييز (Accent)" />
-      <ColorPicker value={c.accentSecondary ?? '#e2c97e'} onChange={v => upd('accentSecondary', v)} label="Accent ثانوي" />
+      <ColorPicker value={c.primary}                    onChange={v => upd('primary', v)}          label="اللون الرئيسي (Primary)" />
+      <ColorPicker value={c.secondary}                  onChange={v => upd('secondary', v)}         label="اللون الثانوي (Secondary)" />
+      <ColorPicker value={c.accent}                     onChange={v => upd('accent', v)}            label="لون التمييز (Accent)" />
+      <ColorPicker value={c.accentSecondary ?? '#e2c97e'} onChange={v => upd('accentSecondary', v)} label="Accent ثانوي (للتدرجات)" />
 
       <SectionTitle>الخلفية والنصوص</SectionTitle>
-      <ColorPicker value={c.background} onChange={v => upd('background', v)} label="خلفية الصفحة" />
-      <ColorPicker value={c.text}       onChange={v => upd('text', v)}       label="لون النصوص الرئيسية" />
-      <ColorPicker value={c.textLight}  onChange={v => upd('textLight', v)}  label="لون النصوص الثانوية" />
-      <ColorPicker value={c.cardBg ?? '#f8fafc'} onChange={v => upd('cardBg', v)} label="خلفية البطاقات" />
-      <ColorPicker value={c.border ?? '#e2e8f0'}  onChange={v => upd('border', v)}  label="لون الحدود" />
+      <ColorPicker value={c.background}              onChange={v => upd('background', v)}  label="خلفية الصفحة" />
+      <ColorPicker value={c.text}                    onChange={v => upd('text', v)}         label="النصوص الرئيسية" />
+      <ColorPicker value={c.textLight}               onChange={v => upd('textLight', v)}    label="النصوص الثانوية" />
+      <ColorPicker value={c.cardBg ?? '#f8fafc'}     onChange={v => upd('cardBg', v)}       label="خلفية البطاقات" />
+      <ColorPicker value={c.border ?? '#e2e8f0'}     onChange={v => upd('border', v)}       label="لون الحدود" />
 
       <SectionTitle>شريط التنقل</SectionTitle>
-      <ColorPicker value={c.navBg ?? c.primary}   onChange={v => upd('navBg', v)}   label="خلفية الـ Nav" />
-      <ColorPicker value={c.navText ?? '#ffffff'}  onChange={v => upd('navText', v)} label="نصوص الـ Nav" />
+      <ColorPicker value={c.navBg   ?? c.primary}   onChange={v => upd('navBg', v)}        label="خلفية الـ Nav" />
+      <ColorPicker value={c.navText ?? '#ffffff'}    onChange={v => upd('navText', v)}      label="نصوص الـ Nav" />
 
-      {/* Quick Palettes */}
-      <SectionTitle>لوحات جاهزة</SectionTitle>
+      <SectionTitle>لوحات جاهزة — اضغط لتطبيق</SectionTitle>
       <div className="grid grid-cols-2 gap-2 pt-1">
-        {[
-          { name: 'فاخر داكن', primary: '#0a0a0a', accent: '#c9a84c', bg: '#0a0a0a', text: '#f5f5f0', navBg: '#000' },
-          { name: 'أبيض عصري', primary: '#ffffff', accent: '#2563eb', bg: '#ffffff', text: '#111827', navBg: '#fff' },
-          { name: 'جريء أحمر', primary: '#000000', accent: '#ef4444', bg: '#000000', text: '#ffffff', navBg: '#000' },
-          { name: 'كريمي كلاسيك', primary: '#fdf8f0', accent: '#8b5e3c', bg: '#fdf8f0', text: '#2c1a0e', navBg: '#2c1a0e' },
-          { name: 'بحري فاخر', primary: '#0f2044', accent: '#c9a84c', bg: '#ffffff', text: '#0f2044', navBg: '#0f2044' },
-          { name: 'أخضر طبيعي', primary: '#1a3d2b', accent: '#7fb069', bg: '#fafaf8', text: '#1a2e1a', navBg: '#1a3d2b' },
-        ].map(p => (
-          <button
-            key={p.name}
+        {PALETTES.map(p => (
+          <button key={p.name} type="button"
             onClick={() => onChange({
               ...config,
               colors: {
-                ...config.colors,
-                primary: p.primary, accent: p.accent, background: p.bg,
-                text: p.text, navBg: p.navBg,
-                navText: p.primary === p.bg ? config.colors.navText : '#ffffff',
+                primary: p.primary, secondary: p.secondary,
+                accent: p.accent, accentSecondary: p.accentSecondary,
+                background: p.background, text: p.text, textLight: p.textLight,
+                cardBg: p.cardBg, border: p.border,
+                navBg: p.navBg, navText: p.navText,
               },
             })}
-            className="flex items-center gap-2 p-2.5 rounded-lg border border-gray-200 hover:border-gray-400 transition-colors text-right"
+            className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 hover:border-gray-400 hover:shadow-sm transition-all text-right"
           >
-            <div className="flex gap-1 flex-shrink-0">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: p.primary }} />
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: p.accent }} />
-              <div className="w-4 h-4 rounded-full border border-gray-200" style={{ backgroundColor: p.bg }} />
+            <div className="flex gap-0.5 flex-shrink-0">
+              {[p.primary, p.accent, p.background].map((cl, i) => (
+                <div key={i} className="w-3.5 h-3.5 rounded-full border border-white/50 shadow-sm" style={{ backgroundColor: cl }} />
+              ))}
             </div>
-            <span className="text-xs font-medium text-gray-700">{p.name}</span>
+            <span className="text-xs font-medium text-gray-700 flex-1 min-w-0 truncate">{p.emoji} {p.name}</span>
           </button>
         ))}
       </div>
@@ -399,9 +844,7 @@ function ColorsTab({
   )
 }
 
-function FontsTab({
-  config, onChange,
-}: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+function FontsTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
   function upd(key: keyof typeof config.fonts, val: unknown) {
     onChange({ ...config, fonts: { ...config.fonts, [key]: val } })
   }
@@ -411,9 +854,7 @@ function FontsTab({
       <SectionTitle>خط العناوين</SectionTitle>
       <Row label="الخط">
         <Select value={f.heading} onValueChange={v => upd('heading', v)}>
-          <SelectTrigger className="h-8 text-sm">
-            <SelectValue />
-          </SelectTrigger>
+          <SelectTrigger className="h-8 text-sm"><SelectValue /></SelectTrigger>
           <SelectContent className="max-h-60">
             {HEADING_FONTS.map(font => (
               <SelectItem key={font} value={font}>
@@ -425,14 +866,14 @@ function FontsTab({
       </Row>
       <Row label="السماكة">
         <Sel value={String(f.headingWeight ?? 700)} onChange={v => upd('headingWeight', Number(v))} options={[
-          { value: '400', label: 'خفيف (400)' },
+          { value: '400', label: 'خفيف جداً (400)' },
           { value: '600', label: 'متوسط (600)' },
           { value: '700', label: 'عريض (700)' },
           { value: '800', label: 'أعرض (800)' },
           { value: '900', label: 'أثقل (900)' },
         ]} />
       </Row>
-      <Row label="أحرف كبيرة">
+      <Row label="أحرف كبيرة Uppercase">
         <Toggle value={f.uppercase ?? false} onChange={v => upd('uppercase', v)} />
       </Row>
 
@@ -456,7 +897,7 @@ function FontsTab({
           { value: '500', label: 'متوسط (500)' },
         ]} />
       </Row>
-      <Row label="الحجم">
+      <Row label="حجم الخط">
         <Sel value={f.bodySize ?? 'md'} onChange={v => upd('bodySize', v)} options={[
           { value: 'sm', label: 'صغير' },
           { value: 'md', label: 'متوسط' },
@@ -467,27 +908,25 @@ function FontsTab({
       <SectionTitle>ضبط دقيق</SectionTitle>
       <Row label="تباعد الحروف">
         <Sel value={f.letterSpacing ?? 'normal'} onChange={v => upd('letterSpacing', v)} options={[
-          { value: 'tight', label: 'ضيق' },
+          { value: 'tight',  label: 'ضيق جداً' },
           { value: 'normal', label: 'عادي' },
-          { value: 'wide', label: 'واسع' },
-          { value: 'wider', label: 'أوسع' },
+          { value: 'wide',   label: 'واسع' },
+          { value: 'wider',  label: 'أوسع' },
         ]} />
       </Row>
       <Row label="ارتفاع السطر">
         <Sel value={f.lineHeight ?? 'relaxed'} onChange={v => upd('lineHeight', v)} options={[
-          { value: 'tight', label: 'ضيق' },
-          { value: 'normal', label: 'عادي' },
+          { value: 'tight',   label: 'ضيق' },
+          { value: 'normal',  label: 'عادي' },
           { value: 'relaxed', label: 'مريح' },
-          { value: 'loose', label: 'واسع' },
+          { value: 'loose',   label: 'واسع جداً' },
         ]} />
       </Row>
     </div>
   )
 }
 
-function HeroTab({
-  config, onChange,
-}: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+function HeroTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
   function upd(key: keyof typeof config.hero, val: unknown) {
     onChange({ ...config, hero: { ...config.hero, [key]: val } })
   }
@@ -495,233 +934,242 @@ function HeroTab({
   return (
     <div className="space-y-1">
       <SectionTitle>شكل الهيرو</SectionTitle>
-      <Row label="النمط" hint="الشكل العام لقسم الهيرو">
-        <Sel value={h.style} onChange={v => upd('style', v)} options={[
-          { value: 'fullscreen', label: 'ملء الشاشة' },
-          { value: 'split', label: 'مقسم (نص + صورة)' },
+      <Row label="النمط" hint="شكل القسم الرئيسي — يظهر في المعاينة">
+        <Sel value={h.style} onChange={v => upd('style', v as typeof h.style)} options={[
+          { value: 'fullscreen',    label: 'ملء الشاشة' },
+          { value: 'split',        label: 'مقسم (نص + صورة)' },
           { value: 'split-reverse', label: 'مقسم معكوس' },
-          { value: 'centered', label: 'مركزي' },
-          { value: 'minimal', label: 'بسيط' },
-          { value: 'cinematic', label: 'سينمائي' },
+          { value: 'centered',     label: 'مركزي' },
+          { value: 'minimal',      label: 'بسيط — فاتح' },
+          { value: 'cinematic',    label: 'سينمائي' },
         ]} />
       </Row>
       <Row label="الارتفاع">
         <Sel value={h.height ?? 'screen'} onChange={v => upd('height', v)} options={[
-          { value: 'half', label: 'نصف الشاشة' },
-          { value: 'tall', label: 'طويل (80%)' },
-          { value: 'screen', label: 'شاشة كاملة' },
+          { value: 'half',   label: 'نصف الشاشة' },
+          { value: 'tall',   label: 'طويل (80%)' },
+          { value: 'screen', label: 'شاشة كاملة (100%)' },
         ]} />
       </Row>
       <Row label="محاذاة النص">
-        <Sel value={h.textAlign} onChange={v => upd('textAlign', v)} options={[
-          { value: 'right', label: 'يمين' },
+        <Sel value={h.textAlign} onChange={v => upd('textAlign', v as 'right' | 'center' | 'left')} options={[
+          { value: 'right',  label: 'يمين (للعربي)' },
           { value: 'center', label: 'وسط' },
-          { value: 'left', label: 'يسار' },
+          { value: 'left',   label: 'يسار' },
         ]} />
       </Row>
 
-      <SectionTitle>الطبقة الشفافة</SectionTitle>
+      <SectionTitle>الطبقة الشفافة (Overlay)</SectionTitle>
       <Row label="النمط">
         <Sel value={h.overlayStyle ?? 'gradient'} onChange={v => upd('overlayStyle', v)} options={[
-          { value: 'gradient', label: 'تدرج' },
-          { value: 'flat', label: 'مستوي' },
-          { value: 'radial', label: 'دائري' },
-          { value: 'vignette', label: 'Vignette' },
-          { value: 'diagonal', label: 'قطري' },
+          { value: 'gradient', label: 'تدرج جانبي' },
+          { value: 'flat',     label: 'مستوي موحد' },
+          { value: 'radial',   label: 'دائري' },
+          { value: 'vignette', label: 'Vignette حواف' },
+          { value: 'diagonal', label: 'قطري مائل' },
         ]} />
       </Row>
       <div className="py-2">
         <div className="flex items-center justify-between mb-1">
-          <p className="text-sm text-gray-700">شفافية الطبقة</p>
-          <span className="text-xs text-gray-400 font-mono">{Math.round(h.overlayOpacity * 100)}%</span>
+          <p className="text-sm text-gray-700">درجة الشفافية</p>
+          <span className="text-xs font-mono text-gray-400">{Math.round(h.overlayOpacity * 100)}%</span>
         </div>
-        <input
-          type="range" min={0} max={1} step={0.05}
-          value={h.overlayOpacity}
-          onChange={e => upd('overlayOpacity', Number(e.target.value))}
-          className="w-full accent-gray-900"
-        />
+        <input type="range" min={0} max={1} step={0.05} value={h.overlayOpacity}
+          onChange={e => upd('overlayOpacity', Number(e.target.value))} className="w-full accent-gray-900" />
       </div>
 
-      <SectionTitle>أزرار الهيرو</SectionTitle>
+      <SectionTitle>النص والأزرار</SectionTitle>
+      <Row label="نص فوق العنوان (Tag)" hint="نص صغير ملون فوق العنوان الرئيسي">
+        <Input value={h.tagOverride ?? ''} onChange={e => upd('tagOverride', e.target.value)}
+          placeholder="مثال: مرحباً بك" className="h-8 text-sm" />
+      </Row>
       <Row label="شكل الأزرار">
-        <Sel value={h.ctaStyle ?? 'solid'} onChange={v => upd('ctaStyle', v)} options={[
-          { value: 'solid', label: 'مملوء' },
-          { value: 'outline', label: 'محدد' },
-          { value: 'ghost', label: 'شفاف' },
+        <Sel value={h.ctaStyle ?? 'solid'} onChange={v => upd('ctaStyle', v as typeof h.ctaStyle)} options={[
+          { value: 'solid',    label: 'مملوء' },
+          { value: 'outline',  label: 'محدد' },
+          { value: 'ghost',    label: 'شفاف' },
           { value: 'gradient', label: 'تدرج' },
         ]} />
       </Row>
       <div className="space-y-2 pt-1">
         <div>
-          <Label className="text-xs text-gray-500 mb-1 block">نص الزر الرئيسي</Label>
+          <Label className="text-xs text-gray-500 mb-1 block">الزر الرئيسي</Label>
           <Input value={h.ctaPrimaryText ?? 'استعرض مشاريعنا'}
             onChange={e => upd('ctaPrimaryText', e.target.value)} className="h-8 text-sm" />
         </div>
         <div>
-          <Label className="text-xs text-gray-500 mb-1 block">نص الزر الثانوي</Label>
+          <Label className="text-xs text-gray-500 mb-1 block">الزر الثانوي</Label>
           <Input value={h.ctaSecondaryText ?? 'تواصل معنا'}
             onChange={e => upd('ctaSecondaryText', e.target.value)} className="h-8 text-sm" />
         </div>
       </div>
 
       <SectionTitle>خيارات إضافية</SectionTitle>
-      <Row label="إظهار الشعار"><Toggle value={h.showLogo ?? true} onChange={v => upd('showLogo', v)} /></Row>
-      <Row label="سهم التمرير للأسفل"><Toggle value={h.showScrollIndicator ?? true} onChange={v => upd('showScrollIndicator', v)} /></Row>
+      <Row label="إظهار الشعار في الهيرو">
+        <Toggle value={h.showLogo ?? true} onChange={v => upd('showLogo', v)} />
+      </Row>
+      <Row label="سهم التمرير للأسفل">
+        <Toggle value={h.showScrollIndicator ?? true} onChange={v => upd('showScrollIndicator', v)} />
+      </Row>
     </div>
   )
 }
 
-function LayoutTab({
-  config, onChange,
-}: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+function LayoutTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
   function upd(key: keyof typeof config.layout, val: unknown) {
     onChange({ ...config, layout: { ...config.layout, [key]: val } })
   }
-  const l = config.layout
-  const allSections = ['hero', 'about', 'services', 'projects', 'features', 'cta', 'footer'] as const
-  const sectionLabels: Record<string, string> = {
-    hero: 'الهيرو', about: 'عن المكتب', services: 'الخدمات',
-    projects: 'المشاريع', features: 'المميزات', cta: 'دعوة للتواصل', footer: 'التذييل',
+  function updSec(key: string, val: unknown) {
+    onChange({ ...config, sections: { ...config.sections, [key]: val } })
   }
+  const l = config.layout
+  const s = config.sections ?? {}
+  const allSections = ['hero', 'about', 'services', 'projects', 'features', 'cta', 'footer'] as const
+  const secLabels: Record<string, string> = { hero: '🖼️ الهيرو', about: '👤 عن المكتب', services: '🔧 الخدمات', projects: '🏗️ المشاريع', features: '⭐ المميزات', cta: '📣 دعوة للتواصل', footer: '🔽 التذييل' }
 
   return (
     <div className="space-y-1">
       <SectionTitle>التخطيط العام</SectionTitle>
       <Row label="انحناء الزوايا">
-        <Sel value={l.borderRadius} onChange={v => upd('borderRadius', v)} options={[
-          { value: 'none', label: 'حادة (بدون انحناء)' },
-          { value: 'sm', label: 'انحناء خفيف' },
-          { value: 'md', label: 'انحناء متوسط' },
-          { value: 'lg', label: 'انحناء كبير' },
+        <Sel value={l.borderRadius} onChange={v => upd('borderRadius', v as typeof l.borderRadius)} options={[
+          { value: 'none', label: 'حادة تماماً' },
+          { value: 'sm',   label: 'انحناء خفيف' },
+          { value: 'md',   label: 'انحناء متوسط' },
+          { value: 'lg',   label: 'انحناء كبير' },
           { value: 'full', label: 'دائري كامل' },
         ]} />
       </Row>
-      <Row label="المسافات بين الأقسام">
-        <Sel value={l.spacing} onChange={v => upd('spacing', v)} options={[
-          { value: 'compact', label: 'ضيقة' },
-          { value: 'normal', label: 'عادية' },
-          { value: 'spacious', label: 'واسعة' },
+      <Row label="المسافات العمودية">
+        <Sel value={l.spacing} onChange={v => upd('spacing', v as typeof l.spacing)} options={[
+          { value: 'compact',   label: 'مضغوطة' },
+          { value: 'normal',    label: 'عادية' },
+          { value: 'spacious',  label: 'واسعة جداً' },
         ]} />
       </Row>
       <Row label="أقصى عرض للمحتوى">
         <Sel value={l.maxWidth ?? 'normal'} onChange={v => upd('maxWidth', v)} options={[
           { value: 'narrow', label: 'ضيق (896px)' },
           { value: 'normal', label: 'عادي (1280px)' },
-          { value: 'wide', label: 'واسع (1536px)' },
-          { value: 'full', label: 'ملء الشاشة' },
+          { value: 'wide',   label: 'واسع (1536px)' },
+          { value: 'full',   label: 'ملء الشاشة' },
         ]} />
       </Row>
 
       <SectionTitle>أقسام الصفحة الرئيسية</SectionTitle>
-      <p className="text-xs text-gray-400 mb-2">فعّل أو عطّل الأقسام — الترتيب ثابت</p>
+      <p className="text-xs text-gray-400 mb-2">فعّل أو عطّل — الترتيب يُحافظ عليه تلقائياً</p>
       <div className="space-y-1.5">
         {allSections.map(sec => {
           const active = l.sections.includes(sec)
           return (
-            <div key={sec} className={cn(
-              'flex items-center justify-between px-3 py-2 rounded-lg border transition-colors',
-              active ? 'border-gray-300 bg-gray-50' : 'border-gray-100 bg-white opacity-50'
-            )}>
-              <span className="text-sm text-gray-700">{sectionLabels[sec]}</span>
-              <Toggle
-                value={active}
-                onChange={on => {
-                  const newSections = on
-                    ? [...l.sections, sec] as typeof l.sections
-                    : l.sections.filter(s => s !== sec) as typeof l.sections
-                  // Keep sections in the correct order
-                  const ordered = allSections.filter(s => newSections.includes(s))
-                  upd('sections', ordered)
-                }}
-              />
+            <div key={sec} className={cn('flex items-center justify-between px-3 py-2 rounded-lg border transition-colors', active ? 'border-gray-300 bg-gray-50' : 'border-gray-100 bg-white opacity-40')}>
+              <span className="text-sm text-gray-700">{secLabels[sec]}</span>
+              <Toggle value={active} onChange={on => {
+                const next = on ? [...l.sections, sec] as typeof l.sections : l.sections.filter(s => s !== sec) as typeof l.sections
+                upd('sections', allSections.filter(s => next.includes(s)))
+              }} />
             </div>
           )
         })}
       </div>
 
       <SectionTitle>إعدادات الأقسام</SectionTitle>
-      <Row label="تخطيط &quot;عن المكتب&quot;">
-        <Sel value={config.sections?.aboutLayout ?? 'side-by-side'} onChange={v =>
-          onChange({ ...config, sections: { ...config.sections, aboutLayout: v as 'side-by-side' | 'stacked' | 'reversed' | 'card' | 'timeline' } })
-        } options={[
+      <Row label="تخطيط «عن المكتب»">
+        <Sel value={s.aboutLayout ?? 'side-by-side'} onChange={v => updSec('aboutLayout', v)} options={[
           { value: 'side-by-side', label: 'جانب لجانب' },
-          { value: 'stacked', label: 'عمودي' },
-          { value: 'reversed', label: 'معكوس' },
-          { value: 'card', label: 'بطاقة' },
-          { value: 'timeline', label: 'خط زمني' },
+          { value: 'stacked',      label: 'عمودي' },
+          { value: 'reversed',     label: 'معكوس' },
+          { value: 'card',         label: 'بطاقة مركزية' },
+          { value: 'timeline',     label: 'خط زمني' },
         ]} />
       </Row>
-      <Row label="إحصائيات في &quot;عن المكتب&quot;">
-        <Toggle value={config.sections?.aboutShowStats ?? true}
-          onChange={v => onChange({ ...config, sections: { ...config.sections, aboutShowStats: v } })} />
+      <Row label="إحصائيات في «عن المكتب»">
+        <Toggle value={s.aboutShowStats ?? true} onChange={v => updSec('aboutShowStats', v)} />
       </Row>
-      <Row label="تخطيط الخدمات">
-        <Sel value={config.sections?.servicesStyle ?? 'card-grid'} onChange={v =>
-          onChange({ ...config, sections: { ...config.sections, servicesStyle: v as 'card-grid' | 'icon-list' | 'horizontal-scroll' | 'numbered' | 'minimal' } })
-        } options={[
-          { value: 'card-grid', label: 'شبكة بطاقات' },
-          { value: 'icon-list', label: 'قائمة بأيقونات' },
+      <Row label="نمط الخدمات">
+        <Sel value={s.servicesStyle ?? 'card-grid'} onChange={v => updSec('servicesStyle', v)} options={[
+          { value: 'card-grid',         label: 'شبكة بطاقات' },
+          { value: 'icon-list',         label: 'قائمة بأيقونات' },
           { value: 'horizontal-scroll', label: 'تمرير أفقي' },
-          { value: 'numbered', label: 'مرقم' },
-          { value: 'minimal', label: 'بسيط' },
+          { value: 'numbered',          label: 'مرقم' },
+          { value: 'minimal',           label: 'بسيط جداً' },
         ]} />
       </Row>
-      <Row label="تخطيط CTA">
-        <Sel value={config.sections?.ctaLayout ?? 'split'} onChange={v =>
-          onChange({ ...config, sections: { ...config.sections, ctaLayout: v as 'split' | 'centered' | 'banner' | 'minimal' | 'floating' } })
-        } options={[
-          { value: 'split', label: 'مقسم' },
-          { value: 'centered', label: 'مركزي' },
-          { value: 'banner', label: 'بانر' },
-          { value: 'minimal', label: 'بسيط' },
-          { value: 'floating', label: 'عائم' },
+      <Row label="نمط المميزات">
+        <Sel value={s.featuresStyle ?? 'icon-list'} onChange={v => updSec('featuresStyle', v)} options={[
+          { value: 'icon-list',  label: 'قائمة بأيقونات' },
+          { value: 'card-grid',  label: 'شبكة بطاقات' },
+          { value: 'numbered',   label: 'مرقمة' },
+          { value: 'checklist',  label: 'قائمة ✓' },
+          { value: 'minimal',    label: 'بسيط' },
+        ]} />
+      </Row>
+      <Row label="تخطيط قسم CTA">
+        <Sel value={s.ctaLayout ?? 'centered'} onChange={v => updSec('ctaLayout', v)} options={[
+          { value: 'centered',  label: 'مركزي' },
+          { value: 'split',     label: 'مقسم' },
+          { value: 'banner',    label: 'بانر شريطي' },
+          { value: 'minimal',   label: 'بسيط' },
+          { value: 'floating',  label: 'عائم' },
+        ]} />
+      </Row>
+      <Row label="خلفية قسم CTA">
+        <Sel value={s.ctaBg ?? 'primary'} onChange={v => updSec('ctaBg', v)} options={[
+          { value: 'primary',    label: 'اللون الرئيسي' },
+          { value: 'accent',     label: 'لون Accent' },
+          { value: 'background', label: 'خلفية الصفحة' },
+          { value: 'gradient',   label: 'تدرج' },
         ]} />
       </Row>
       <Row label="نمط الـ Footer">
-        <Sel value={config.sections?.footerStyle ?? 'dark'} onChange={v =>
-          onChange({ ...config, sections: { ...config.sections, footerStyle: v as 'dark' | 'light' | 'accent' | 'minimal' } })
-        } options={[
-          { value: 'dark', label: 'داكن' },
-          { value: 'light', label: 'فاتح' },
-          { value: 'accent', label: 'Accent' },
+        <Sel value={s.footerStyle ?? 'dark'} onChange={v => updSec('footerStyle', v)} options={[
+          { value: 'dark',    label: 'داكن' },
+          { value: 'light',   label: 'فاتح' },
+          { value: 'accent',  label: 'Accent' },
           { value: 'minimal', label: 'بسيط' },
         ]} />
+      </Row>
+      <Row label="أعمدة الـ Footer">
+        <Sel value={String(s.footerColumns ?? 2)} onChange={v => updSec('footerColumns', Number(v) as 2 | 3 | 4)} options={[
+          { value: '2', label: 'عمودان' },
+          { value: '3', label: '3 أعمدة' },
+          { value: '4', label: '4 أعمدة' },
+        ]} />
+      </Row>
+      <Row label="روابط السوشيال في الفوتر">
+        <Toggle value={s.footerShowSocial ?? true} onChange={v => updSec('footerShowSocial', v)} />
       </Row>
     </div>
   )
 }
 
-function NavTab({
-  config, onChange,
-}: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+function NavTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
   function upd(key: string, val: unknown) {
     onChange({ ...config, navigation: { ...config.navigation, [key]: val } })
   }
   const n = config.navigation ?? {}
   return (
     <div className="space-y-1">
-      <SectionTitle>شريط التنقل</SectionTitle>
-      <Row label="النمط">
+      <SectionTitle>مظهر الـ Nav</SectionTitle>
+      <Row label="النمط" hint="يؤثر على خلفية شريط التنقل">
         <Sel value={n.style ?? 'transparent'} onChange={v => upd('style', v)} options={[
-          { value: 'solid', label: 'مصمت' },
-          { value: 'transparent', label: 'شفاف → يتحول' },
-          { value: 'blur', label: 'زجاجي ضبابي' },
-          { value: 'glass', label: 'Glass' },
-          { value: 'bordered', label: 'محدد' },
+          { value: 'solid',       label: 'مصمت دائماً' },
+          { value: 'transparent', label: 'شفاف ← يتلوّن' },
+          { value: 'blur',        label: 'زجاجي ضبابي' },
+          { value: 'glass',       label: 'Glass فاخر' },
+          { value: 'bordered',    label: 'محدد بـ Accent' },
         ]} />
       </Row>
       <Row label="الارتفاع">
         <Sel value={n.height ?? 'normal'} onChange={v => upd('height', v)} options={[
-          { value: 'compact', label: 'ضيق' },
-          { value: 'normal', label: 'عادي' },
-          { value: 'tall', label: 'طويل' },
+          { value: 'compact', label: 'ضيق (36px)' },
+          { value: 'normal',  label: 'عادي (44px)' },
+          { value: 'tall',    label: 'طويل (56px)' },
         ]} />
       </Row>
-      <Row label="الموضع عند التمرير">
+      <Row label="السلوك عند التمرير">
         <Sel value={n.position ?? 'sticky'} onChange={v => upd('position', v)} options={[
           { value: 'sticky', label: 'لاصق (Sticky)' },
-          { value: 'fixed', label: 'ثابت (Fixed)' },
+          { value: 'fixed',  label: 'ثابت (Fixed)' },
           { value: 'static', label: 'ساكن' },
         ]} />
       </Row>
@@ -732,15 +1180,14 @@ function NavTab({
           { value: 'lg', label: 'كبير' },
         ]} />
       </Row>
+      <SectionTitle>خيارات إضافية</SectionTitle>
       <Row label="خط سفلي"><Toggle value={n.showBorder ?? false} onChange={v => upd('showBorder', v)} /></Row>
       <Row label="زر CTA في التنقل"><Toggle value={n.ctaInNav ?? true} onChange={v => upd('ctaInNav', v)} /></Row>
     </div>
   )
 }
 
-function ProjectsTab({
-  config, onChange,
-}: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+function ProjectsTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
   function upd(key: keyof typeof config.projectsGrid, val: unknown) {
     onChange({ ...config, projectsGrid: { ...config.projectsGrid, [key]: val } })
   }
@@ -748,147 +1195,150 @@ function ProjectsTab({
   return (
     <div className="space-y-1">
       <SectionTitle>شبكة المشاريع</SectionTitle>
-
-      {/* Columns visual selector */}
       <div className="py-2">
         <p className="text-sm text-gray-700 mb-2">عدد الأعمدة</p>
         <div className="flex gap-2">
           {[2, 3, 4].map(n => (
-            <button
-              key={n}
-              onClick={() => upd('columns', n)}
-              className={cn(
-                'flex-1 py-3 rounded-lg border-2 transition-colors text-sm font-bold',
-                pg.columns === n
-                  ? 'border-gray-900 bg-gray-900 text-white'
-                  : 'border-gray-200 text-gray-500 hover:border-gray-400'
-              )}
-            >
-              {n}
-            </button>
+            <button key={n} type="button" onClick={() => upd('columns', n as 2 | 3 | 4)}
+              className={cn('flex-1 py-3 rounded-lg border-2 text-sm font-bold transition-colors',
+                pg.columns === n ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-200 text-gray-500 hover:border-gray-400')}
+            >{n}</button>
           ))}
         </div>
       </div>
 
       <Row label="شكل الشبكة">
         <Sel value={pg.style} onChange={v => upd('style', v as typeof pg.style)} options={[
-          { value: 'grid', label: 'شبكة منتظمة' },
-          { value: 'masonry', label: 'Masonry' },
-          { value: 'list', label: 'قائمة' },
-          { value: 'magazine', label: 'مجلة' },
+          { value: 'grid',      label: 'شبكة منتظمة' },
+          { value: 'masonry',   label: 'Masonry متفاوتة' },
+          { value: 'list',      label: 'قائمة عمودية' },
+          { value: 'magazine',  label: 'مجلة (بطل + صغيرة)' },
           { value: 'filmstrip', label: 'شريط أفقي' },
         ]} />
       </Row>
       <Row label="نسبة الصور">
         <Sel value={pg.imageRatio ?? '4/3'} onChange={v => upd('imageRatio', v)} options={[
-          { value: 'square', label: 'مربع (1:1)' },
-          { value: '4/3', label: 'عرضي (4:3)' },
-          { value: '16/9', label: 'سينمائي (16:9)' },
-          { value: '3/4', label: 'طولي (3:4)' },
-          { value: 'dynamic', label: 'تلقائي' },
+          { value: 'square',  label: 'مربع (1:1)' },
+          { value: '4/3',     label: 'عرضي (4:3)' },
+          { value: '16/9',    label: 'سينمائي (16:9)' },
+          { value: '3/4',     label: 'طولي (3:4) — بورتريه' },
+          { value: 'dynamic', label: 'تلقائي حسب الصورة' },
         ]} />
       </Row>
-      <Row label="نمط النص على البطاقة">
+      <Row label="عرض النص على الصورة" hint="أين يظهر اسم المشروع">
         <Sel value={pg.captionStyle ?? 'overlay'} onChange={v => upd('captionStyle', v)} options={[
-          { value: 'overlay', label: 'فوق الصورة' },
-          { value: 'below', label: 'تحت الصورة' },
-          { value: 'slide', label: 'ينزلق للأعلى' },
-          { value: 'minimal', label: 'بسيط' },
-          { value: 'floating', label: 'عائم' },
+          { value: 'overlay',  label: 'فوق الصورة (تدرج)' },
+          { value: 'below',    label: 'تحت الصورة' },
+          { value: 'slide',    label: 'ينزلق عند hover' },
+          { value: 'minimal',  label: 'بسيط جداً' },
+          { value: 'floating', label: 'عائم كـ badge' },
         ]} />
       </Row>
-      <Row label="تأثير Hover">
+      <Row label="تأثير عند hover">
         <Sel value={pg.hoverEffect ?? 'zoom'} onChange={v => upd('hoverEffect', v)} options={[
-          { value: 'zoom', label: 'تكبير الصورة' },
-          { value: 'lift', label: 'رفع البطاقة' },
-          { value: 'fade', label: 'Fade' },
+          { value: 'zoom',   label: 'تكبير الصورة' },
+          { value: 'lift',   label: 'رفع البطاقة' },
+          { value: 'fade',   label: 'Fade' },
           { value: 'reveal', label: 'كشف النص' },
-          { value: 'none', label: 'بدون تأثير' },
+          { value: 'none',   label: 'بدون تأثير' },
         ]} />
       </Row>
     </div>
   )
 }
 
-function CardsTab({
-  config, onChange,
-}: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+function CardsTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
   function updCard(key: string, val: unknown) {
     onChange({ ...config, cards: { ...config.cards, [key]: val } })
   }
   function updBtn(key: string, val: unknown) {
     onChange({ ...config, buttons: { ...config.buttons, [key]: val } })
   }
-  const cards = config.cards ?? {}
-  const btns = config.buttons ?? {}
+  const crd = config.cards ?? {}
+  const btn = config.buttons ?? {}
   return (
     <div className="space-y-1">
       <SectionTitle>البطاقات (الخدمات والمميزات)</SectionTitle>
-      <Row label="شكل البطاقة">
-        <Sel value={cards.style ?? 'elevated'} onChange={v => updCard('style', v)} options={[
-          { value: 'flat', label: 'مستوية' },
-          { value: 'elevated', label: 'مرفوعة (ظل)' },
-          { value: 'bordered', label: 'محددة' },
-          { value: 'glass', label: 'زجاجية' },
-          { value: 'filled', label: 'مملوءة' },
-          { value: 'ghost', label: 'شفافة' },
+      <Row label="شكل البطاقة" hint="يظهر في المعاينة اليمنى">
+        <Sel value={crd.style ?? 'elevated'} onChange={v => updCard('style', v)} options={[
+          { value: 'flat',     label: 'مسطحة — بدون ظل' },
+          { value: 'elevated', label: 'مرفوعة — ظل ناعم' },
+          { value: 'bordered', label: 'محددة — بوردر' },
+          { value: 'glass',    label: 'زجاجية — Glassmorphism' },
+          { value: 'filled',   label: 'مملوءة — بلون داكن' },
+          { value: 'ghost',    label: 'شفافة — بوردر منقط' },
         ]} />
       </Row>
       <Row label="الحشو الداخلي">
-        <Sel value={cards.padding ?? 'normal'} onChange={v => updCard('padding', v)} options={[
+        <Sel value={crd.padding ?? 'normal'} onChange={v => updCard('padding', v)} options={[
           { value: 'compact', label: 'ضيق' },
-          { value: 'normal', label: 'عادي' },
-          { value: 'large', label: 'كبير' },
+          { value: 'normal',  label: 'عادي' },
+          { value: 'large',   label: 'كبير' },
         ]} />
       </Row>
-      <Row label="شكل الأيقونة">
-        <Sel value={cards.iconShape ?? 'rounded'} onChange={v => updCard('iconShape', v)} options={[
-          { value: 'circle', label: 'دائرة' },
-          { value: 'square', label: 'مربع' },
+      <Row label="شريط Accent">
+        <Sel value={crd.accentBar ?? 'none'} onChange={v => updCard('accentBar', v as 'none' | 'right' | 'left' | 'top' | 'bottom')} options={[
+          { value: 'none',   label: 'بدون' },
+          { value: 'right',  label: 'يمين' },
+          { value: 'left',   label: 'يسار' },
+          { value: 'top',    label: 'أعلى' },
+          { value: 'bottom', label: 'أسفل' },
+        ]} />
+      </Row>
+      <Row label="شكل حاوية الأيقونة">
+        <Sel value={crd.iconShape ?? 'rounded'} onChange={v => updCard('iconShape', v)} options={[
+          { value: 'circle',  label: 'دائرة' },
+          { value: 'square',  label: 'مربع' },
           { value: 'rounded', label: 'منحنية' },
-          { value: 'diamond', label: 'معين' },
-          { value: 'none', label: 'بدون' },
+          { value: 'diamond', label: 'معين (◆)' },
+          { value: 'none',    label: 'بدون حاوية' },
         ]} />
       </Row>
-      <Row label="تأثير Hover للبطاقة">
-        <Sel value={cards.hoverEffect ?? 'lift'} onChange={v => updCard('hoverEffect', v)} options={[
-          { value: 'lift', label: 'رفع' },
-          { value: 'glow', label: 'توهج' },
-          { value: 'border', label: 'حدود' },
-          { value: 'scale', label: 'تكبير' },
-          { value: 'fill', label: 'تعبئة' },
-          { value: 'none', label: 'بدون' },
+      <Row label="تأثير hover للبطاقة">
+        <Sel value={crd.hoverEffect ?? 'lift'} onChange={v => updCard('hoverEffect', v)} options={[
+          { value: 'lift',   label: 'رفع ناعم' },
+          { value: 'glow',   label: 'توهج' },
+          { value: 'border', label: 'حدود Accent' },
+          { value: 'scale',  label: 'تكبير' },
+          { value: 'fill',   label: 'تعبئة بالـ Accent' },
+          { value: 'none',   label: 'بدون تأثير' },
         ]} />
       </Row>
-      <Row label="أرقام تسلسلية"><Toggle value={cards.showNumber ?? false} onChange={v => updCard('showNumber', v)} /></Row>
+      <Row label="أرقام تسلسلية على البطاقات">
+        <Toggle value={crd.showNumber ?? false} onChange={v => updCard('showNumber', v)} />
+      </Row>
 
       <SectionTitle>الأزرار</SectionTitle>
       <Row label="شكل الأزرار">
-        <Sel value={btns.style ?? 'solid'} onChange={v => updBtn('style', v)} options={[
-          { value: 'solid', label: 'مملوء' },
-          { value: 'outline', label: 'محدد' },
-          { value: 'ghost', label: 'شفاف' },
-          { value: 'gradient', label: 'تدرج' },
-          { value: 'pill', label: 'بيضاوي' },
+        <Sel value={btn.style ?? 'solid'} onChange={v => updBtn('style', v)} options={[
+          { value: 'solid',    label: 'مملوء' },
+          { value: 'outline',  label: 'محدد (بوردر)' },
+          { value: 'ghost',    label: 'شفاف' },
+          { value: 'gradient', label: 'تدرج لوني' },
+          { value: 'pill',     label: 'بيضاوي Pill' },
         ]} />
       </Row>
       <Row label="حجم الأزرار">
-        <Sel value={btns.size ?? 'md'} onChange={v => updBtn('size', v)} options={[
+        <Sel value={btn.size ?? 'md'} onChange={v => updBtn('size', v)} options={[
           { value: 'sm', label: 'صغير' },
           { value: 'md', label: 'متوسط' },
           { value: 'lg', label: 'كبير' },
         ]} />
       </Row>
-      <Row label="توهج حول الزر"><Toggle value={btns.glow ?? false} onChange={v => updBtn('glow', v)} /></Row>
-      <Row label="نص كبير (Uppercase)"><Toggle value={btns.uppercase ?? false} onChange={v => updBtn('uppercase', v)} /></Row>
-      <Row label="تكبير عند Hover"><Toggle value={btns.hoverScale ?? true} onChange={v => updBtn('hoverScale', v)} /></Row>
+      <Row label="توهج Glow حول الزر">
+        <Toggle value={btn.glow ?? false} onChange={v => updBtn('glow', v)} />
+      </Row>
+      <Row label="Uppercase — نص كبير">
+        <Toggle value={btn.uppercase ?? false} onChange={v => updBtn('uppercase', v)} />
+      </Row>
+      <Row label="تكبير عند hover">
+        <Toggle value={btn.hoverScale ?? true} onChange={v => updBtn('hoverScale', v)} />
+      </Row>
     </div>
   )
 }
 
-function EffectsTab({
-  config, onChange,
-}: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+function EffectsTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
   function updEff(key: string, val: boolean) {
     onChange({ ...config, effects: { ...config.effects, [key]: val } })
   }
@@ -900,68 +1350,198 @@ function EffectsTab({
   return (
     <div className="space-y-1">
       <SectionTitle>التأثيرات الحركية</SectionTitle>
-      <Row label="Fade عند التمرير"><Toggle value={eff.sectionFade ?? true} onChange={v => updEff('sectionFade', v)} /></Row>
-      <Row label="رفع البطاقات عند Hover"><Toggle value={eff.hoverLift ?? true} onChange={v => updEff('hoverLift', v)} /></Row>
-      <Row label="تمرير سلس للصفحة"><Toggle value={eff.smoothScroll ?? true} onChange={v => updEff('smoothScroll', v)} /></Row>
-      <Row label="تكبير صور المشاريع"><Toggle value={eff.projectZoom ?? true} onChange={v => updEff('projectZoom', v)} /></Row>
-      <Row label="تكبير الأزرار"><Toggle value={eff.buttonScale ?? true} onChange={v => updEff('buttonScale', v)} /></Row>
-      <Row label="توهج Accent"><Toggle value={eff.accentGlow ?? false} onChange={v => updEff('accentGlow', v)} /></Row>
-      <Row label="Glass Effect للـ Nav"><Toggle value={eff.glassEffect ?? false} onChange={v => updEff('glassEffect', v)} /></Row>
-      <Row label="خط متحرك على الروابط"><Toggle value={eff.animatedUnderline ?? false} onChange={v => updEff('animatedUnderline', v)} /></Row>
+      <Row label="Fade عند التمرير" hint="الأقسام تظهر بتأثير ناعم">
+        <Toggle value={eff.sectionFade ?? true} onChange={v => updEff('sectionFade', v)} />
+      </Row>
+      <Row label="رفع البطاقات (Hover Lift)">
+        <Toggle value={eff.hoverLift ?? true} onChange={v => updEff('hoverLift', v)} />
+      </Row>
+      <Row label="تمرير سلس للصفحة">
+        <Toggle value={eff.smoothScroll ?? true} onChange={v => updEff('smoothScroll', v)} />
+      </Row>
+      <Row label="تكبير صور المشاريع">
+        <Toggle value={eff.projectZoom ?? true} onChange={v => updEff('projectZoom', v)} />
+      </Row>
+      <Row label="تكبير الأزرار عند hover">
+        <Toggle value={eff.buttonScale ?? true} onChange={v => updEff('buttonScale', v)} />
+      </Row>
+      <Row label="توهج حول عناصر Accent">
+        <Toggle value={eff.accentGlow ?? false} onChange={v => updEff('accentGlow', v)} />
+      </Row>
+      <Row label="Glass Effect للـ Nav">
+        <Toggle value={eff.glassEffect ?? false} onChange={v => updEff('glassEffect', v)} />
+      </Row>
+      <Row label="خط متحرك تحت الروابط">
+        <Toggle value={eff.animatedUnderline ?? false} onChange={v => updEff('animatedUnderline', v)} />
+      </Row>
+      <Row label="نبضة على عناصر Accent (Pulse)">
+        <Toggle value={eff.pulseAccent ?? false} onChange={v => updEff('pulseAccent', v)} />
+      </Row>
 
-      <SectionTitle>الزخارف</SectionTitle>
+      <SectionTitle>الزخارف والأنماط</SectionTitle>
+      <Row label="خط Accent جانبي للعناوين">
+        <Toggle value={dec.accentLine ?? true} onChange={v => updDec('accentLine', v)} />
+      </Row>
+      <Row label="تبادل خلفيات الأقسام">
+        <Toggle value={dec.sectionBgAlt ?? true} onChange={v => updDec('sectionBgAlt', v)} />
+      </Row>
+      <Row label="نقطة لونية في زاوية البطاقة">
+        <Toggle value={dec.cardCornerDot ?? false} onChange={v => updDec('cardCornerDot', v)} />
+      </Row>
+      <Row label="رقم القسم كزخرفة خلفية">
+        <Toggle value={dec.sectionLabel ?? false} onChange={v => updDec('sectionLabel', v)} />
+      </Row>
+
       <Row label="فاصل بين الأقسام">
         <Sel value={dec.sectionDivider ?? 'none'} onChange={v => updDec('sectionDivider', v)} options={[
-          { value: 'none', label: 'بدون' },
-          { value: 'line', label: 'خط' },
-          { value: 'gradient', label: 'تدرج' },
-          { value: 'dots-row', label: 'نقاط' },
-          { value: 'wave', label: 'موجة' },
-          { value: 'slash', label: 'مائل' },
+          { value: 'none',      label: 'بدون' },
+          { value: 'line',      label: 'خط مستقيم' },
+          { value: 'gradient',  label: 'تدرج' },
+          { value: 'dots-row',  label: 'صف نقاط' },
+          { value: 'wave',      label: 'موجة' },
+          { value: 'slash',     label: 'مائل' },
         ]} />
       </Row>
-      <Row label="نمط الخلفية">
+      <Row label="نمط خلفية الأقسام">
         <Sel value={dec.backgroundPattern ?? 'none'} onChange={v => updDec('backgroundPattern', v)} options={[
-          { value: 'none', label: 'بدون نمط' },
-          { value: 'dots', label: 'نقاط' },
-          { value: 'grid', label: 'شبكة' },
-          { value: 'diagonal', label: 'مائل' },
-          { value: 'cross', label: 'تقاطع' },
+          { value: 'none',     label: 'بدون نمط' },
+          { value: 'dots',     label: 'نقاط' },
+          { value: 'grid',     label: 'شبكة' },
+          { value: 'diagonal', label: 'خطوط مائلة' },
+          { value: 'cross',    label: 'تقاطع' },
         ]} />
       </Row>
       {dec.backgroundPattern && dec.backgroundPattern !== 'none' && (
         <div className="py-2">
           <div className="flex items-center justify-between mb-1">
             <p className="text-sm text-gray-700">شفافية النمط</p>
-            <span className="text-xs text-gray-400 font-mono">{Math.round((dec.patternOpacity ?? 0.04) * 100)}%</span>
+            <span className="text-xs font-mono text-gray-400">{Math.round((dec.patternOpacity ?? 0.04) * 100)}%</span>
           </div>
-          <input
-            type="range" min={0.01} max={0.2} step={0.01}
+          <input type="range" min={0.01} max={0.25} step={0.01}
             value={dec.patternOpacity ?? 0.04}
             onChange={e => updDec('patternOpacity', Number(e.target.value))}
-            className="w-full accent-gray-900"
-          />
+            className="w-full accent-gray-900" />
         </div>
       )}
-      <Row label="خط ملون جانبي للعناوين"><Toggle value={dec.accentLine ?? true} onChange={v => updDec('accentLine', v)} /></Row>
-      <Row label="تبادل خلفيات الأقسام"><Toggle value={dec.sectionBgAlt ?? true} onChange={v => updDec('sectionBgAlt', v)} /></Row>
-      <Row label="نقطة في زاوية البطاقة"><Toggle value={dec.cardCornerDot ?? false} onChange={v => updDec('cardCornerDot', v)} /></Row>
     </div>
   )
 }
 
-// ── Main Builder ───────────────────────────────────────────────────────────────
+function ContactTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+  function upd(key: string, val: unknown) {
+    onChange({ ...config, contactStyle: { ...config.contactStyle, [key]: val } })
+  }
+  const cs = config.contactStyle ?? {}
+  return (
+    <div className="space-y-1">
+      <SectionTitle>تخطيط صفحة التواصل</SectionTitle>
+      <Row label="تخطيط الصفحة" hint="كيف تُرتَّب معلومات التواصل والخريطة">
+        <Sel value={cs.layout ?? 'side-by-side'} onChange={v => upd('layout', v)} options={[
+          { value: 'side-by-side', label: 'جانب لجانب' },
+          { value: 'grid',         label: 'شبكة' },
+          { value: 'list',         label: 'قائمة' },
+          { value: 'centered',     label: 'مركزي' },
+        ]} />
+      </Row>
+
+      <SectionTitle>بطاقات معلومات التواصل</SectionTitle>
+      <Row label="شكل البطاقات">
+        <Sel value={cs.cardStyle ?? 'bordered'} onChange={v => upd('cardStyle', v)} options={[
+          { value: 'flat',     label: 'مسطحة' },
+          { value: 'glass',    label: 'زجاجية' },
+          { value: 'bordered', label: 'محددة (بوردر)' },
+          { value: 'filled',   label: 'مملوءة داكنة' },
+        ]} />
+      </Row>
+
+      <SectionTitle>روابط السوشيال</SectionTitle>
+      <Row label="شكل أزرار السوشيال">
+        <Sel value={cs.socialStyle ?? 'pills'} onChange={v => upd('socialStyle', v)} options={[
+          { value: 'icons',    label: 'أيقونات دائرية' },
+          { value: 'pills',    label: 'أزرار بيضاوية' },
+          { value: 'outlined', label: 'محددة (بوردر)' },
+          { value: 'text',     label: 'نص عادي' },
+        ]} />
+      </Row>
+
+      <SectionTitle>الخريطة وواتساب</SectionTitle>
+      <Row label="طريقة عرض الخريطة">
+        <Sel value={cs.mapStyle ?? 'embedded'} onChange={v => upd('mapStyle', v)} options={[
+          { value: 'embedded', label: 'مدمجة في الصفحة' },
+          { value: 'button',   label: 'زر يفتح الخريطة' },
+          { value: 'none',     label: 'إخفاء الخريطة' },
+        ]} />
+      </Row>
+      <Row label="زر واتساب عائم">
+        <Toggle value={cs.showWhatsappFloat ?? true} onChange={v => upd('showWhatsappFloat', v)} />
+      </Row>
+    </div>
+  )
+}
+
+function IdentityTab({ config, onChange }: { config: CustomThemeConfig; onChange: (c: CustomThemeConfig) => void }) {
+  function upd(key: string, val: unknown) {
+    onChange({ ...config, visualPreset: { ...config.visualPreset, [key]: val } })
+  }
+  const vp = config.visualPreset ?? {}
+  return (
+    <div className="space-y-1">
+      <SectionTitle>هوية القالب</SectionTitle>
+      <div className="space-y-3 pt-1">
+        <div>
+          <Label className="text-sm text-gray-600 mb-1 block">مزاج القالب (للتوثيق)</Label>
+          <Input value={vp.themeMood ?? ''} onChange={e => upd('themeMood', e.target.value)}
+            placeholder="مثال: فاخر داكن، عصري محايد، جريء..." className="h-9" />
+          <p className="text-[10px] text-gray-400 mt-1">يظهر للأدمن فقط، لا يؤثر على الشكل</p>
+        </div>
+      </div>
+
+      <SectionTitle>كثافة المحتوى</SectionTitle>
+      <Row label="كثافة العناصر" hint="تؤثر على المسافات والأحجام">
+        <Sel value={vp.density ?? 'normal'} onChange={v => upd('density', v as 'minimal' | 'normal' | 'rich')} options={[
+          { value: 'minimal', label: 'بسيط — مساحات واسعة' },
+          { value: 'normal',  label: 'عادي — متوازن' },
+          { value: 'rich',    label: 'مكثف — عناصر كثيرة' },
+        ]} />
+      </Row>
+      <Row label="درجة التباين" hint="تؤثر على وضوح النصوص والعناصر">
+        <Sel value={vp.contrast ?? 'normal'} onChange={v => upd('contrast', v as 'low' | 'normal' | 'high')} options={[
+          { value: 'low',    label: 'منخفض — ناعم ومريح' },
+          { value: 'normal', label: 'عادي — متوازن' },
+          { value: 'high',   label: 'عالي — صارخ وحاد' },
+        ]} />
+      </Row>
+
+      <SectionTitle>ملخص الإعدادات الحالية</SectionTitle>
+      <div className="bg-gray-50 rounded-lg p-3 space-y-1.5 text-xs text-gray-600">
+        <div className="flex justify-between"><span>الخط:</span><span className="font-mono">{config.fonts.heading}</span></div>
+        <div className="flex justify-between"><span>الهيرو:</span><span>{config.hero.style}</span></div>
+        <div className="flex justify-between"><span>الأعمدة:</span><span>{config.projectsGrid.columns}</span></div>
+        <div className="flex justify-between"><span>البطاقات:</span><span>{config.cards?.style ?? 'elevated'}</span></div>
+        <div className="flex justify-between"><span>الأزرار:</span><span>{config.buttons?.style ?? 'solid'}</span></div>
+        <div className="flex justify-between"><span>الانحناء:</span><span>{config.layout.borderRadius}</span></div>
+        <div className="flex justify-between"><span>الـ Nav:</span><span>{config.navigation?.style ?? 'transparent'}</span></div>
+        <div className="flex justify-between"><span>الأقسام:</span><span>{config.layout.sections.length}</span></div>
+      </div>
+    </div>
+  )
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MAIN BUILDER
+// ══════════════════════════════════════════════════════════════════════════════
+
 export default function ThemeBuilderClient({ existingTheme }: { existingTheme?: CustomTheme }) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState('colors')
   const [saving, setSaving] = useState(false)
 
   const [meta, setMeta] = useState({
-    name_ar: existingTheme?.name_ar ?? '',
-    name_en: existingTheme?.name_en ?? '',
+    name_ar:      existingTheme?.name_ar ?? '',
+    name_en:      existingTheme?.name_en ?? '',
     description_ar: existingTheme?.description_ar ?? '',
     plan_required: existingTheme?.plan_required ?? 'pro',
-    visibility: (existingTheme as (CustomTheme & { visibility?: string }) | undefined)?.visibility ?? 'public',
+    visibility:   (existingTheme as (CustomTheme & { visibility?: string }) | undefined)?.visibility ?? 'public',
   })
 
   const [config, setConfig] = useState<CustomThemeConfig>(
@@ -975,25 +1555,15 @@ export default function ThemeBuilderClient({ existingTheme }: { existingTheme?: 
   async function handleSave() {
     if (!meta.name_ar.trim()) { toast.error('أدخل اسم القالب أولاً'); return }
     setSaving(true)
-
-    const body = existingTheme
-      ? { id: existingTheme.id, ...meta, config }
-      : { ...meta, config }
-
+    const body = existingTheme ? { id: existingTheme.id, ...meta, config } : { ...meta, config }
     const res = await fetch('/api/admin/themes/builder', {
       method: existingTheme ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     })
-
     const data = await res.json()
     setSaving(false)
-
-    if (!res.ok) {
-      toast.error(data.error ?? 'فشل الحفظ', { duration: 5000 })
-      return
-    }
-
+    if (!res.ok) { toast.error(data.error ?? 'فشل الحفظ', { duration: 5000 }); return }
     toast.success(existingTheme ? '✅ تم تحديث القالب' : '✅ تم إنشاء القالب')
     router.push('/admin/themes')
   }
@@ -1027,9 +1597,7 @@ export default function ThemeBuilderClient({ existingTheme }: { existingTheme?: 
         {/* Tabs */}
         <div className="flex overflow-x-auto border-b border-gray-100 bg-gray-50 flex-shrink-0 scrollbar-hide">
           {TABS.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               className={cn(
                 'px-3 py-2.5 text-xs whitespace-nowrap transition-colors flex-shrink-0 flex items-center gap-1',
                 activeTab === tab.id
@@ -1054,6 +1622,8 @@ export default function ThemeBuilderClient({ existingTheme }: { existingTheme?: 
           {activeTab === 'projects' && <ProjectsTab config={config} onChange={setConfig} />}
           {activeTab === 'cards'    && <CardsTab    config={config} onChange={setConfig} />}
           {activeTab === 'effects'  && <EffectsTab  config={config} onChange={setConfig} />}
+          {activeTab === 'contact'  && <ContactTab  config={config} onChange={setConfig} />}
+          {activeTab === 'identity' && <IdentityTab config={config} onChange={setConfig} />}
         </div>
       </div>
 
