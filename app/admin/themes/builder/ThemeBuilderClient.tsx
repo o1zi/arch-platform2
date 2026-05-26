@@ -112,7 +112,7 @@ function Sel({
   value, onChange, options,
 }: { value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
   return (
-    <Select value={value} onValueChange={onChange}>
+    <Select value={value} onValueChange={(v) => v && onChange(v)}>
       <SelectTrigger className="h-8 text-sm">
         <SelectValue />
       </SelectTrigger>
