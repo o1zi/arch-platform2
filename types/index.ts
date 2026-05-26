@@ -192,7 +192,7 @@ export interface CustomThemeConfig {
   layout: {
     borderRadius: 'none' | 'sm' | 'md' | 'lg' | 'full'
     spacing: 'compact' | 'normal' | 'spacious'
-    sections: Array<'hero' | 'about' | 'services' | 'projects' | 'features' | 'cta' | 'footer'>
+    sections: Array<'hero' | 'about' | 'services' | 'projects' | 'features' | 'testimonials' | 'faq' | 'cta' | 'footer'>
     maxWidth?: 'narrow' | 'normal' | 'wide' | 'full'
   }
 
