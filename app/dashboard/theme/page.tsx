@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Tenant, PLAN_LIMITS, CustomTheme } from '@/types'
+import { Tenant, CustomTheme } from '@/types'
 import ThemeSelector from '@/components/dashboard/ThemeSelector'
 
 export default async function ThemePage() {
@@ -66,7 +66,6 @@ export default async function ThemePage() {
       </div>
       <ThemeSelector
         tenant={tenant}
-        availableThemes={PLAN_LIMITS[tenant.plan].themes}
         customThemes={availableCustomThemes}
       />
     </div>

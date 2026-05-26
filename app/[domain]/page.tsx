@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation'
 import { getTenantByIdentifier } from '@/lib/tenant'
 import { createClient } from '@/lib/supabase/server'
 import { Project, ContentBlock, CustomTheme, TenantStat, TenantTestimonial, TenantFAQ } from '@/types'
-import { ThemeRenderer } from '@/components/themes/ThemeRenderer'
+import DynamicThemeEngine from '@/components/themes/DynamicThemeEngine'
 import { getSectorConfig } from '@/lib/sectors'
+import { getCustomTheme } from '@/lib/get-custom-theme'
+import { DEFAULT_THEME_CONFIG } from '@/lib/default-theme'
 
 export default async function TenantHomePage({ params }: { params: { domain: string } }) {
   const tenant = await getTenantByIdentifier(params.domain)
@@ -11,10 +13,7 @@ export default async function TenantHomePage({ params }: { params: { domain: str
 
   const supabase = await createClient()
 
-  // جلب المشاريع + الكتل + القالب المخصص (إن وجد) بالتوازي
-  const tenantWithCustomTheme = tenant as typeof tenant & { custom_theme_id?: string | null }
-
-  const [projectsResult, blocksResult, customThemeResult, statsResult, testimonialsResult, faqsResult] = await Promise.all([
+  const [projectsResult, blocksResult, customTheme, statsResult, testimonialsResult, faqsResult] = await Promise.all([
     supabase
       .from('projects')
       .select('*, images:project_images(*)')
@@ -27,14 +26,7 @@ export default async function TenantHomePage({ params }: { params: { domain: str
       .eq('tenant_id', tenant.id)
       .eq('is_active', true)
       .order('sort_order', { ascending: true }),
-    tenantWithCustomTheme.custom_theme_id
-      ? supabase
-          .from('custom_themes')
-          .select('*')
-          .eq('id', tenantWithCustomTheme.custom_theme_id)
-          .eq('is_active', true)
-          .single()
-      : Promise.resolve({ data: null }),
+    getCustomTheme(tenant.id),
     supabase
       .from('tenant_stats')
       .select('*')
@@ -61,20 +53,22 @@ export default async function TenantHomePage({ params }: { params: { domain: str
   const services = allBlocks.filter(b => b.type === 'service')
   const features = allBlocks.filter(b => b.type === 'feature')
 
-  const customTheme = (customThemeResult.data ?? null) as CustomTheme | null
   const sectorConfig = getSectorConfig(tenant.sector)
   const stats = (statsResult.data ?? []) as TenantStat[]
   const testimonials = (testimonialsResult.data ?? []) as TenantTestimonial[]
   const faqs = (faqsResult.data ?? []) as TenantFAQ[]
 
+  // استخدام القالب المخصص إن وُجد، وإلا القالب الافتراضي الفاخر
+  const config = (customTheme as CustomTheme | null)?.config ?? DEFAULT_THEME_CONFIG
+
   return (
-    <ThemeRenderer
+    <DynamicThemeEngine
+      config={config}
       tenant={tenant}
       projects={allProjects}
       featuredProjects={featuredProjects}
       services={services}
       features={features}
-      customTheme={customTheme}
       sectorConfig={sectorConfig}
       stats={stats}
       testimonials={testimonials}

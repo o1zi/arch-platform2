@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation'
 import { getTenantByIdentifier } from '@/lib/tenant'
 import { createClient } from '@/lib/supabase/server'
-import { Project } from '@/types'
-import { ThemeProjectsRenderer } from '@/components/themes/ThemeProjectsRenderer'
+import { Project, CustomTheme } from '@/types'
+import DynamicProjectsPage from '@/components/themes/DynamicProjectsPage'
 import { getCustomTheme } from '@/lib/get-custom-theme'
 import { getSectorConfig } from '@/lib/sectors'
+import { DEFAULT_THEME_CONFIG } from '@/lib/default-theme'
 
 export default async function TenantProjectsPage({ params }: { params: { domain: string } }) {
   const tenant = await getTenantByIdentifier(params.domain)
@@ -22,12 +23,13 @@ export default async function TenantProjectsPage({ params }: { params: { domain:
   ])
 
   const sectorConfig = getSectorConfig(tenant.sector)
+  const config = (customTheme as CustomTheme | null)?.config ?? DEFAULT_THEME_CONFIG
 
   return (
-    <ThemeProjectsRenderer
+    <DynamicProjectsPage
       tenant={tenant}
       projects={(projects ?? []) as Project[]}
-      customTheme={customTheme}
+      config={config}
       sectorConfig={sectorConfig}
     />
   )
