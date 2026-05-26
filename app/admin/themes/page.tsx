@@ -3,7 +3,7 @@ import { CustomTheme } from '@/types'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Plus, Palette } from 'lucide-react'
+import { Plus, Palette, Paintbrush, Upload } from 'lucide-react'
 import AdminThemeActions from './AdminThemeActions'
 
 export default async function AdminThemesPage() {
@@ -21,16 +21,23 @@ export default async function AdminThemesPage() {
 
   return (
     <div className="space-y-6 max-w-5xl">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold">القوالب المخصصة</h1>
-          <p className="text-gray-500 mt-1">ارفع قوالب ZIP وأتحها للمكاتب حسب باقاتها</p>
+          <p className="text-gray-500 mt-1">صمّم قوالب فاخرة بالمحرر المرئي أو ارفع قالب ZIP</p>
         </div>
-        <Link href="/admin/themes/new"
-          className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
-          <Plus className="h-4 w-4" />
-          رفع قالب جديد
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/admin/themes/new"
+            className="flex items-center gap-2 border border-gray-300 text-gray-700 bg-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+            <Upload className="h-4 w-4" />
+            رفع ZIP
+          </Link>
+          <Link href="/admin/themes/builder"
+            className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+            <Paintbrush className="h-4 w-4" />
+            إنشاء بالمحرر
+          </Link>
+        </div>
       </div>
 
       {!themes?.length ? (
@@ -95,7 +102,18 @@ export default async function AdminThemesPage() {
                   </p>
                 )}
 
-                <AdminThemeActions theme={theme} />
+                <div className="flex gap-2">
+                  <Link
+                    href={`/admin/themes/builder?edit=${theme.id}`}
+                    className="flex-1 text-center text-xs border border-gray-200 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1"
+                  >
+                    <Paintbrush className="h-3 w-3" />
+                    تعديل
+                  </Link>
+                  <div className="flex-1">
+                    <AdminThemeActions theme={theme} />
+                  </div>
+                </div>
               </div>
             </div>
           ))}
