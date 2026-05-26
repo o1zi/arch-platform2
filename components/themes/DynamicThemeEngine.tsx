@@ -7,6 +7,9 @@ import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Phone, Mail, MapPin, ArrowUp, ChevronDown, CheckCircle } from 'lucide-react'
 import { resolveIcon } from '@/components/themes/iconMap'
+import { SocialFloat } from '@/components/themes/shared/SocialFloat'
+import { Testimonials, SECTOR_TESTIMONIALS } from '@/components/themes/shared/Testimonials'
+import { FAQ, SECTOR_FAQ } from '@/components/themes/shared/FAQ'
 
 // ── WhatsApp SVG ─────────────────────────────────────────────────────────────
 function WhatsAppIcon() {
@@ -17,7 +20,7 @@ function WhatsAppIcon() {
   )
 }
 
-type SectionKey = 'hero' | 'about' | 'services' | 'projects' | 'features' | 'cta' | 'footer'
+type SectionKey = 'hero' | 'about' | 'services' | 'projects' | 'features' | 'testimonials' | 'faq' | 'cta' | 'footer'
 
 interface EngineProps extends ThemeProps {
   config: CustomThemeConfig
@@ -192,6 +195,7 @@ function AccentTag({ label, show }: { label: string; show: boolean }) {
 export default function DynamicThemeEngine({
   config, tenant, projects, featuredProjects,
   services: customServices, features: customFeatures, sectorConfig,
+  testimonials: rawTestimonials, faqs: rawFaqs,
 }: EngineProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop]   = useState(false)
@@ -919,6 +923,48 @@ export default function DynamicThemeEngine({
     )
   }
 
+  // ── TESTIMONIALS ──────────────────────────────────────────────────────────
+  const SectionTestimonials = () => {
+    const items = rawTestimonials && rawTestimonials.length > 0
+      ? rawTestimonials.map(t => ({ name: t.name, role: t.role ?? '', text: t.content, rating: t.rating ?? undefined }))
+      : (SECTOR_TESTIMONIALS[tenant.sector ?? 'general'] ?? SECTOR_TESTIMONIALS.general)
+    const altBg = dec.sectionBgAlt ? (config.colors.cardBg ?? config.colors.secondary) : config.colors.background
+    return (
+      <Testimonials
+        testimonials={items}
+        title="ماذا يقول عملاؤنا"
+        accentColor={config.colors.accent}
+        bgColor={altBg}
+        textColor={config.colors.text}
+        textLight={config.colors.textLight}
+        variant="carousel"
+      />
+    )
+  }
+
+  // ── FAQ ───────────────────────────────────────────────────────────────────
+  const SectionFAQ = () => {
+    const items = rawFaqs && rawFaqs.length > 0
+      ? rawFaqs.map(f => ({ q: f.question, a: f.answer }))
+      : (SECTOR_FAQ[tenant.sector ?? 'general'] ?? SECTOR_FAQ.general)
+    const cardStyle = config.cards?.style
+    const faqVariant: 'default' | 'bordered' | 'minimal' | 'filled' =
+      cardStyle === 'bordered' ? 'bordered' :
+      cardStyle === 'glass' || cardStyle === 'filled' ? 'filled' :
+      cardStyle === 'flat' ? 'minimal' : 'default'
+    return (
+      <FAQ
+        items={items}
+        title="الأسئلة الشائعة"
+        accentColor={config.colors.accent}
+        bgColor={config.colors.background}
+        textColor={config.colors.text}
+        textLight={config.colors.textLight}
+        variant={faqVariant}
+      />
+    )
+  }
+
   // ── CTA ───────────────────────────────────────────────────────────────────
   const SectionCTA = () => {
     const layout = sec.ctaLayout ?? 'split'
@@ -1064,6 +1110,8 @@ export default function DynamicThemeEngine({
     services: SectionServices,
     projects: SectionProjects,
     features: SectionFeatures,
+    testimonials: SectionTestimonials,
+    faq: SectionFAQ,
     cta: SectionCTA,
     footer: SectionFooter,
   }
@@ -1104,13 +1152,14 @@ export default function DynamicThemeEngine({
         )
       })}
 
-      {/* WhatsApp Float */}
-      {(config.contactStyle?.showWhatsappFloat !== false) && waUrl && (
-        <a href={waUrl} target="_blank" rel="noopener noreferrer"
-          className={`fixed bottom-6 left-6 z-50 w-14 h-14 flex items-center justify-center text-white shadow-2xl hover:scale-110 transition-transform ${br === 'rounded-none' ? 'rounded-none' : 'rounded-full'} ${btnGlow ? 'btn-accent-glow' : ''}`}
-          style={{ backgroundColor: '#25D366' }}>
-          <WhatsAppIcon />
-        </a>
+      {/* Social Float (WhatsApp + Snapchat + TikTok) */}
+      {config.contactStyle?.showWhatsappFloat !== false && (
+        <SocialFloat
+          whatsapp={tenant.whatsapp ?? tenant.phone ?? undefined}
+          snapchat_url={tenant.snapchat_url ?? undefined}
+          tiktok_url={tenant.tiktok_url ?? undefined}
+          tenantSlug={tenant.slug}
+        />
       )}
 
       {/* Back to top */}

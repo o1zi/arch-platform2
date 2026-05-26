@@ -43,7 +43,7 @@ export const DEFAULT_THEME_CONFIG: CustomThemeConfig = {
     borderRadius: 'md',
     spacing:      'normal',
     maxWidth:     'normal',
-    sections:     ['hero', 'about', 'services', 'projects', 'cta', 'footer'],
+    sections:     ['hero', 'about', 'services', 'projects', 'testimonials', 'faq', 'cta', 'footer'],
   },
   navigation: {
     style:    'transparent',
