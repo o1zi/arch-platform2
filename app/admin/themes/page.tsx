@@ -3,7 +3,7 @@ import { CustomTheme } from '@/types'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Plus, Palette, Paintbrush, Upload } from 'lucide-react'
+import { Palette, Paintbrush, Upload } from 'lucide-react'
 import AdminThemeActions from './AdminThemeActions'
 
 export default async function AdminThemesPage() {
