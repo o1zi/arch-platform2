@@ -1,7 +1,7 @@
-export type Theme = 'modern' | 'classic' | 'bold' | 'minimal' | 'luxury' | 'nebula'
+export type Theme = 'modern' | 'classic' | 'bold' | 'minimal' | 'luxury' | 'nebula' | 'heritage' | 'studio'
 export type Plan = 'basic' | 'pro' | 'premium'
 export type TenantUserRole = 'owner' | 'editor'
-export type Sector = 'engineering' | 'contractor' | 'real_estate' | 'interior_design' | 'photography' | 'legal' | 'medical' | 'general'
+export type Sector = 'engineering' | 'contractor' | 'real_estate' | 'interior_design' | 'photography' | 'legal' | 'medical' | 'general' | 'architecture' | 'interior' | 'photo' | 'realestate'
 
 export interface Tenant {
   id: string

@@ -26,7 +26,9 @@
       "Bash(dir \"C:\\\\Users\\\\saudi\\\\OneDrive\\\\سطح المكتب\\\\مكاتب هندسية\\\\pro - Copy\\\\app\" /b /s)",
       "Bash(findstr \"projects\")",
       "Bash(npx eslint *)",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "Bash(node --max-old-space-size=4096 node_modules/.bin/tsc --noEmit)",
+      "Bash(node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc --noEmit)"
     ]
   }
 }

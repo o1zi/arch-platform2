@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>وجود — منصة بناء مواقع المكاتب المهنية</title>
+  <base href="/" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #app { min-height: 100vh; }
+  </style>
+
+  <!-- React 18 — production builds (~600KB vs 6MB dev) -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <!-- Supabase JS v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- متغيرات البيئة — محلي: .env.js  |  Vercel: تُحقن آلياً -->
+  <script src=".env.js"></script>
+
+  <!-- Shared atoms, icons, mock data, supabase -->
+  <script type="text/babel" src="src/icons.jsx"></script>
+  <script type="text/babel" src="src/data.jsx"></script>
+  <script type="text/babel" src="src/atoms.jsx"></script>
+  <script type="text/babel" src="src/supabase.jsx"></script>
+
+  <!-- Templates -->
+  <script type="text/babel" src="src/views/templates/classic.jsx"></script>
+  <script type="text/babel" src="src/views/templates/heritage.jsx"></script>
+  <script type="text/babel" src="src/views/templates/minimal.jsx"></script>
+  <script type="text/babel" src="src/views/templates/luxury.jsx"></script>
+  <script type="text/babel" src="src/views/templates/studio.jsx"></script>
+
+  <!-- Views -->
+  <script type="text/babel" src="src/views/landing.jsx"></script>
+  <script type="text/babel" src="src/views/auth.jsx"></script>
+  <script type="text/babel" src="src/views/tenant.jsx"></script>
+  <script type="text/babel" src="src/views/admin.jsx"></script>
+  <script type="text/babel" src="src/views/publicSite.jsx"></script>
+  <script type="text/babel" src="src/views/themeBuilder.jsx"></script>
+
+  <!-- Main app/router -->
+  <script type="text/babel" src="src/app.jsx"></script>
+</body>
+</html>

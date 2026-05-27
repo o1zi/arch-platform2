@@ -1,21 +1,16 @@
 import type { Metadata } from 'next'
-import { Cairo } from 'next/font/google'
 import './globals.css'
-import { Toaster } from '@/components/ui/sonner'
-
-const cairo = Cairo({ subsets: ['arabic', 'latin'], variable: '--font-sans', display: 'swap' })
 
 export const metadata: Metadata = {
-  title: 'منصة مواقع مكاتب الهندسة',
-  description: 'أنشئ موقعاً احترافياً لمكتبك الهندسي في دقائق',
+  title: 'وجود — منصة بناء مواقع المكاتب المهنية',
+  description: 'منصة متكاملة لإطلاق موقع احترافي لمكتبك خلال يوم واحد',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" className={cairo.variable}>
-      <body className="antialiased font-sans">
+    <html lang="ar" dir="rtl">
+      <body className="antialiased">
         {children}
-        <Toaster richColors position="top-center" />
       </body>
     </html>
   )

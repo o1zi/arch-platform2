@@ -1,17 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plan } from '@/types'
-import { ALL_SECTORS, Sector } from '@/lib/sectors'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { toast } from 'sonner'
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { SectionHeader, Card, Field, Input, Textarea, Select, Btn, IconBtn, Alert } from '@/components/ui/atoms'
+import { Icons } from '@/lib/icons'
+import { ADMIN_TENANTS, PLANS, fmtSAR } from '@/lib/data'
+import { sbGetAllTenants } from '@/lib/api'
 
 function slugify(str: string): string {
   return str
@@ -25,20 +19,26 @@ function slugify(str: string): string {
 export default function NewTenantPage() {
   const router = useRouter()
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+
+  const today = new Date().toISOString().split('T')[0]
+  const yearLater = new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0]
 
   const [form, setForm] = useState({
     name_ar: '',
     slug: '',
     email: '',
     password: '',
-    plan: 'basic' as Plan,
-    sector: 'engineering' as Sector,
-    subscription_start: new Date().toISOString().split('T')[0],
-    subscription_end: new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0],
+    phone: '',
+    address_ar: '',
+    plan: 'basic' as string,
+    subscription_start: today,
+    subscription_end: yearLater,
     notes: '',
   })
 
-  function set(field: string, value: string) {
+  const set = (field: string, value: string) => {
     setForm(prev => {
       const next = { ...prev, [field]: value }
       if (field === 'name_ar' && !prev.slug) {
@@ -46,120 +46,176 @@ export default function NewTenantPage() {
       }
       return next
     })
+    setError('')
+    setSuccess('')
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.name_ar || !form.slug || !form.email || !form.password) {
-      toast.error('يرجى ملء جميع الحقول الإلزامية')
+      setError('يرجى ملء جميع الحقول الإلزامية')
       return
     }
+
+    try {
+      const result = await sbGetAllTenants()
+      if (result?.data) {
+        const exists = (result.data as Record<string, unknown>[]).find(
+          r => (r.slug as string) === form.slug
+        )
+        if (exists) {
+          setError('هذا الرابط مستخدم بالفعل، اختر رابطاً آخر')
+          return
+        }
+      }
+    } catch { /* proceed */ }
+
     setSaving(true)
+    try {
+      const res = await fetch('/api/admin/tenants', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
 
-    // Call the API route that uses service role
-    const res = await fetch('/api/admin/tenants', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    })
-    const data = await res.json()
+      if (!res.ok) {
+        setError(data.error ?? 'حدث خطأ')
+        setSaving(false)
+        return
+      }
 
-    if (!res.ok) {
-      toast.error(data.error ?? 'حدث خطأ')
+      setSuccess('تم إنشاء المكتب بنجاح')
+      setTimeout(() => router.push(`/admin/tenants/${data.tenantId}`), 800)
+    } catch {
+      setError('حدث خطأ في الاتصال')
       setSaving(false)
-      return
     }
-
-    toast.success('تم إنشاء المكتب بنجاح')
-    router.push(`/admin/tenants/${data.tenantId}`)
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href="/admin/tenants" className="text-gray-500 hover:text-gray-700">
-          <ArrowRight className="h-5 w-5" />
-        </Link>
-        <h1 className="text-2xl font-bold">إضافة مكتب جديد</h1>
+    <div className="wj-anim-in" style={{ maxWidth: 700 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+        <IconBtn icon="arrowLeft" title="رجوع" onClick={() => router.push('/admin/tenants')} />
+        <SectionHeader title="إضافة مكتب جديد" sub="إنشاء حساب مكتب جديد في المنصة" />
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <Card>
-          <CardHeader><CardTitle>معلومات المكتب</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>اسم المكتب (عربي) *</Label>
-                <Input value={form.name_ar} onChange={e => set('name_ar', e.target.value)} required />
-              </div>
-              <div className="space-y-2">
-                <Label>الـ Slug (رابط المكتب) *</Label>
-                <Input value={form.slug} onChange={e => set('slug', slugify(e.target.value))} dir="ltr" required />
-              </div>
+      {error && (
+        <div style={{ marginBottom: 16 }}>
+          <Alert tone="danger" icon="warn">{error}</Alert>
+        </div>
+      )}
+      {success && (
+        <div style={{ marginBottom: 16 }}>
+          <Alert tone="success" icon="check">{success}</Alert>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <Card pad>
+          <h3 style={{ margin: '0 0 16px', fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 600 }}>
+            معلومات المكتب
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }} className="max-sm:grid-cols-[1fr]">
+              <Field label="اسم المكتب (عربي) *" error={!form.name_ar && saving ? 'مطلوب' : undefined}>
+                <Input
+                  value={form.name_ar}
+                  onChange={e => set('name_ar', e.target.value)}
+                  placeholder="مكتب الفارابي للاستشارات الهندسية"
+                  required
+                />
+              </Field>
+              <Field label="الرابط (Slug) *" hint="يُولّد تلقائياً من الاسم، يمكن تعديله" error={!form.slug && saving ? 'مطلوب' : undefined}>
+                <Input
+                  value={form.slug}
+                  onChange={e => set('slug', slugify(e.target.value))}
+                  placeholder="alfarabi"
+                  style={{ direction: 'ltr', fontFamily: 'var(--font-mono)' }}
+                  required
+                />
+              </Field>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>البريد الإلكتروني *</Label>
-                <Input type="email" value={form.email} onChange={e => set('email', e.target.value)} dir="ltr" required />
-              </div>
-              <div className="space-y-2">
-                <Label>كلمة المرور المؤقتة *</Label>
-                <Input type="text" value={form.password} onChange={e => set('password', e.target.value)} dir="ltr" required />
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }} className="max-sm:grid-cols-[1fr]">
+              <Field label="البريد الإلكتروني *" error={!form.email && saving ? 'مطلوب' : undefined}>
+                <Input
+                  type="email"
+                  value={form.email}
+                  onChange={e => set('email', e.target.value)}
+                  placeholder="info@alfarabi.sa"
+                  style={{ direction: 'ltr' }}
+                  required
+                />
+              </Field>
+              <Field label="كلمة المرور المؤقتة *" error={!form.password && saving ? 'مطلوب' : undefined}>
+                <Input
+                  type="text"
+                  value={form.password}
+                  onChange={e => set('password', e.target.value)}
+                  placeholder="كلمة مرور مؤقتة"
+                  style={{ direction: 'ltr' }}
+                  required
+                />
+              </Field>
             </div>
-          </CardContent>
+            <Field label="رقم الجوال">
+              <Input
+                value={form.phone}
+                onChange={e => set('phone', e.target.value)}
+                placeholder="+966 50 000 0000"
+                style={{ direction: 'ltr' }}
+              />
+            </Field>
+            <Field label="العنوان">
+              <Input
+                value={form.address_ar}
+                onChange={e => set('address_ar', e.target.value)}
+                placeholder="الرياض، حي الورود"
+              />
+            </Field>
+          </div>
         </Card>
 
-        <Card className="mt-4">
-          <CardHeader><CardTitle>القطاع والاشتراك</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>القطاع</Label>
-              <Select value={form.sector} onValueChange={(v) => v && set('sector', v)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {ALL_SECTORS.map(s => (
-                    <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+        <Card pad>
+          <h3 style={{ margin: '0 0 16px', fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 600 }}>
+            الباقة والاشتراك
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }} className="max-sm:grid-cols-[1fr]">
+              <Field label="الباقة">
+                <Select value={form.plan} onChange={e => set('plan', e.target.value)} style={{ width: '100%', height: 40, borderRadius: 'var(--r-md)', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--ink)', fontSize: 14, padding: '0 10px' }}>
+                  {Object.entries(PLANS).map(([key, p]) => (
+                    <option key={key} value={key}>
+                      {p.labelAr} — {fmtSAR(p.priceY)} ر.س/سنة
+                    </option>
                   ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-gray-500">يحدد نوع الأعمال والتصنيفات — لا يمكن تغييره لاحقاً</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label>الباقة</Label>
-                <Select value={form.plan} onValueChange={(v) => v && set('plan', v)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="basic">Basic</SelectItem>
-                    <SelectItem value="pro">Pro</SelectItem>
-                    <SelectItem value="premium">Premium</SelectItem>
-                  </SelectContent>
                 </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>تاريخ البداية</Label>
-                <Input type="date" value={form.subscription_start} onChange={e => set('subscription_start', e.target.value)} dir="ltr" />
-              </div>
-              <div className="space-y-2">
-                <Label>تاريخ النهاية</Label>
-                <Input type="date" value={form.subscription_end} onChange={e => set('subscription_end', e.target.value)} dir="ltr" />
-              </div>
+              </Field>
+              <Field label="تاريخ البداية">
+                <Input type="date" value={form.subscription_start} onChange={e => set('subscription_start', e.target.value)} style={{ direction: 'ltr' }} />
+              </Field>
+              <Field label="تاريخ النهاية">
+                <Input type="date" value={form.subscription_end} onChange={e => set('subscription_end', e.target.value)} style={{ direction: 'ltr' }} />
+              </Field>
             </div>
-            <div className="space-y-2">
-              <Label>ملاحظة (رقم التحويل، اسم المحوّل)</Label>
-              <Input value={form.notes} onChange={e => set('notes', e.target.value)} />
-            </div>
-          </CardContent>
+            <Field label="ملاحظة (رقم التحويل، اسم المحوّل)">
+              <Textarea
+                value={form.notes}
+                onChange={e => set('notes', e.target.value)}
+                placeholder="تحويل رقم #xxxx — بنك الراجحي"
+                rows={2}
+              />
+            </Field>
+          </div>
         </Card>
 
-        <div className="flex gap-3 mt-4">
-          <Button type="submit" disabled={saving} className="flex-1">
+        <div style={{ display: 'flex', gap: 10 }}>
+          <Btn kind="primary" type="submit" disabled={saving} size="lg">
             {saving ? 'جارٍ الإنشاء...' : 'إنشاء المكتب'}
-          </Button>
-          <Link href="/admin/tenants">
-            <Button type="button" variant="outline">إلغاء</Button>
-          </Link>
+          </Btn>
+          <Btn kind="ghost" onClick={() => router.push('/admin/tenants')} size="lg">
+            إلغاء
+          </Btn>
         </div>
       </form>
     </div>
