@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { SectionHeader, Card, Badge, SearchInput, Avatar, PlanPill, StatePill, Btn, Select, IconBtn } from '@/components/ui/atoms'
-import { Icons } from '@/lib/icons'
+import { SectionHeader, Card, SearchInput, Avatar, PlanPill, StatePill, Btn, Select, IconBtn } from '@/components/ui/atoms'
 import { ADMIN_TENANTS, daysUntil, fmtDate } from '@/lib/data'
 import { sbGetAllTenants } from '@/lib/api'
 

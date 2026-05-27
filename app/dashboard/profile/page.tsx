@@ -1,24 +1,18 @@
 ﻿'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   SectionHeader,
   Card,
   Btn,
-  Field,
-  Input,
-  Textarea,
   Alert,
-  Avatar,
   EmptyImg,
 } from '@/components/ui/atoms'
 import { Icons } from '@/lib/icons'
-import { DEMO_TENANT, fmtDate } from '@/lib/data'
+import { DEMO_TENANT } from '@/lib/data'
 import { sbGetMyTenant, sbUpdateTenant, sbUpload } from '@/lib/api'
 
 export default function ProfilePage() {
-  const router = useRouter()
   const [tenant, setTenant] = useState<Record<string, unknown>>({ ...DEMO_TENANT })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -106,7 +100,7 @@ export default function ProfilePage() {
         setTenant(prev => ({ ...prev, ...updates }))
         setTimeout(() => setMsg(null), 3000)
       }
-    } catch (e) {
+    } catch {
       setMsg({ tone: 'danger', text: 'حدث خطأ غير متوقع' })
     }
     setSaving(false)

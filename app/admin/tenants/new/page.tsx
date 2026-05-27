@@ -3,8 +3,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SectionHeader, Card, Field, Input, Textarea, Select, Btn, IconBtn, Alert } from '@/components/ui/atoms'
-import { Icons } from '@/lib/icons'
-import { ADMIN_TENANTS, PLANS, fmtSAR } from '@/lib/data'
+import { PLANS, fmtSAR } from '@/lib/data'
 import { sbGetAllTenants } from '@/lib/api'
 
 function slugify(str: string): string {

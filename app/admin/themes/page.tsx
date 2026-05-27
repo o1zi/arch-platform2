@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { SectionHeader, Card, Badge, Btn, IconBtn, Modal, Field, Select } from '@/components/ui/atoms'
-import { Icons } from '@/lib/icons'
-import { PALETTES, HEADING_FONTS, BODY_FONTS, HERO_STYLES, PLANS, fmtDate } from '@/lib/data'
+import { SectionHeader, Card, Badge, Btn, IconBtn, Select } from '@/components/ui/atoms'
+import { PALETTES, HEADING_FONTS, BODY_FONTS, HERO_STYLES, PLANS } from '@/lib/data'
 
 type ThemeItem = {
   id: string

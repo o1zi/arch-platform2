@@ -8,10 +8,8 @@ import {
   IconBtn,
   Toggle,
   Modal,
-  Textarea,
   Alert,
 } from '@/components/ui/atoms'
-import { Icons } from '@/lib/icons'
 import { DEMO_TENANT, DEMO_FAQS } from '@/lib/data'
 import { sbGetMyTenant, sbGetFaqs, sbAddFaq, sbUpdateFaq, sbDeleteFaq } from '@/lib/api'
 

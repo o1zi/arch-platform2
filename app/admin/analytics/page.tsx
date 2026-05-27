@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { SectionHeader, Card, StatCard, Badge, SearchInput, Select, PlanPill, Btn } from '@/components/ui/atoms'
-import { Icons } from '@/lib/icons'
-import { ADMIN_PLATFORM_STATS, ADMIN_TENANTS, PLANS, daysUntil, fmtSAR } from '@/lib/data'
+import { SectionHeader, Card, StatCard, Badge, SearchInput, Select, PlanPill } from '@/components/ui/atoms'
+import { ADMIN_PLATFORM_STATS, fmtSAR } from '@/lib/data'
 import { sbGetAdminStats, sbGetAllTenants } from '@/lib/api'
 
 type TenantRow = {
@@ -70,12 +69,6 @@ export default function AdminAnalyticsPage() {
     }
     if (planFilter !== 'all' && t.plan !== planFilter) return false
     return true
-  })
-
-  const endingSoon = tenants.filter(t => {
-    if (!t.active || !t.ends_at) return false
-    const d = daysUntil(t.ends_at)
-    return d <= 30 && d > 0
   })
 
   const totalViews = filtered.reduce((s, t) => s + t.views, 0)

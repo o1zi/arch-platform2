@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SectionHeader, Card, Badge, SearchInput, Btn, Select, PlanPill } from '@/components/ui/atoms'
-import { Icons } from '@/lib/icons'
 import { SUBSCRIPTION_LOG, ADMIN_TENANTS, fmtDate, fmtSAR } from '@/lib/data'
 import { sbGetAllTenants } from '@/lib/api'
 
@@ -57,7 +56,6 @@ const ACTION_TONES: Record<string, 'green' | 'red' | 'gold' | 'default'> = {
 
 export default function AdminSubscriptionsPage() {
   const router = useRouter()
-  const [logs, setLogs] = useState<LogEntry[]>(getMockLogs())
   const [search, setSearch] = useState('')
   const [actionFilter, setActionFilter] = useState('all')
   const [loading, setLoading] = useState(true)

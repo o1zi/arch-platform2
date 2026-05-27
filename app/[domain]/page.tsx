@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { Icons } from '@/lib/icons'
 import { DEMO_TENANT, DEMO_PROJECTS, DEMO_SERVICES, DEMO_FEATURES, DEMO_STATS, DEMO_TESTIMONIALS, DEMO_FAQS } from '@/lib/data'
@@ -35,7 +35,6 @@ function SectionHeader({ tag, title, sub }: { tag: string; title: string; sub?: 
 
 export default function PublicSiteHome() {
   const params = useParams()
-  const router = useRouter()
   const domain = (params?.domain as string) || 'demo'
 
   const [scrolled, setScrolled] = useState(false)
@@ -299,7 +298,7 @@ export default function PublicSiteHome() {
                 transition: 'all 0.3s ease',
               }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(14,59,46,0.06)' }} onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '' }}>
                 <div style={{ color: ACC, marginBottom: 12, display: 'flex', gap: 3 }}>
-                  {[1, 2, 3, 4, 5].map(s => Icons.star?.({ size: 15 }))}
+                  {[1, 2, 3, 4, 5].map(() => Icons.star?.({ size: 15 }))}
                 </div>
                 <p style={{ fontSize: 15, color: INK, lineHeight: 1.9, margin: '0 0 20px' }}>&ldquo;{t.text as string}&rdquo;</p>
                 <div style={{ borderTop: '1px solid #dde5df', paddingTop: 14, display: 'flex', alignItems: 'center', gap: 12 }}>

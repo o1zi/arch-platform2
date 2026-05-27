@@ -11,7 +11,7 @@ import {
   Avatar,
 } from '@/components/ui/atoms'
 import { Icons } from '@/lib/icons'
-import { DEMO_TENANT, daysUntil } from '@/lib/data'
+import { DEMO_TENANT } from '@/lib/data'
 import { sbGetMyTenant, sbSignOut } from '@/lib/api'
 
 const PAGE_TITLES: Record<string, string> = {
@@ -69,7 +69,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const plan = (_tenant.plan as string) || 'basic'
   const active = !!_tenant.is_active
   const endsAt = _tenant.subscription_end as string | null
-  const days = daysUntil(endsAt)
 
   const pageTitle = PAGE_TITLES[pathname] || 'لوحة التحكم'
 

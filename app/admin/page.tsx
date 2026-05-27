@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, Badge, SectionHeader, StatCard, Avatar, PlanPill, Btn } from '@/components/ui/atoms'
-import { Icons } from '@/lib/icons'
-import { ADMIN_PLATFORM_STATS, ADMIN_TENANTS, PLANS, daysUntil, fmtSAR } from '@/lib/data'
+import { ADMIN_PLATFORM_STATS, ADMIN_TENANTS, daysUntil, fmtSAR } from '@/lib/data'
 import { sbGetAdminStats, sbGetAllTenants } from '@/lib/api'
 
 type AdminTenant = {

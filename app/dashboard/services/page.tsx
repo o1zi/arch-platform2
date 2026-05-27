@@ -9,8 +9,6 @@ import {
   Toggle,
   Modal,
   TabBar,
-  Input,
-  Textarea,
   Alert,
 } from '@/components/ui/atoms'
 import { Icons } from '@/lib/icons'

@@ -1,7 +1,6 @@
 ﻿'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   SectionHeader,
   Card,
@@ -9,9 +8,6 @@ import {
   IconBtn,
   Toggle,
   Modal,
-  Field,
-  Input,
-  Textarea,
   Badge,
   ProjectCover,
   EmptyImg,
@@ -25,7 +21,6 @@ import type { Plan } from '@/types'
 const CATEGORIES = ['سكني', 'تجاري', 'صناعي', 'ترفيهي', 'حكومي', 'تعليمي', 'صحي', 'ديني']
 
 export default function ProjectsPage() {
-  const router = useRouter()
   const [tenant, setTenant] = useState<Record<string, unknown>>({ ...DEMO_TENANT })
   const [projects, setProjects] = useState<Record<string, unknown>[]>([])
   const [loading, setLoading] = useState(true)

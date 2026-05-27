@@ -7,7 +7,6 @@ import {
   Btn,
   IconBtn,
   Modal,
-  Input,
   Alert,
 } from '@/components/ui/atoms'
 import { Icons } from '@/lib/icons'
